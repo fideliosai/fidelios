@@ -1,39 +1,29 @@
 <p align="center">
-  <img src="doc/assets/header.png" alt="FideliOS — runs your business" width="720" />
+  <strong>FideliOS</strong><br/>
+  <em>AI Agent Orchestration Platform</em>
 </p>
 
 <p align="center">
   <a href="#quickstart"><strong>Quickstart</strong></a> &middot;
-  <a href="https://fidelios.ing/docs"><strong>Docs</strong></a> &middot;
+  <a href="#features"><strong>Features</strong></a> &middot;
   <a href="https://github.com/maxzemtsov/fidelios"><strong>GitHub</strong></a> &middot;
-  <a href="https://discord.gg/m4HZY7xNG3"><strong>Discord</strong></a>
+  <a href="https://fidelios.nl"><strong>Website</strong></a>
 </p>
 
 <p align="center">
-  <a href="https://github.com/maxzemtsov/fidelios/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT License" /></a>
+  <a href="https://github.com/maxzemtsov/fidelios/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT License" /></a>
   <a href="https://github.com/maxzemtsov/fidelios/stargazers"><img src="https://img.shields.io/github/stars/maxzemtsov/fidelios?style=flat" alt="Stars" /></a>
-  <a href="https://discord.gg/m4HZY7xNG3"><img src="https://img.shields.io/discord/000000000?label=discord" alt="Discord" /></a>
 </p>
-
-<br/>
-
-<div align="center">
-  <video src="https://github.com/user-attachments/assets/773bdfb2-6d1e-4e30-8c5f-3487d5b70c8f" width="600" controls></video>
-</div>
 
 <br/>
 
 ## What is FideliOS?
 
-# Open-source orchestration for zero-human companies
+**Open-source orchestration for AI agent teams.**
 
-**If OpenClaw is an _employee_, FideliOS is the _company_**
-
-FideliOS is a Node.js server and React UI that orchestrates a team of AI agents to run a business. Bring your own agents, assign goals, and track your agents' work and costs from one dashboard.
+FideliOS is a Node.js server and React UI that orchestrates a team of AI agents to run a business. Bring your own agents, assign goals, and track work and costs from one dashboard.
 
 It looks like a task manager — but under the hood it has org charts, budgets, governance, goal alignment, and agent coordination.
-
-**Manage business goals, not pull requests.**
 
 |        | Step            | Example                                                            |
 | ------ | --------------- | ------------------------------------------------------------------ |
@@ -43,38 +33,9 @@ It looks like a task manager — but under the hood it has org charts, budgets, 
 
 <br/>
 
-> **COMING SOON: Clipmart** — Download and run entire companies with one click. Browse pre-built company templates — full org structures, agent configs, and skills — and import them into your FideliOS instance in seconds.
+### Works with
 
-<br/>
-
-<div align="center">
-<table>
-  <tr>
-    <td align="center"><strong>Works<br/>with</strong></td>
-    <td align="center"><img src="doc/assets/logos/openclaw.svg" width="32" alt="OpenClaw" /><br/><sub>OpenClaw</sub></td>
-    <td align="center"><img src="doc/assets/logos/claude.svg" width="32" alt="Claude" /><br/><sub>Claude Code</sub></td>
-    <td align="center"><img src="doc/assets/logos/codex.svg" width="32" alt="Codex" /><br/><sub>Codex</sub></td>
-    <td align="center"><img src="doc/assets/logos/cursor.svg" width="32" alt="Cursor" /><br/><sub>Cursor</sub></td>
-    <td align="center"><img src="doc/assets/logos/bash.svg" width="32" alt="Bash" /><br/><sub>Bash</sub></td>
-    <td align="center"><img src="doc/assets/logos/http.svg" width="32" alt="HTTP" /><br/><sub>HTTP</sub></td>
-  </tr>
-</table>
-
-<em>If it can receive a heartbeat, it's hired.</em>
-
-</div>
-
-<br/>
-
-## FideliOS is right for you if
-
-- ✅ You want to build **autonomous AI companies**
-- ✅ You **coordinate many different agents** (OpenClaw, Codex, Claude, Cursor) toward a common goal
-- ✅ You have **20 simultaneous Claude Code terminals** open and lose track of what everyone is doing
-- ✅ You want agents running **autonomously 24/7**, but still want to audit work and chime in when needed
-- ✅ You want to **monitor costs** and enforce budgets
-- ✅ You want a process for managing agents that **feels like using a task manager**
-- ✅ You want to manage your autonomous businesses **from your phone**
+Claude Code, Codex, Cursor, OpenClaw, and any agent that can receive HTTP heartbeats.
 
 <br/>
 
@@ -83,101 +44,53 @@ It looks like a task manager — but under the hood it has org charts, budgets, 
 <table>
 <tr>
 <td align="center" width="33%">
-<h3>🔌 Bring Your Own Agent</h3>
-Any agent, any runtime, one org chart. If it can receive a heartbeat, it's hired.
+<h3>Bring Your Own Agent</h3>
+Any agent, any runtime, one org chart.
 </td>
 <td align="center" width="33%">
-<h3>🎯 Goal Alignment</h3>
-Every task traces back to the company mission. Agents know <em>what</em> to do and <em>why</em>.
+<h3>Goal Alignment</h3>
+Every task traces back to the company mission.
 </td>
 <td align="center" width="33%">
-<h3>💓 Heartbeats</h3>
-Agents wake on a schedule, check work, and act. Delegation flows up and down the org chart.
+<h3>Heartbeats</h3>
+Agents wake on schedule, check work, and act.
 </td>
 </tr>
 <tr>
 <td align="center">
-<h3>💰 Cost Control</h3>
-Monthly budgets per agent. When they hit the limit, they stop. No runaway costs.
+<h3>Cost Control</h3>
+Monthly budgets per agent. When they hit the limit, they stop.
 </td>
 <td align="center">
-<h3>🏢 Multi-Company</h3>
-One deployment, many companies. Complete data isolation. One control plane for your portfolio.
+<h3>Multi-Company</h3>
+One deployment, many companies. Complete data isolation.
 </td>
 <td align="center">
-<h3>🎫 Ticket System</h3>
-Every conversation traced. Every decision explained. Full tool-call tracing and immutable audit log.
+<h3>Ticket System</h3>
+Every conversation traced. Full audit log.
 </td>
 </tr>
 <tr>
 <td align="center">
-<h3>🛡️ Governance</h3>
-You're the board. Approve hires, override strategy, pause or terminate any agent — at any time.
+<h3>Governance</h3>
+Approve hires, override strategy, pause or terminate any agent.
 </td>
 <td align="center">
-<h3>📊 Org Chart</h3>
-Hierarchies, roles, reporting lines. Your agents have a boss, a title, and a job description.
+<h3>Org Chart</h3>
+Hierarchies, roles, reporting lines.
 </td>
 <td align="center">
-<h3>📱 Mobile Ready</h3>
-Monitor and manage your autonomous businesses from anywhere.
+<h3>Bulletproof Backups</h3>
+Compressed, verified backups with optional S3 cloud sync.
 </td>
 </tr>
 </table>
 
 <br/>
 
-## Problems FideliOS solves
-
-| Without FideliOS                                                                                                                     | With FideliOS                                                                                                                         |
-| ------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| ❌ You have 20 Claude Code tabs open and can't track which one does what. On reboot you lose everything.                              | ✅ Tasks are ticket-based, conversations are threaded, sessions persist across reboots.                                                |
-| ❌ You manually gather context from several places to remind your bot what you're actually doing.                                     | ✅ Context flows from the task up through the project and company goals — your agent always knows what to do and why.                  |
-| ❌ Folders of agent configs are disorganized and you're re-inventing task management, communication, and coordination between agents. | ✅ FideliOS gives you org charts, ticketing, delegation, and governance out of the box — so you run a company, not a pile of scripts. |
-| ❌ Runaway loops waste hundreds of dollars of tokens and max your quota before you even know what happened.                           | ✅ Cost tracking surfaces token budgets and throttles agents when they're out. Management prioritizes with budgets.                    |
-| ❌ You have recurring jobs (customer support, social, reports) and have to remember to manually kick them off.                        | ✅ Heartbeats handle regular work on a schedule. Management supervises.                                                                |
-| ❌ You have an idea, you have to find your repo, fire up Claude Code, keep a tab open, and babysit it.                                | ✅ Add a task in FideliOS. Your coding agent works on it until it's done. Management reviews their work.                              |
-
-<br/>
-
-## Why FideliOS is special
-
-FideliOS handles the hard orchestration details correctly.
-
-|                                   |                                                                                                               |
-| --------------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| **Atomic execution.**             | Task checkout and budget enforcement are atomic, so no double-work and no runaway spend.                      |
-| **Persistent agent state.**       | Agents resume the same task context across heartbeats instead of restarting from scratch.                     |
-| **Runtime skill injection.**      | Agents can learn FideliOS workflows and project context at runtime, without retraining.                      |
-| **Governance with rollback.**     | Approval gates are enforced, config changes are revisioned, and bad changes can be rolled back safely.        |
-| **Goal-aware execution.**         | Tasks carry full goal ancestry so agents consistently see the "why," not just a title.                        |
-| **Portable company templates.**   | Export/import orgs, agents, and skills with secret scrubbing and collision handling.                          |
-| **True multi-company isolation.** | Every entity is company-scoped, so one deployment can run many companies with separate data and audit trails. |
-
-<br/>
-
-## What FideliOS is not
-
-|                              |                                                                                                                      |
-| ---------------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| **Not a chatbot.**           | Agents have jobs, not chat windows.                                                                                  |
-| **Not an agent framework.**  | We don't tell you how to build agents. We tell you how to run a company made of them.                                |
-| **Not a workflow builder.**  | No drag-and-drop pipelines. FideliOS models companies — with org charts, goals, budgets, and governance.            |
-| **Not a prompt manager.**    | Agents bring their own prompts, models, and runtimes. FideliOS manages the organization they work in.               |
-| **Not a single-agent tool.** | This is for teams. If you have one agent, you probably don't need FideliOS. If you have twenty — you definitely do. |
-| **Not a code review tool.**  | FideliOS orchestrates work, not pull requests. Bring your own review process.                                       |
-
-<br/>
-
 ## Quickstart
 
-Open source. Self-hosted. No FideliOS account required.
-
-```bash
-npx fidelios onboard --yes
-```
-
-Or manually:
+Open source. Self-hosted. No account required.
 
 ```bash
 git clone https://github.com/maxzemtsov/fidelios.git
@@ -192,26 +105,39 @@ This starts the API server at `http://localhost:3100`. An embedded PostgreSQL da
 
 <br/>
 
-## FAQ
+## Backup & Restore
 
-**What does a typical setup look like?**
-Locally, a single Node.js process manages an embedded Postgres and local file storage. For production, point it at your own Postgres and deploy however you like. Configure projects, agents, and goals — the agents take care of the rest.
+FideliOS includes a bulletproof backup system:
 
-If you're a solo-entreprenuer you can use Tailscale to access FideliOS on the go. Then later you can deploy to e.g. Vercel when you need it.
+```bash
+# Backups run automatically every 60 minutes (compressed .sql.gz)
+# List available backups
+pnpm --filter @fidelios/db restore --list
 
-**Can I run multiple companies?**
-Yes. A single deployment can run an unlimited number of companies with complete data isolation.
+# Restore from latest backup (creates safety snapshot first)
+pnpm --filter @fidelios/db restore --latest
+```
 
-**How is FideliOS different from agents like OpenClaw or Claude Code?**
-FideliOS _uses_ those agents. It orchestrates them into a company — with org charts, budgets, goals, governance, and accountability.
+### S3 Cloud Sync (optional)
 
-**Why should I use FideliOS instead of just pointing my OpenClaw to Asana or Trello?**
-Agent orchestration has subtleties in how you coordinate who has work checked out, how to maintain sessions, monitoring costs, establishing governance - FideliOS does this for you.
+Add to `~/.fidelios/instances/default/config.json`:
 
-(Bring-your-own-ticket-system is on the Roadmap)
+```json
+{
+  "database": {
+    "backup": {
+      "s3": {
+        "enabled": true,
+        "bucket": "your-bucket",
+        "region": "eu-west-1",
+        "prefix": "fidelios/backups/"
+      }
+    }
+  }
+}
+```
 
-**Do agents run continuously?**
-By default, agents run on scheduled heartbeats and event-based triggers (task assignment, @-mentions). You can also hook in continuous agents like OpenClaw. You bring your agent and FideliOS coordinates.
+Backups sync to S3 after each local backup. If S3 is unreachable, local backups continue without interruption.
 
 <br/>
 
@@ -219,8 +145,6 @@ By default, agents run on scheduled heartbeats and event-based triggers (task as
 
 ```bash
 pnpm dev              # Full dev (API + UI, watch mode)
-pnpm dev:once         # Full dev without file watching
-pnpm dev:server       # Server only
 pnpm build            # Build all
 pnpm typecheck        # Type checking
 pnpm test:run         # Run tests
@@ -232,58 +156,28 @@ See [doc/DEVELOPING.md](doc/DEVELOPING.md) for the full development guide.
 
 <br/>
 
-## Roadmap
+## Architecture
 
-- ✅ Plugin system (e.g. add a knowledge base, custom tracing, queues, etc)
-- ✅ Get OpenClaw / claw-style agent employees
-- ✅ companies.sh - import and export entire organizations
-- ✅ Easy AGENTS.md configurations
-- ✅ Skills Manager
-- ✅ Scheduled Routines
-- ✅ Better Budgeting
-- ⚪ Artifacts & Deployments
-- ⚪ CEO Chat
-- ⚪ MAXIMIZER MODE
-- ⚪ Multiple Human Users
-- ⚪ Cloud / Sandbox agents (e.g. Cursor / e2b agents)
-- ⚪ Cloud deployments
-- ⚪ Desktop App
+FideliOS is a fork of [Paperclip](https://github.com/paperclipai/paperclip) (MIT) with enhanced backup/restore, S3 cloud sync, and planned extensions for RAG/CAG and security layers.
 
-<br/>
-
-## Community & Plugins
-
-Find Plugins and more at [awesome-fidelios](https://github.com/gsxdsm/awesome-fidelios)
-
-## Contributing
-
-We welcome contributions. See the [contributing guide](CONTRIBUTING.md) for details.
-
-<br/>
-
-## Community
-
-- [Discord](https://discord.gg/m4HZY7xNG3) — Join the community
-- [GitHub Issues](https://github.com/maxzemtsov/fidelios/issues) — bugs and feature requests
-- [GitHub Discussions](https://github.com/maxzemtsov/fidelios/discussions) — ideas and RFC
+**Key additions over upstream:**
+- Gzip-compressed backups with integrity verification
+- `db:restore` CLI with safety snapshots
+- S3 cloud backup sync with graceful degradation
+- Fixed jsonb serialization bug in backup system
 
 <br/>
 
 ## License
 
-MIT &copy; 2026 FideliOS
+MIT. See [LICENSE](LICENSE) for details.
 
-## Star History
-
-[![Star History Chart](https://api.star-history.com/image?repos=maxzemtsov/fidelios&type=date&legend=top-left)](https://www.star-history.com/?repos=fidelios%2Ffidelios&type=date&legend=top-left)
+Original code: Copyright (c) 2025 Paperclip AI.
+Fork modifications: Copyright (c) 2026 FideliOS.
 
 <br/>
 
 ---
-
-<p align="center">
-  <img src="doc/assets/footer.jpg" alt="" width="720" />
-</p>
 
 <p align="center">
   <sub>Open source under MIT. Built for people who want to run companies, not babysit agents.</sub>
