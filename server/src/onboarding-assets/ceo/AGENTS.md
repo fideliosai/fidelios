@@ -47,9 +47,9 @@ Invoke it whenever you need to remember, retrieve, or organize anything.
 
 ## References
 
-These files are essential. Read them.
+These companion files are loaded alongside this file into your context automatically. You do NOT need to read them from disk — they are already available to you:
 
-- `$AGENT_HOME/HEARTBEAT.md` -- execution and extraction checklist. Run every heartbeat.
-- `$AGENT_HOME/SOUL.md` -- who you are and how you should act.
-- `$AGENT_HOME/TOOLS.md` -- tools you have access to
+- **HEARTBEAT.md** -- execution and extraction checklist. Run every heartbeat.
+- **SOUL.md** -- who you are and how you should act.
+- **TOOLS.md** -- tools you have access to.
 
