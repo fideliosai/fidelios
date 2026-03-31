@@ -8,6 +8,7 @@ import { heartbeatRun } from "./commands/heartbeat-run.js";
 import { runCommand } from "./commands/run.js";
 import { bootstrapCeoInvite } from "./commands/auth-bootstrap-ceo.js";
 import { dbBackupCommand } from "./commands/db-backup.js";
+import { uninstallCommand } from "./commands/uninstall.js";
 import { registerContextCommands } from "./commands/client/context.js";
 import { registerCompanyCommands } from "./commands/client/company.js";
 import { registerIssueCommands } from "./commands/client/issue.js";
@@ -88,6 +89,14 @@ program
   .action(async (opts) => {
     await dbBackupCommand(opts);
   });
+
+program
+  .command("uninstall")
+  .description("Uninstall FideliOS and optionally remove all data")
+  .option("-c, --config <path>", "Path to config file")
+  .option("-d, --data-dir <path>", DATA_DIR_OPTION_HELP)
+  .option("--force", "Remove everything including backups, skip confirmation", false)
+  .action(uninstallCommand);
 
 program
   .command("allowed-hostname")

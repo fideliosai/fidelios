@@ -23,6 +23,8 @@ import { promptLogging } from "../prompts/logging.js";
 import { defaultSecretsConfig } from "../prompts/secrets.js";
 import { defaultStorageConfig, promptStorage } from "../prompts/storage.js";
 import { promptServer } from "../prompts/server.js";
+import fs from "node:fs";
+import fsp from "node:fs/promises";
 import {
   describeLocalInstancePaths,
   expandHomePrefix,
@@ -263,6 +265,33 @@ export async function onboard(opts: OnboardOptions): Promise<void> {
         ),
       );
     }
+  } else {
+    // No config — check for leftover backups from a previous uninstall
+    const backupDir = resolveDefaultBackupDir(instance.instanceId);
+    if (fs.existsSync(backupDir)) {
+      const backupFiles = (await fsp.readdir(backupDir)).filter(
+        (f) => f.startsWith("fidelios-final-") && f.endsWith(".sql.gz"),
+      );
+      if (backupFiles.length > 0) {
+        const latestBackup = backupFiles.sort().pop()!;
+        const backupPath = path.join(backupDir, latestBackup);
+        p.log.message(
+          pc.cyan(`Found previous backup: ${latestBackup}`),
+        );
+        const restoreChoice = await p.confirm({
+          message: "Restore from previous installation?",
+        });
+        if (!p.isCancel(restoreChoice) && restoreChoice) {
+          (opts as OnboardOptions & { restoreBackupPath?: string }).restoreBackupPath = backupPath;
+          p.log.message(pc.green(`Will restore from ${latestBackup} after setup completes.`));
+        } else {
+          // Archive old backups so they don't prompt again
+          const archiveDir = path.join(path.dirname(backupDir), "backups-archived");
+          await fsp.rename(backupDir, archiveDir).catch(() => {});
+          p.log.message(pc.dim(`Previous backups archived to ${archiveDir}`));
+        }
+      }
+    }
   }
 
   let setupMode: SetupMode = "quickstart";
@@ -492,6 +521,16 @@ export async function onboard(opts: OnboardOptions): Promise<void> {
         `Then: ${pc.cyan("fidelios auth bootstrap-ceo")}`,
       ].join("\n"),
     );
+  }
+
+  // Restore from previous backup if selected during setup
+  const restoreBackupPath = (opts as OnboardOptions & { restoreBackupPath?: string }).restoreBackupPath;
+  if (restoreBackupPath) {
+    p.log.message("");
+    p.log.message(pc.cyan("Restoring database from previous installation..."));
+    p.log.message(pc.dim(`Backup: ${restoreBackupPath}`));
+    p.log.message(pc.dim("The database will be restored when the server starts for the first time."));
+    p.log.message(pc.dim(`Run: ${pc.cyan("fidelios run")} then ${pc.cyan(`fidelios db:restore --file ${restoreBackupPath}`)}`));
   }
 
   p.outro("You're all set!");
