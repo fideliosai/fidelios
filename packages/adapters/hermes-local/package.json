@@ -2,7 +2,7 @@
   "name": "@fideliosai/adapter-hermes-local",
   "version": "0.0.3",
   "license": "MIT",
-  "description": "Hermes AI agent adapter for FideliOS (forked from hermes adapter by NousResearch)",
+  "description": "Hermes AI agent adapter for FideliOS",
   "homepage": "https://github.com/fideliosai/fidelios",
   "repository": {
     "type": "git",
