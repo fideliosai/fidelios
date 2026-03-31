@@ -13,12 +13,21 @@ export function deploymentAuthCheck(config: FideliOSConfig): CheckResult {
 
   if (mode === "local_trusted") {
     if (!isLoopbackHost(config.server.host)) {
+      // Allow 0.0.0.0 if allowedHostnames is configured (e.g. Tailscale remote access)
+      const hasAllowedHostnames = config.server.allowedHostnames && config.server.allowedHostnames.length > 0;
+      if (hasAllowedHostnames) {
+        return {
+          name: "Deployment/auth mode",
+          status: "pass",
+          message: `local_trusted mode with remote access via allowedHostnames (${config.server.allowedHostnames.join(", ")})`,
+        };
+      }
       return {
         name: "Deployment/auth mode",
         status: "fail",
         message: `local_trusted requires loopback host binding (found ${config.server.host})`,
         canRepair: false,
-        repairHint: "Run `fidelios configure --section server` and set host to 127.0.0.1",
+        repairHint: "Run `fidelios configure --section server` and set host to 127.0.0.1, or add allowedHostnames for remote access",
       };
     }
     return {
