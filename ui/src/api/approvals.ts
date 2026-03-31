@@ -1,4 +1,4 @@
-import type { Approval, ApprovalComment, Issue } from "@fidelios/shared";
+import type { Approval, ApprovalComment, Issue } from "@fideliosai/shared";
 import { api } from "./client";
 
 export const approvalsApi = {

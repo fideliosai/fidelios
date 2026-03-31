@@ -1,5 +1,5 @@
 {
-  "name": "@fidelios/adapter-claude-local",
+  "name": "@fideliosai/adapter-claude-local",
   "version": "0.0.3",
   "license": "MIT",
   "homepage": "https://github.com/fideliosai/fidelios",
@@ -39,7 +39,8 @@
       }
     },
     "main": "./dist/index.js",
-    "types": "./dist/index.d.ts"
+    "types": "./dist/index.d.ts",
+    "registry": "https://npm.pkg.github.com"
   },
   "files": [
     "dist",
@@ -53,7 +54,7 @@
     "probe:quota:raw": "pnpm exec tsx src/cli/quota-probe.ts --json --raw-cli"
   },
   "dependencies": {
-    "@fidelios/adapter-utils": "workspace:*",
+    "@fideliosai/adapter-utils": "workspace:*",
     "picocolors": "^1.1.1"
   },
   "devDependencies": {

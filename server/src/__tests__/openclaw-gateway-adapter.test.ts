@@ -1,12 +1,12 @@
 import { afterEach, describe, expect, it } from "vitest";
 import { createServer } from "node:http";
 import { WebSocketServer } from "ws";
-import { execute, testEnvironment } from "@fidelios/adapter-openclaw-gateway/server";
+import { execute, testEnvironment } from "@fideliosai/adapter-openclaw-gateway/server";
 import {
   buildOpenClawGatewayConfig,
   parseOpenClawGatewayStdoutLine,
-} from "@fidelios/adapter-openclaw-gateway/ui";
-import type { AdapterExecutionContext } from "@fidelios/adapter-utils";
+} from "@fideliosai/adapter-openclaw-gateway/ui";
+import type { AdapterExecutionContext } from "@fideliosai/adapter-utils";
 
 function buildContext(
   config: Record<string, unknown>,

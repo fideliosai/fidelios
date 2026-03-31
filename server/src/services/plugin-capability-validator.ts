@@ -24,7 +24,7 @@ import type {
   FideliOSPluginManifestV1,
   PluginUiSlotType,
   PluginLauncherPlacementZone,
-} from "@fidelios/shared";
+} from "@fideliosai/shared";
 import { forbidden } from "../errors.js";
 import { logger } from "../middleware/logger.js";
 

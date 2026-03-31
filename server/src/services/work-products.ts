@@ -1,7 +1,7 @@
 import { and, desc, eq } from "drizzle-orm";
-import type { Db } from "@fidelios/db";
-import { issueWorkProducts } from "@fidelios/db";
-import type { IssueWorkProduct } from "@fidelios/shared";
+import type { Db } from "@fideliosai/db";
+import { issueWorkProducts } from "@fideliosai/db";
+import type { IssueWorkProduct } from "@fideliosai/shared";
 
 type IssueWorkProductRow = typeof issueWorkProducts.$inferSelect;
 

@@ -3,8 +3,8 @@ import type {
   PluginDetailTabProps,
   PluginCommentAnnotationProps,
   PluginCommentContextMenuItemProps,
-} from "@fidelios/plugin-sdk/ui";
-import { usePluginAction, usePluginData } from "@fidelios/plugin-sdk/ui";
+} from "@fideliosai/plugin-sdk/ui";
+import { usePluginAction, usePluginData } from "@fideliosai/plugin-sdk/ui";
 import { useMemo, useState, useEffect, useRef, type MouseEvent, type RefObject } from "react";
 import { EditorView } from "@codemirror/view";
 import { basicSetup } from "codemirror";

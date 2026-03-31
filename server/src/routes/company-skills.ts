@@ -1,11 +1,11 @@
 import { Router, type Request } from "express";
-import type { Db } from "@fidelios/db";
+import type { Db } from "@fideliosai/db";
 import {
   companySkillCreateSchema,
   companySkillFileUpdateSchema,
   companySkillImportSchema,
   companySkillProjectScanRequestSchema,
-} from "@fidelios/shared";
+} from "@fideliosai/shared";
 import { validate } from "../middleware/validate.js";
 import { accessService, agentService, companySkillService, logActivity } from "../services/index.js";
 import { forbidden } from "../errors.js";

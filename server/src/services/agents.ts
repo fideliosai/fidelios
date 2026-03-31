@@ -1,6 +1,6 @@
 import { createHash, randomBytes } from "node:crypto";
 import { and, desc, eq, gte, inArray, lt, ne, sql } from "drizzle-orm";
-import type { Db } from "@fidelios/db";
+import type { Db } from "@fideliosai/db";
 import {
   agents,
   agentConfigRevisions,
@@ -11,8 +11,8 @@ import {
   costEvents,
   heartbeatRunEvents,
   heartbeatRuns,
-} from "@fidelios/db";
-import { isUuidLike, normalizeAgentUrlKey } from "@fidelios/shared";
+} from "@fideliosai/db";
+import { isUuidLike, normalizeAgentUrlKey } from "@fideliosai/shared";
 import { conflict, notFound, unprocessable } from "../errors.js";
 import { normalizeAgentPermissions } from "./agent-permissions.js";
 import { REDACTED_EVENT_VALUE, sanitizeRecord } from "../redaction.js";

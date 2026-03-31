@@ -1,4 +1,4 @@
-import type { TranscriptEntry } from "@fidelios/adapter-utils";
+import type { TranscriptEntry } from "@fideliosai/adapter-utils";
 import { normalizeOpenClawGatewayStreamLine } from "../shared/stream.js";
 
 function safeJsonParse(text: string): unknown {

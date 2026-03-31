@@ -1,4 +1,4 @@
-import type { PluginLauncherRegistration } from "@fidelios/plugin-sdk";
+import type { PluginLauncherRegistration } from "@fideliosai/plugin-sdk";
 
 export const PLUGIN_ID = "fidelios-kitchen-sink-example";
 export const PLUGIN_VERSION = "0.1.0";

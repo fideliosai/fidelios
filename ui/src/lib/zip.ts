@@ -1,4 +1,4 @@
-import type { CompanyPortabilityFileEntry } from "@fidelios/shared";
+import type { CompanyPortabilityFileEntry } from "@fideliosai/shared";
 
 const textEncoder = new TextEncoder();
 const textDecoder = new TextDecoder();

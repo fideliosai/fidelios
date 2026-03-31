@@ -1,4 +1,4 @@
-import type { FideliOSPluginManifestV1 } from "@fidelios/plugin-sdk";
+import type { FideliOSPluginManifestV1 } from "@fideliosai/plugin-sdk";
 import {
   DEFAULT_CONFIG,
   EXPORT_NAMES,

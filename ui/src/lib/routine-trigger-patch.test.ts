@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { RoutineTrigger } from "@fidelios/shared";
+import type { RoutineTrigger } from "@fideliosai/shared";
 import { buildRoutineTriggerPatch } from "./routine-trigger-patch";
 
 function makeScheduleTrigger(overrides: Partial<RoutineTrigger> = {}): RoutineTrigger {

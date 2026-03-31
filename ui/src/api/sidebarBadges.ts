@@ -1,4 +1,4 @@
-import type { SidebarBadges } from "@fidelios/shared";
+import type { SidebarBadges } from "@fideliosai/shared";
 import { api } from "./client";
 
 export const sidebarBadgesApi = {

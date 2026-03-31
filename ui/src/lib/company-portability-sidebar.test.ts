@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { Agent, Project } from "@fidelios/shared";
+import type { Agent, Project } from "@fideliosai/shared";
 import {
   buildPortableAgentSlugMap,
   buildPortableProjectSlugMap,

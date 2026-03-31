@@ -3,10 +3,10 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { and, asc, eq } from "drizzle-orm";
-import type { Db } from "@fidelios/db";
-import { companySkills } from "@fidelios/db";
-import { readFideliOSSkillSyncPreference, writeFideliOSSkillSyncPreference } from "@fidelios/adapter-utils/server-utils";
-import type { FideliOSSkillEntry } from "@fidelios/adapter-utils/server-utils";
+import type { Db } from "@fideliosai/db";
+import { companySkills } from "@fideliosai/db";
+import { readFideliOSSkillSyncPreference, writeFideliOSSkillSyncPreference } from "@fideliosai/adapter-utils/server-utils";
+import type { FideliOSSkillEntry } from "@fideliosai/adapter-utils/server-utils";
 import type {
   CompanySkill,
   CompanySkillCreateRequest,
@@ -25,8 +25,8 @@ import type {
   CompanySkillTrustLevel,
   CompanySkillUpdateStatus,
   CompanySkillUsageAgent,
-} from "@fidelios/shared";
-import { normalizeAgentUrlKey } from "@fidelios/shared";
+} from "@fideliosai/shared";
+import { normalizeAgentUrlKey } from "@fideliosai/shared";
 import { findServerAdapter } from "../adapters/index.js";
 import { resolveFideliOSInstanceRoot } from "../home-paths.js";
 import { notFound, unprocessable } from "../errors.js";

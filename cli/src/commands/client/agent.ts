@@ -1,9 +1,9 @@
 import { Command } from "commander";
-import type { Agent } from "@fidelios/shared";
+import type { Agent } from "@fideliosai/shared";
 import {
   removeMaintainerOnlySkillSymlinks,
   resolveFideliOSSkillsDir,
-} from "@fidelios/adapter-utils/server-utils";
+} from "@fideliosai/adapter-utils/server-utils";
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";

@@ -1,10 +1,10 @@
 import { createHash } from "node:crypto";
 import type { Request, RequestHandler } from "express";
 import { and, eq, isNull } from "drizzle-orm";
-import type { Db } from "@fidelios/db";
-import { agentApiKeys, agents, companyMemberships, instanceUserRoles } from "@fidelios/db";
+import type { Db } from "@fideliosai/db";
+import { agentApiKeys, agents, companyMemberships, instanceUserRoles } from "@fideliosai/db";
 import { verifyLocalAgentJwt } from "../agent-auth-jwt.js";
-import type { DeploymentMode } from "@fidelios/shared";
+import type { DeploymentMode } from "@fideliosai/shared";
 import type { BetterAuthSessionResult } from "../auth/better-auth.js";
 import { logger } from "./logger.js";
 import { boardAuthService } from "../services/board-auth.js";

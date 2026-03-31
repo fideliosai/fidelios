@@ -1,4 +1,4 @@
-import type { StorageProvider as StorageProviderId } from "@fidelios/shared";
+import type { StorageProvider as StorageProviderId } from "@fideliosai/shared";
 import type { Readable } from "node:stream";
 
 export interface PutObjectInput {

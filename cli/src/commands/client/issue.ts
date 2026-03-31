@@ -6,7 +6,7 @@ import {
   updateIssueSchema,
   type Issue,
   type IssueComment,
-} from "@fidelios/shared";
+} from "@fideliosai/shared";
 import {
   addCommonClientOptions,
   formatInlineRecord,

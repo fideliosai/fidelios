@@ -16,7 +16,7 @@ export async function databaseCheck(config: FideliOSConfig, configPath?: string)
     }
 
     try {
-      const { createDb } = await import("@fidelios/db");
+      const { createDb } = await import("@fideliosai/db");
       const db = createDb(config.database.connectionString);
       await db.execute("SELECT 1");
       return {

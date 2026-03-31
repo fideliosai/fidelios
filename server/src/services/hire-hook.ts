@@ -1,7 +1,7 @@
 import { and, eq } from "drizzle-orm";
-import type { Db } from "@fidelios/db";
-import { agents } from "@fidelios/db";
-import type { HireApprovedPayload } from "@fidelios/adapter-utils";
+import type { Db } from "@fideliosai/db";
+import { agents } from "@fideliosai/db";
+import type { HireApprovedPayload } from "@fideliosai/adapter-utils";
 import { findServerAdapter } from "../adapters/registry.js";
 import { logger } from "../middleware/logger.js";
 import { logActivity } from "./activity-log.js";

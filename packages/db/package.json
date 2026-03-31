@@ -1,5 +1,5 @@
 {
-  "name": "@fidelios/db",
+  "name": "@fideliosai/db",
   "version": "0.0.3",
   "license": "MIT",
   "homepage": "https://github.com/fideliosai/fidelios",
@@ -29,7 +29,8 @@
       }
     },
     "main": "./dist/index.js",
-    "types": "./dist/index.d.ts"
+    "types": "./dist/index.d.ts",
+    "registry": "https://npm.pkg.github.com"
   },
   "files": [
     "dist"
@@ -45,7 +46,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.888.0",
-    "@fidelios/shared": "workspace:*",
+    "@fideliosai/shared": "workspace:*",
     "drizzle-orm": "^0.38.4",
     "embedded-postgres": "^18.1.0-beta.16",
     "postgres": "^3.4.5"

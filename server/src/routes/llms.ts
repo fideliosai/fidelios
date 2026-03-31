@@ -1,6 +1,6 @@
 import { Router, type Request } from "express";
-import type { Db } from "@fidelios/db";
-import { AGENT_ICON_NAMES } from "@fidelios/shared";
+import type { Db } from "@fideliosai/db";
+import { AGENT_ICON_NAMES } from "@fideliosai/shared";
 import { forbidden } from "../errors.js";
 import { listServerAdapters } from "../adapters/index.js";
 import { agentService } from "../services/agents.js";

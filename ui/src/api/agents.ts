@@ -11,8 +11,8 @@ import type {
   HeartbeatRun,
   Approval,
   AgentConfigRevision,
-} from "@fidelios/shared";
-import { isUuidLike, normalizeAgentUrlKey } from "@fidelios/shared";
+} from "@fideliosai/shared";
+import { isUuidLike, normalizeAgentUrlKey } from "@fideliosai/shared";
 import { ApiError, api } from "./client";
 
 export interface AgentKey {

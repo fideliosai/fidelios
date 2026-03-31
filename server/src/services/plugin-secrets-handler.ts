@@ -34,9 +34,9 @@
  */
 
 import { eq, and, desc } from "drizzle-orm";
-import type { Db } from "@fidelios/db";
-import { companySecrets, companySecretVersions, pluginConfig } from "@fidelios/db";
-import type { SecretProvider } from "@fidelios/shared";
+import type { Db } from "@fideliosai/db";
+import { companySecrets, companySecretVersions, pluginConfig } from "@fideliosai/db";
+import type { SecretProvider } from "@fideliosai/shared";
 import { getSecretProvider } from "../secrets/provider-registry.js";
 import { pluginRegistryService } from "./plugin-registry.js";
 

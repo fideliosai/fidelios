@@ -1,4 +1,4 @@
-import { definePlugin, runWorker } from "@fidelios/plugin-sdk";
+import { definePlugin, runWorker } from "@fideliosai/plugin-sdk";
 
 const plugin = definePlugin({
   async setup(ctx) {

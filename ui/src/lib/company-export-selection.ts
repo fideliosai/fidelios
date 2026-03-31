@@ -1,4 +1,4 @@
-import type { CompanyPortabilityIssueManifestEntry } from "@fidelios/shared";
+import type { CompanyPortabilityIssueManifestEntry } from "@fideliosai/shared";
 
 function isTaskPath(filePath: string): boolean {
   return /(?:^|\/)tasks\//.test(filePath);

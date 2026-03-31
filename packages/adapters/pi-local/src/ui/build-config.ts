@@ -1,4 +1,4 @@
-import type { CreateConfigValues } from "@fidelios/adapter-utils";
+import type { CreateConfigValues } from "@fideliosai/adapter-utils";
 
 function parseEnvVars(text: string): Record<string, string> {
   const env: Record<string, string> = {};

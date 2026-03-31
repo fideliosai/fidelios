@@ -1,6 +1,6 @@
 import { lt, sql } from "drizzle-orm";
-import type { Db } from "@fidelios/db";
-import { pluginLogs } from "@fidelios/db";
+import type { Db } from "@fideliosai/db";
+import { pluginLogs } from "@fideliosai/db";
 import { logger } from "../middleware/logger.js";
 
 /** Default retention period: 7 days. */

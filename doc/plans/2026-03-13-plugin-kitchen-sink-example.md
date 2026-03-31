@@ -135,7 +135,7 @@ The implementation should keep a small validation checklist for these before we 
 The plugin should be named:
 
 - display name: `Kitchen Sink (Example)`
-- package: `@fidelios/plugin-kitchen-sink-example`
+- package: `@fideliosai/plugin-kitchen-sink-example`
 - plugin id: `fidelios.kitchen-sink-example` or `fidelios-kitchen-sink-example`
 
 Recommendation: use `fidelios-kitchen-sink-example` to match current in-repo example naming style.

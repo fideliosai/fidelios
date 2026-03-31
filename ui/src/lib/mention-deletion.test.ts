@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { $createLinkNode, LinkNode } from "@lexical/link";
-import { buildAgentMentionHref } from "@fidelios/shared";
+import { buildAgentMentionHref } from "@fideliosai/shared";
 import {
   createEditor,
   $createParagraphNode,

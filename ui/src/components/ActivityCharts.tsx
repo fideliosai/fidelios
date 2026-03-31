@@ -1,4 +1,4 @@
-import type { HeartbeatRun } from "@fidelios/shared";
+import type { HeartbeatRun } from "@fideliosai/shared";
 
 /* ---- Utilities ---- */
 

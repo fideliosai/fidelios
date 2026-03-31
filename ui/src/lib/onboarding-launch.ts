@@ -1,4 +1,4 @@
-import type { Goal } from "@fidelios/shared";
+import type { Goal } from "@fideliosai/shared";
 
 export const ONBOARDING_PROJECT_NAME = "Onboarding";
 

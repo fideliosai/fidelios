@@ -1,5 +1,5 @@
 {
-  "name": "@fidelios/plugin-authoring-smoke-example",
+  "name": "@fideliosai/plugin-authoring-smoke-example",
   "version": "0.0.3",
   "type": "module",
   "private": true,
@@ -11,7 +11,7 @@
     "dev": "node ./esbuild.config.mjs --watch",
     "dev:ui": "fidelios-plugin-dev-server --root . --ui-dir dist/ui --port 4177",
     "test": "vitest run --config ./vitest.config.ts",
-    "typecheck": "pnpm --filter @fidelios/plugin-sdk build && tsc --noEmit"
+    "typecheck": "pnpm --filter @fideliosai/plugin-sdk build && tsc --noEmit"
   },
   "fideliosPlugin": {
     "manifest": "./dist/manifest.js",
@@ -26,7 +26,7 @@
   "author": "Plugin Author",
   "license": "MIT",
   "dependencies": {
-    "@fidelios/plugin-sdk": "workspace:*"
+    "@fideliosai/plugin-sdk": "workspace:*"
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^16.0.1",

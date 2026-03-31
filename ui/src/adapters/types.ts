@@ -1,8 +1,8 @@
 import type { ComponentType } from "react";
-import type { CreateConfigValues } from "@fidelios/adapter-utils";
+import type { CreateConfigValues } from "@fideliosai/adapter-utils";
 
 // Re-export shared types so local consumers don't need to change imports
-export type { TranscriptEntry, StdoutLineParser, CreateConfigValues } from "@fidelios/adapter-utils";
+export type { TranscriptEntry, StdoutLineParser, CreateConfigValues } from "@fideliosai/adapter-utils";
 
 export interface AdapterConfigFieldsProps {
   mode: "create" | "edit";
@@ -27,7 +27,7 @@ export interface AdapterConfigFieldsProps {
 export interface UIAdapterModule {
   type: string;
   label: string;
-  parseStdoutLine: (line: string, ts: string) => import("@fidelios/adapter-utils").TranscriptEntry[];
+  parseStdoutLine: (line: string, ts: string) => import("@fideliosai/adapter-utils").TranscriptEntry[];
   ConfigFields: ComponentType<AdapterConfigFieldsProps>;
   buildAdapterConfig: (values: CreateConfigValues) => Record<string, unknown>;
 }

@@ -88,8 +88,8 @@ import {
   type AgentRuntimeState,
   type LiveEvent,
   type WorkspaceOperation,
-} from "@fidelios/shared";
-import { redactHomePathUserSegments, redactHomePathUserSegmentsInValue } from "@fidelios/adapter-utils";
+} from "@fideliosai/shared";
+import { redactHomePathUserSegments, redactHomePathUserSegmentsInValue } from "@fideliosai/adapter-utils";
 import { agentRouteRef } from "../lib/utils";
 import {
   applyAgentSkillSnapshot,

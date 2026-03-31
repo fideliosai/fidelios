@@ -1,7 +1,7 @@
 import type { UIAdapterModule } from "../types";
-import { parseClaudeStdoutLine } from "@fidelios/adapter-claude-local/ui";
+import { parseClaudeStdoutLine } from "@fideliosai/adapter-claude-local/ui";
 import { ClaudeLocalConfigFields } from "./config-fields";
-import { buildClaudeLocalConfig } from "@fidelios/adapter-claude-local/ui";
+import { buildClaudeLocalConfig } from "@fideliosai/adapter-claude-local/ui";
 
 export const claudeLocalUIAdapter: UIAdapterModule = {
   type: "claude_local",

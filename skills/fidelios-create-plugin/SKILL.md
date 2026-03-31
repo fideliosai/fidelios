@@ -33,14 +33,14 @@ Current runtime assumptions:
 Use the scaffold package instead of hand-writing the boilerplate:
 
 ```bash
-pnpm --filter @fidelios/create-fidelios-plugin build
+pnpm --filter @fideliosai/create-fidelios-plugin build
 node packages/plugins/create-fidelios-plugin/dist/index.js <npm-package-name> --output <target-dir>
 ```
 
 For a plugin that lives outside the FideliOS repo, pass `--sdk-path` and let the scaffold snapshot the local SDK/shared packages into `.fidelios-sdk/`:
 
 ```bash
-pnpm --filter @fidelios/create-fidelios-plugin build
+pnpm --filter @fideliosai/create-fidelios-plugin build
 node packages/plugins/create-fidelios-plugin/dist/index.js @acme/plugin-name \
   --output /absolute/path/to/plugin-repos \
   --sdk-path /absolute/path/to/fidelios/packages/plugins/sdk

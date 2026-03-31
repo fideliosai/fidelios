@@ -1,5 +1,5 @@
-import type { Db } from "@fidelios/db";
-import { companies, instanceSettings } from "@fidelios/db";
+import type { Db } from "@fideliosai/db";
+import { companies, instanceSettings } from "@fideliosai/db";
 import {
   instanceGeneralSettingsSchema,
   type InstanceGeneralSettings,
@@ -8,7 +8,7 @@ import {
   type PatchInstanceGeneralSettings,
   type InstanceSettings,
   type PatchInstanceExperimentalSettings,
-} from "@fidelios/shared";
+} from "@fideliosai/shared";
 import { eq } from "drizzle-orm";
 
 const DEFAULT_SINGLETON_KEY = "default";

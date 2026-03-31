@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import type { FideliOSConfig } from "@fidelios/shared";
+import type { FideliOSConfig } from "@fideliosai/shared";
 import { resolveFideliOSConfigPath, resolveFideliOSEnvPath } from "./paths.js";
 
 function nonEmpty(value: string | null | undefined): string | null {

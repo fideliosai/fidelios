@@ -1,4 +1,4 @@
-import { definePlugin, runWorker } from "@fidelios/plugin-sdk";
+import { definePlugin, runWorker } from "@fideliosai/plugin-sdk";
 import * as fs from "node:fs";
 import * as path from "node:path";
 

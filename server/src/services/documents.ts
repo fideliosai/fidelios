@@ -1,7 +1,7 @@
 import { and, asc, desc, eq } from "drizzle-orm";
-import type { Db } from "@fidelios/db";
-import { documentRevisions, documents, issueDocuments, issues } from "@fidelios/db";
-import { issueDocumentKeySchema } from "@fidelios/shared";
+import type { Db } from "@fideliosai/db";
+import { documentRevisions, documents, issueDocuments, issues } from "@fideliosai/db";
+import { issueDocumentKeySchema } from "@fideliosai/shared";
 import { conflict, notFound, unprocessable } from "../errors.js";
 
 function normalizeDocumentKey(key: string) {

@@ -1,4 +1,4 @@
-import type { RoutineTrigger } from "@fidelios/shared";
+import type { RoutineTrigger } from "@fideliosai/shared";
 
 export type RoutineTriggerEditorDraft = {
   label: string;

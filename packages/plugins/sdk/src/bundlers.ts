@@ -60,8 +60,8 @@ export interface PluginBundlerPresets {
  */
 export function createPluginBundlerPresets(input: PluginBundlerPresetInput = {}): PluginBundlerPresets {
   const uiExternal = [
-    "@fidelios/plugin-sdk/ui",
-    "@fidelios/plugin-sdk/ui/hooks",
+    "@fideliosai/plugin-sdk/ui",
+    "@fideliosai/plugin-sdk/ui/hooks",
     "react",
     "react-dom",
     "react/jsx-runtime",
@@ -129,7 +129,7 @@ export function createPluginBundlerPresets(input: PluginBundlerPresetInput = {})
       sourcemap,
       entryFileNames: "manifest.js",
     },
-    external: ["@fidelios/plugin-sdk"],
+    external: ["@fideliosai/plugin-sdk"],
   };
 
   const rollupUi = uiEntry

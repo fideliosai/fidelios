@@ -1,7 +1,7 @@
 import path from "node:path";
 import * as p from "@clack/prompts";
 import pc from "picocolors";
-import { formatDatabaseBackupResult, runDatabaseBackup } from "@fidelios/db";
+import { formatDatabaseBackupResult, runDatabaseBackup } from "@fideliosai/db";
 import {
   expandHomePrefix,
   resolveDefaultBackupDir,

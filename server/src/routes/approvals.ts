@@ -1,12 +1,12 @@
 import { Router } from "express";
-import type { Db } from "@fidelios/db";
+import type { Db } from "@fideliosai/db";
 import {
   addApprovalCommentSchema,
   createApprovalSchema,
   requestApprovalRevisionSchema,
   resolveApprovalSchema,
   resubmitApprovalSchema,
-} from "@fidelios/shared";
+} from "@fideliosai/shared";
 import { validate } from "../middleware/validate.js";
 import { logger } from "../middleware/logger.js";
 import {

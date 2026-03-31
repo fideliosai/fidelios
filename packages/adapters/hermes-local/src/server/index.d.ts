@@ -5,7 +5,7 @@ export { execute } from "./execute.js";
 export { testEnvironment } from "./test.js";
 export { detectModel } from "./detect-model.js";
 export { listHermesSkills as listSkills, syncHermesSkills as syncSkills, resolveHermesDesiredSkillNames as resolveDesiredSkillNames, } from "./skills.js";
-import type { AdapterSessionCodec } from "@fidelios/adapter-utils";
+import type { AdapterSessionCodec } from "@fideliosai/adapter-utils";
 /**
  * Session codec for structured validation and migration of session parameters.
  *

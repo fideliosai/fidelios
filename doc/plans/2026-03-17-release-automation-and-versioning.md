@@ -85,7 +85,7 @@ That tradeoff is probably acceptable for FideliOS, but it should be explicit:
 - release notes become the compatibility signal
 - downstream users should prefer exact pins or deliberate upgrades
 
-This is especially relevant for public library packages like `@fidelios/shared`, `@fidelios/db`, and the adapter packages.
+This is especially relevant for public library packages like `@fideliosai/shared`, `@fideliosai/db`, and the adapter packages.
 
 ### 3. Drop release branches for normal publishing
 

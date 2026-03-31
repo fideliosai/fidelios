@@ -19,7 +19,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { History } from "lucide-react";
-import type { Agent } from "@fidelios/shared";
+import type { Agent } from "@fideliosai/shared";
 
 export function Activity() {
   const { selectedCompanyId } = useCompany();

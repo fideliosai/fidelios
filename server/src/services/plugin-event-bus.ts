@@ -20,8 +20,8 @@
  * @see PLUGIN_SPEC.md §16.2 — Plugin-to-Plugin Events
  */
 
-import type { PluginEventType } from "@fidelios/shared";
-import type { PluginEvent, EventFilter } from "@fidelios/plugin-sdk";
+import type { PluginEventType } from "@fideliosai/shared";
+import type { PluginEvent, EventFilter } from "@fideliosai/plugin-sdk";
 
 // ---------------------------------------------------------------------------
 // Internal types

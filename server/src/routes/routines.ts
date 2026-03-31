@@ -1,5 +1,5 @@
 import { Router, type Request } from "express";
-import type { Db } from "@fidelios/db";
+import type { Db } from "@fideliosai/db";
 import {
   createRoutineSchema,
   createRoutineTriggerSchema,
@@ -7,7 +7,7 @@ import {
   runRoutineSchema,
   updateRoutineSchema,
   updateRoutineTriggerSchema,
-} from "@fidelios/shared";
+} from "@fideliosai/shared";
 import { validate } from "../middleware/validate.js";
 import { accessService, logActivity, routineService } from "../services/index.js";
 import { assertCompanyAccess, getActorInfo } from "./authz.js";

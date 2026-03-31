@@ -3,7 +3,7 @@ import type {
   AdapterEnvironmentCheck,
   AdapterEnvironmentTestContext,
   AdapterEnvironmentTestResult,
-} from "@fidelios/adapter-utils";
+} from "@fideliosai/adapter-utils";
 import {
   asBoolean,
   asNumber,
@@ -14,7 +14,7 @@ import {
   ensurePathInEnv,
   parseObject,
   runChildProcess,
-} from "@fidelios/adapter-utils/server-utils";
+} from "@fideliosai/adapter-utils/server-utils";
 import { DEFAULT_GEMINI_LOCAL_MODEL } from "../index.js";
 import { detectGeminiAuthRequired, detectGeminiQuotaExhausted, parseGeminiJsonl } from "./parse.js";
 import { firstNonEmptyLine } from "./utils.js";

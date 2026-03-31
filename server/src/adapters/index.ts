@@ -13,5 +13,5 @@ export type {
   UsageSummary,
   AdapterAgent,
   AdapterRuntime,
-} from "@fidelios/adapter-utils";
+} from "@fideliosai/adapter-utils";
 export { runningProcesses } from "./utils.js";

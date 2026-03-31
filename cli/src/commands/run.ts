@@ -141,7 +141,7 @@ function getMissingModuleSpecifier(err: unknown): string | null {
 function maybeEnableUiDevMiddleware(entrypoint: string): void {
   if (process.env.FIDELIOS_UI_DEV_MIDDLEWARE !== undefined) return;
   const normalized = entrypoint.replaceAll("\\", "/");
-  if (normalized.endsWith("/server/src/index.ts") || normalized.endsWith("@fidelios/server/src/index.ts")) {
+  if (normalized.endsWith("/server/src/index.ts") || normalized.endsWith("@fideliosai/server/src/index.ts")) {
     process.env.FIDELIOS_UI_DEV_MIDDLEWARE = "true";
   }
 }
@@ -156,17 +156,17 @@ async function importServerEntry(): Promise<StartedServer> {
     return await startServerFromModule(mod, devEntry);
   }
 
-  // Production mode: import the published @fidelios/server package
+  // Production mode: import the published @fideliosai/server package
   try {
-    const mod = await import("@fidelios/server");
-    return await startServerFromModule(mod, "@fidelios/server");
+    const mod = await import("@fideliosai/server");
+    return await startServerFromModule(mod, "@fideliosai/server");
   } catch (err) {
     const missingSpecifier = getMissingModuleSpecifier(err);
-    const missingServerEntrypoint = !missingSpecifier || missingSpecifier === "@fidelios/server";
+    const missingServerEntrypoint = !missingSpecifier || missingSpecifier === "@fideliosai/server";
     if (isModuleNotFoundError(err) && missingServerEntrypoint) {
       throw new Error(
         `Could not locate a FideliOS server entrypoint.\n` +
-          `Tried: ${devEntry}, @fidelios/server\n` +
+          `Tried: ${devEntry}, @fideliosai/server\n` +
           `${formatError(err)}`,
       );
     }

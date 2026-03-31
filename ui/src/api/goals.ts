@@ -1,4 +1,4 @@
-import type { Goal } from "@fidelios/shared";
+import type { Goal } from "@fideliosai/shared";
 import { api } from "./client";
 
 export const goalsApi = {

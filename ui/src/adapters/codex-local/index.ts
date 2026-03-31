@@ -1,7 +1,7 @@
 import type { UIAdapterModule } from "../types";
-import { parseCodexStdoutLine } from "@fidelios/adapter-codex-local/ui";
+import { parseCodexStdoutLine } from "@fideliosai/adapter-codex-local/ui";
 import { CodexLocalConfigFields } from "./config-fields";
-import { buildCodexLocalConfig } from "@fidelios/adapter-codex-local/ui";
+import { buildCodexLocalConfig } from "@fideliosai/adapter-codex-local/ui";
 
 export const codexLocalUIAdapter: UIAdapterModule = {
   type: "codex_local",

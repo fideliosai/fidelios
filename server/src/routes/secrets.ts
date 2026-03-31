@@ -1,12 +1,12 @@
 import { Router } from "express";
-import type { Db } from "@fidelios/db";
+import type { Db } from "@fideliosai/db";
 import {
   SECRET_PROVIDERS,
   type SecretProvider,
   createSecretSchema,
   rotateSecretSchema,
   updateSecretSchema,
-} from "@fidelios/shared";
+} from "@fideliosai/shared";
 import { validate } from "../middleware/validate.js";
 import { assertBoard, assertCompanyAccess } from "./authz.js";
 import { logActivity, secretService } from "../services/index.js";

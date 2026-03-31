@@ -1,4 +1,4 @@
-import { type TranscriptEntry } from "@fidelios/adapter-utils";
+import { type TranscriptEntry } from "@fideliosai/adapter-utils";
 
 function safeJsonParse(text: string): unknown {
   try {

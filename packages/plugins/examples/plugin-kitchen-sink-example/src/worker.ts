@@ -20,8 +20,8 @@ import {
   type ScopeKey,
   type ToolResult,
   type ToolRunContext,
-} from "@fidelios/plugin-sdk";
-import type { Goal, Issue } from "@fidelios/shared";
+} from "@fideliosai/plugin-sdk";
+import type { Goal, Issue } from "@fideliosai/shared";
 import {
   DEFAULT_CONFIG,
   JOB_KEYS,

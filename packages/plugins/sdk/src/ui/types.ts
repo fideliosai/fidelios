@@ -1,7 +1,7 @@
 /**
  * FideliOS plugin UI SDK — types for plugin frontend components.
  *
- * Plugin UI bundles import from `@fidelios/plugin-sdk/ui`.  This subpath
+ * Plugin UI bundles import from `@fideliosai/plugin-sdk/ui`.  This subpath
  * provides the bridge hooks, component prop interfaces, and error types that
  * plugin React components use to communicate with the host.
  *
@@ -18,7 +18,7 @@ import type {
   PluginBridgeErrorCode,
   PluginLauncherBounds,
   PluginLauncherRenderEnvironment,
-} from "@fidelios/shared";
+} from "@fideliosai/shared";
 import type {
   PluginLauncherRenderContextSnapshot,
   PluginModalBoundsRequest,
@@ -30,7 +30,7 @@ export type {
   PluginBridgeErrorCode,
   PluginLauncherBounds,
   PluginLauncherRenderEnvironment,
-} from "@fidelios/shared";
+} from "@fideliosai/shared";
 export type {
   PluginLauncherRenderContextSnapshot,
   PluginModalBoundsRequest,

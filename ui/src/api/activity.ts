@@ -1,4 +1,4 @@
-import type { ActivityEvent } from "@fidelios/shared";
+import type { ActivityEvent } from "@fideliosai/shared";
 import { api } from "./client";
 
 export interface RunForIssue {

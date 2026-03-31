@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { CompanyPortabilityPreviewResult } from "@fidelios/shared";
+import type { CompanyPortabilityPreviewResult } from "@fideliosai/shared";
 import {
   buildCompanyDashboardUrl,
   buildDefaultImportAdapterOverrides,

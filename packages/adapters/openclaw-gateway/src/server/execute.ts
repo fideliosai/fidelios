@@ -2,8 +2,8 @@ import type {
   AdapterExecutionContext,
   AdapterExecutionResult,
   AdapterRuntimeServiceReport,
-} from "@fidelios/adapter-utils";
-import { asNumber, asString, buildFideliOSEnv, parseObject } from "@fidelios/adapter-utils/server-utils";
+} from "@fideliosai/adapter-utils";
+import { asNumber, asString, buildFideliOSEnv, parseObject } from "@fideliosai/adapter-utils/server-utils";
 import crypto, { randomUUID } from "node:crypto";
 import { WebSocket } from "ws";
 

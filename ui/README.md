@@ -1,4 +1,4 @@
-# @fidelios/ui
+# @fideliosai/ui
 
 Published static assets for the FideliOS board UI.
 
@@ -8,4 +8,4 @@ The npm package contains the production build under `dist/`. It does not ship th
 
 ## Typical use
 
-Install the package, then serve or copy the built files from `node_modules/@fidelios/ui/dist`.
+Install the package, then serve or copy the built files from `node_modules/@fideliosai/ui/dist`.

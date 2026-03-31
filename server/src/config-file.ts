@@ -1,5 +1,5 @@
 import fs from "node:fs";
-import { fideliosConfigSchema, type FideliOSConfig } from "@fidelios/shared";
+import { fideliosConfigSchema, type FideliOSConfig } from "@fideliosai/shared";
 import { resolveFideliOSConfigPath } from "./paths.js";
 
 export function readConfigFile(): FideliOSConfig | null {

@@ -9,9 +9,9 @@
  * @see PLUGIN_SPEC.md §10 — Plugin Manifest
  * @see packages/shared/src/validators/plugin.ts — Zod schema definition
  */
-import { pluginManifestV1Schema } from "@fidelios/shared";
-import type { FideliOSPluginManifestV1 } from "@fidelios/shared";
-import { PLUGIN_API_VERSION } from "@fidelios/shared";
+import { pluginManifestV1Schema } from "@fideliosai/shared";
+import type { FideliOSPluginManifestV1 } from "@fideliosai/shared";
+import { PLUGIN_API_VERSION } from "@fideliosai/shared";
 import { badRequest } from "../errors.js";
 
 // ---------------------------------------------------------------------------

@@ -5,14 +5,14 @@ import { fileURLToPath } from "node:url";
 import type {
   AdapterSkillContext,
   AdapterSkillSnapshot,
-} from "@fidelios/adapter-utils";
+} from "@fideliosai/adapter-utils";
 import {
   buildPersistentSkillSnapshot,
   ensureFideliOSSkillSymlink,
   readFideliOSRuntimeSkillEntries,
   readInstalledSkillTargets,
   resolveFideliOSDesiredSkillNames,
-} from "@fidelios/adapter-utils/server-utils";
+} from "@fideliosai/adapter-utils/server-utils";
 
 const __moduleDir = path.dirname(fileURLToPath(import.meta.url));
 

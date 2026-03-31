@@ -1,5 +1,5 @@
 {
-  "name": "@fidelios/server",
+  "name": "@fideliosai/server",
   "version": "0.0.3",
   "license": "MIT",
   "homepage": "https://github.com/fideliosai/fidelios",
@@ -24,7 +24,8 @@
       }
     },
     "main": "./dist/index.js",
-    "types": "./dist/index.d.ts"
+    "types": "./dist/index.d.ts",
+    "registry": "https://npm.pkg.github.com"
   },
   "files": [
     "dist",
@@ -40,21 +41,21 @@
     "postpack": "rm -rf ui-dist",
     "clean": "rm -rf dist",
     "start": "node dist/index.js",
-    "typecheck": "pnpm --filter @fidelios/plugin-sdk build && tsc --noEmit"
+    "typecheck": "pnpm --filter @fideliosai/plugin-sdk build && tsc --noEmit"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.888.0",
-    "@fidelios/adapter-claude-local": "workspace:*",
-    "@fidelios/adapter-codex-local": "workspace:*",
-    "@fidelios/adapter-cursor-local": "workspace:*",
-    "@fidelios/adapter-gemini-local": "workspace:*",
-    "@fidelios/adapter-openclaw-gateway": "workspace:*",
-    "@fidelios/adapter-opencode-local": "workspace:*",
-    "@fidelios/adapter-pi-local": "workspace:*",
-    "@fidelios/adapter-utils": "workspace:*",
-    "@fidelios/db": "workspace:*",
-    "@fidelios/plugin-sdk": "workspace:*",
-    "@fidelios/shared": "workspace:*",
+    "@fideliosai/adapter-claude-local": "workspace:*",
+    "@fideliosai/adapter-codex-local": "workspace:*",
+    "@fideliosai/adapter-cursor-local": "workspace:*",
+    "@fideliosai/adapter-gemini-local": "workspace:*",
+    "@fideliosai/adapter-openclaw-gateway": "workspace:*",
+    "@fideliosai/adapter-opencode-local": "workspace:*",
+    "@fideliosai/adapter-pi-local": "workspace:*",
+    "@fideliosai/adapter-utils": "workspace:*",
+    "@fideliosai/db": "workspace:*",
+    "@fideliosai/plugin-sdk": "workspace:*",
+    "@fideliosai/shared": "workspace:*",
     "ajv": "^8.18.0",
     "ajv-formats": "^3.0.1",
     "better-auth": "1.4.18",
@@ -74,7 +75,7 @@
     "sharp": "^0.34.5",
     "ws": "^8.19.0",
     "zod": "^3.24.2",
-    "@fidelios/adapter-hermes-local": "workspace:*"
+    "@fideliosai/adapter-hermes-local": "workspace:*"
   },
   "devDependencies": {
     "@types/express": "^5.0.0",

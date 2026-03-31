@@ -1,12 +1,12 @@
 import { Router } from "express";
-import type { Db } from "@fidelios/db";
+import type { Db } from "@fideliosai/db";
 import {
   createCostEventSchema,
   createFinanceEventSchema,
   resolveBudgetIncidentSchema,
   updateBudgetSchema,
   upsertBudgetPolicySchema,
-} from "@fidelios/shared";
+} from "@fideliosai/shared";
 import { validate } from "../middleware/validate.js";
 import {
   budgetService,

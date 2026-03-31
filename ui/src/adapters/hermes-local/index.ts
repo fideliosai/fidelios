@@ -1,7 +1,7 @@
 import type { UIAdapterModule } from "../types";
-import { parseHermesStdoutLine } from "@fidelios/adapter-hermes-local/ui";
+import { parseHermesStdoutLine } from "@fideliosai/adapter-hermes-local/ui";
 import { HermesLocalConfigFields } from "./config-fields";
-import { buildHermesConfig } from "@fidelios/adapter-hermes-local/ui";
+import { buildHermesConfig } from "@fideliosai/adapter-hermes-local/ui";
 
 export const hermesLocalUIAdapter: UIAdapterModule = {
   type: "hermes_local",

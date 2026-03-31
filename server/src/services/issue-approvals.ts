@@ -1,6 +1,6 @@
 import { and, desc, eq, inArray } from "drizzle-orm";
-import type { Db } from "@fidelios/db";
-import { approvals, issueApprovals, issues } from "@fidelios/db";
+import type { Db } from "@fideliosai/db";
+import { approvals, issueApprovals, issues } from "@fideliosai/db";
 import { notFound, unprocessable } from "../errors.js";
 import { redactEventPayload } from "../redaction.js";
 

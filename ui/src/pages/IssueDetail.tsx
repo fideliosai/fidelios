@@ -53,8 +53,8 @@ import {
   SlidersHorizontal,
   Trash2,
 } from "lucide-react";
-import type { ActivityEvent } from "@fidelios/shared";
-import type { Agent, IssueAttachment } from "@fidelios/shared";
+import type { ActivityEvent } from "@fideliosai/shared";
+import type { Agent, IssueAttachment } from "@fideliosai/shared";
 import { FideliOSIcon } from "@/components/FideliOSIcon";
 
 type CommentReassignment = {

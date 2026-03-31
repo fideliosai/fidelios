@@ -1,7 +1,7 @@
 {
-  "name": "@fidelios/plugin-sdk",
+  "name": "@fideliosai/plugin-sdk",
   "version": "0.0.3",
-  "description": "Stable public API for FideliOS plugins \u2014 worker-side context and UI bridge hooks",
+  "description": "Stable public API for FideliOS plugins — worker-side context and UI bridge hooks",
   "license": "MIT",
   "homepage": "https://github.com/fideliosai/fidelios",
   "bugs": {
@@ -95,19 +95,20 @@
       }
     },
     "main": "./dist/index.js",
-    "types": "./dist/index.d.ts"
+    "types": "./dist/index.d.ts",
+    "registry": "https://npm.pkg.github.com"
   },
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "pnpm --filter @fidelios/shared build && tsc",
+    "build": "pnpm --filter @fideliosai/shared build && tsc",
     "clean": "rm -rf dist",
-    "typecheck": "pnpm --filter @fidelios/shared build && tsc --noEmit",
+    "typecheck": "pnpm --filter @fideliosai/shared build && tsc --noEmit",
     "dev:server": "tsx src/dev-cli.ts"
   },
   "dependencies": {
-    "@fidelios/shared": "workspace:*",
+    "@fideliosai/shared": "workspace:*",
     "zod": "^3.24.2"
   },
   "devDependencies": {

@@ -1,4 +1,4 @@
-import type { AgentAdapterType, JoinRequest } from "@fidelios/shared";
+import type { AgentAdapterType, JoinRequest } from "@fideliosai/shared";
 import { api } from "./client";
 
 type InviteSummary = {

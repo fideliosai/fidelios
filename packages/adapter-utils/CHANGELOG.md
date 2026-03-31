@@ -1,4 +1,4 @@
-# @fidelios/adapter-utils
+# @fideliosai/adapter-utils
 
 ## 0.3.1
 

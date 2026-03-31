@@ -1,5 +1,5 @@
 {
-  "name": "@fidelios/adapter-opencode-local",
+  "name": "@fideliosai/adapter-opencode-local",
   "version": "0.0.3",
   "license": "MIT",
   "homepage": "https://github.com/fideliosai/fidelios",
@@ -39,7 +39,8 @@
       }
     },
     "main": "./dist/index.js",
-    "types": "./dist/index.d.ts"
+    "types": "./dist/index.d.ts",
+    "registry": "https://npm.pkg.github.com"
   },
   "files": [
     "dist",
@@ -51,7 +52,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@fidelios/adapter-utils": "workspace:*",
+    "@fideliosai/adapter-utils": "workspace:*",
     "picocolors": "^1.1.1"
   },
   "devDependencies": {

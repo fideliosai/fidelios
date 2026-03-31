@@ -22,7 +22,7 @@ import {
   companies,
   companyMemberships,
   instanceUserRoles,
-} from "@fidelios/db";
+} from "@fideliosai/db";
 import detectPort from "detect-port";
 import { createApp } from "./app.js";
 import { loadConfig } from "./config.js";
@@ -641,7 +641,7 @@ export async function startServer(): Promise<StartedServer> {
         // S3 cloud sync (non-blocking, graceful degradation)
         if (config.databaseBackupS3Enabled) {
           try {
-            const { uploadBackupToS3, pruneS3Backups } = await import("@fidelios/db/s3-sync");
+            const { uploadBackupToS3, pruneS3Backups } = await import("@fideliosai/db/s3-sync");
             const s3Config = {
               enabled: true,
               bucket: config.databaseBackupS3Bucket,

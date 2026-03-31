@@ -1,5 +1,5 @@
-import type { Agent, CompanyPortabilitySidebarOrder, Project } from "@fidelios/shared";
-import { deriveProjectUrlKey, normalizeAgentUrlKey } from "@fidelios/shared";
+import type { Agent, CompanyPortabilitySidebarOrder, Project } from "@fideliosai/shared";
+import { deriveProjectUrlKey, normalizeAgentUrlKey } from "@fideliosai/shared";
 
 function uniqueSlug(base: string, used: Set<string>) {
   if (!used.has(base)) {

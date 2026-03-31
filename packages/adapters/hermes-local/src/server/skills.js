@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { readFideliOSRuntimeSkillEntries, resolveFideliOSDesiredSkillNames, } from "@fidelios/adapter-utils/server-utils";
+import { readFideliOSRuntimeSkillEntries, resolveFideliOSDesiredSkillNames, } from "@fideliosai/adapter-utils/server-utils";
 import { fileURLToPath } from "node:url";
 const __moduleDir = path.dirname(fileURLToPath(import.meta.url));
 // ---------------------------------------------------------------------------

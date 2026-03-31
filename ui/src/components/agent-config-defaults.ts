@@ -1,4 +1,4 @@
-import type { CreateConfigValues } from "@fidelios/adapter-utils";
+import type { CreateConfigValues } from "@fideliosai/adapter-utils";
 
 export const defaultCreateValues: CreateConfigValues = {
   adapterType: "claude_local",

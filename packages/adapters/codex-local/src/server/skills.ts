@@ -4,11 +4,11 @@ import type {
   AdapterSkillContext,
   AdapterSkillEntry,
   AdapterSkillSnapshot,
-} from "@fidelios/adapter-utils";
+} from "@fideliosai/adapter-utils";
 import {
   readFideliOSRuntimeSkillEntries,
   resolveFideliOSDesiredSkillNames,
-} from "@fidelios/adapter-utils/server-utils";
+} from "@fideliosai/adapter-utils/server-utils";
 
 const __moduleDir = path.dirname(fileURLToPath(import.meta.url));
 

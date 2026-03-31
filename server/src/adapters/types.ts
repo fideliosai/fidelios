@@ -26,4 +26,4 @@ export type {
   ResolvedSessionCompactionPolicy,
   SessionCompactionPolicy,
   ServerAdapterModule,
-} from "@fidelios/adapter-utils";
+} from "@fideliosai/adapter-utils";

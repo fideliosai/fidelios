@@ -11,7 +11,7 @@
  * @example
  * ```ts
  * // dist/worker.ts
- * import { definePlugin } from "@fidelios/plugin-sdk";
+ * import { definePlugin } from "@fideliosai/plugin-sdk";
  *
  * export default definePlugin({
  *   async setup(ctx) {
@@ -232,7 +232,7 @@ export interface FideliOSPlugin {
  *
  * @example
  * ```ts
- * import { definePlugin } from "@fidelios/plugin-sdk";
+ * import { definePlugin } from "@fideliosai/plugin-sdk";
  *
  * export default definePlugin({
  *   async setup(ctx) {

@@ -43,7 +43,7 @@ import {
   runDatabaseRestore,
   createEmbeddedPostgresLogBuffer,
   formatEmbeddedPostgresError,
-} from "@fidelios/db";
+} from "@fideliosai/db";
 import type { Command } from "commander";
 import { ensureAgentJwtSecret, loadFideliOSEnvFile, mergeFideliOSEnvEntries, readFideliOSEnvEntries, resolveFideliOSEnvFile } from "../config/env.js";
 import { expandHomePrefix } from "../config/home.js";

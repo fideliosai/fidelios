@@ -15,7 +15,7 @@ import {
   type RealizedExecutionWorkspace,
 } from "../services/workspace-runtime.ts";
 import { resolveFideliOSConfigPath } from "../paths.ts";
-import type { WorkspaceOperation } from "@fidelios/shared";
+import type { WorkspaceOperation } from "@fideliosai/shared";
 import type { WorkspaceOperationRecorder } from "../services/workspace-operations.ts";
 
 const execFileAsync = promisify(execFile);

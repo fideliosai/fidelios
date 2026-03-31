@@ -10,13 +10,13 @@ import { fileURLToPath } from "node:url";
 import { Router } from "express";
 import type { Request } from "express";
 import { and, eq, isNull, desc } from "drizzle-orm";
-import type { Db } from "@fidelios/db";
+import type { Db } from "@fideliosai/db";
 import {
   agentApiKeys,
   authUsers,
   invites,
   joinRequests
-} from "@fidelios/db";
+} from "@fideliosai/db";
 import {
   acceptInviteSchema,
   createCliAuthChallengeSchema,
@@ -28,8 +28,8 @@ import {
   updateMemberPermissionsSchema,
   updateUserCompanyAccessSchema,
   PERMISSION_KEYS
-} from "@fidelios/shared";
-import type { DeploymentExposure, DeploymentMode } from "@fidelios/shared";
+} from "@fideliosai/shared";
+import type { DeploymentExposure, DeploymentMode } from "@fideliosai/shared";
 import {
   forbidden,
   conflict,

@@ -15,7 +15,7 @@
  *   -v/--verbose       verbose output
  *   --checkpoints      filesystem checkpoints
  */
-import { runChildProcess, buildFideliOSEnv, renderTemplate, ensureAbsoluteDirectory, } from "@fidelios/adapter-utils/server-utils";
+import { runChildProcess, buildFideliOSEnv, renderTemplate, ensureAbsoluteDirectory, } from "@fideliosai/adapter-utils/server-utils";
 import { HERMES_CLI, DEFAULT_TIMEOUT_SEC, DEFAULT_GRACE_SEC, VALID_PROVIDERS, } from "../shared/constants.js";
 // ---------------------------------------------------------------------------
 // Config helpers

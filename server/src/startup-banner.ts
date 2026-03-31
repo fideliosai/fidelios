@@ -1,6 +1,6 @@
 import { existsSync, readFileSync } from "node:fs";
 import { resolveFideliOSConfigPath, resolveFideliOSEnvPath } from "./paths.js";
-import type { DeploymentExposure, DeploymentMode } from "@fidelios/shared";
+import type { DeploymentExposure, DeploymentMode } from "@fideliosai/shared";
 
 import { parse as parseEnvFileContents } from "dotenv";
 

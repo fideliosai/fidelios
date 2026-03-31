@@ -1,2 +1,2 @@
 export { getCLIAdapter } from "./registry.js";
-export type { CLIAdapterModule } from "@fidelios/adapter-utils";
+export type { CLIAdapterModule } from "@fideliosai/adapter-utils";

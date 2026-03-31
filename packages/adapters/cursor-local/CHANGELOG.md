@@ -1,4 +1,4 @@
-# @fidelios/adapter-cursor-local
+# @fideliosai/adapter-cursor-local
 
 ## 0.3.1
 
@@ -6,7 +6,7 @@
 
 - Stable release preparation for 0.3.1
 - Updated dependencies
-  - @fidelios/adapter-utils@0.3.1
+  - @fideliosai/adapter-utils@0.3.1
 
 ## 0.3.0
 
@@ -17,7 +17,7 @@
 ### Patch Changes
 
 - Updated dependencies
-  - @fidelios/adapter-utils@0.3.0
+  - @fideliosai/adapter-utils@0.3.0
 
 ## 0.2.7
 

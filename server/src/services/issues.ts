@@ -1,5 +1,5 @@
 import { and, asc, desc, eq, inArray, isNull, ne, or, sql } from "drizzle-orm";
-import type { Db } from "@fidelios/db";
+import type { Db } from "@fideliosai/db";
 import {
   activityLog,
   agents,
@@ -20,8 +20,8 @@ import {
   labels,
   projectWorkspaces,
   projects,
-} from "@fidelios/db";
-import { extractAgentMentionIds, extractProjectMentionIds } from "@fidelios/shared";
+} from "@fideliosai/db";
+import { extractAgentMentionIds, extractProjectMentionIds } from "@fideliosai/shared";
 import { conflict, notFound, unprocessable } from "../errors.js";
 import {
   defaultIssueExecutionWorkspaceSettingsForProject,

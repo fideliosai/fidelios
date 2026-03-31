@@ -8,7 +8,7 @@ import type {
   IssueLabel,
   IssueWorkProduct,
   UpsertIssueDocument,
-} from "@fidelios/shared";
+} from "@fideliosai/shared";
 import { api } from "./client";
 
 export const issuesApi = {

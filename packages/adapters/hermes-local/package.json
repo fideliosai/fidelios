@@ -1,5 +1,5 @@
 {
-  "name": "@fidelios/adapter-hermes-local",
+  "name": "@fideliosai/adapter-hermes-local",
   "version": "0.0.3",
   "license": "MIT",
   "description": "Hermes AI agent adapter for FideliOS (forked from hermes adapter by NousResearch)",
@@ -17,13 +17,14 @@
     "./cli": "./src/cli/index.js"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "registry": "https://npm.pkg.github.com"
   },
   "files": [
     "src"
   ],
   "dependencies": {
-    "@fidelios/adapter-utils": "workspace:*",
+    "@fideliosai/adapter-utils": "workspace:*",
     "picocolors": "^1.1.0"
   }
 }

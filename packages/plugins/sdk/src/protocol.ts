@@ -29,8 +29,8 @@ import type {
   IssueDocumentSummary,
   Agent,
   Goal,
-} from "@fidelios/shared";
-export type { PluginLauncherRenderContextSnapshot } from "@fidelios/shared";
+} from "@fideliosai/shared";
+export type { PluginLauncherRenderContextSnapshot } from "@fideliosai/shared";
 
 import type {
   PluginEvent,

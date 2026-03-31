@@ -1,4 +1,4 @@
-import type { Project } from "@fidelios/shared";
+import type { Project } from "@fideliosai/shared";
 
 export const PROJECT_ORDER_UPDATED_EVENT = "fidelios:project-order-updated";
 const PROJECT_ORDER_STORAGE_PREFIX = "fidelios.projectOrder";

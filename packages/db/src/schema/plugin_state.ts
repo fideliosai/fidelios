@@ -7,7 +7,7 @@ import {
   index,
   unique,
 } from "drizzle-orm/pg-core";
-import type { PluginStateScopeKind } from "@fidelios/shared";
+import type { PluginStateScopeKind } from "@fideliosai/shared";
 import { plugins } from "./plugins.js";
 
 /**

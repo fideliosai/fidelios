@@ -1,6 +1,6 @@
 import { and, asc, desc, eq, inArray } from "drizzle-orm";
-import type { Db } from "@fidelios/db";
-import { projects, projectGoals, goals, projectWorkspaces, workspaceRuntimeServices } from "@fidelios/db";
+import type { Db } from "@fideliosai/db";
+import { projects, projectGoals, goals, projectWorkspaces, workspaceRuntimeServices } from "@fideliosai/db";
 import {
   PROJECT_COLORS,
   deriveProjectUrlKey,
@@ -11,7 +11,7 @@ import {
   type ProjectGoalRef,
   type ProjectWorkspace,
   type WorkspaceRuntimeService,
-} from "@fidelios/shared";
+} from "@fideliosai/shared";
 import { listWorkspaceRuntimeServicesForProjectWorkspaces } from "./workspace-runtime.js";
 import { parseProjectExecutionWorkspacePolicy } from "./execution-workspace-policy.js";
 import { resolveManagedProjectWorkspaceDir } from "../home-paths.js";

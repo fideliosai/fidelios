@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef, useCallback, useMemo } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import type { AdapterEnvironmentTestResult } from "@fidelios/shared";
+import type { AdapterEnvironmentTestResult } from "@fideliosai/shared";
 import { useLocation, useNavigate, useParams } from "@/lib/router";
 import { useDialog } from "../context/DialogContext";
 import { useCompany } from "../context/CompanyContext";
@@ -33,9 +33,9 @@ import {
 import {
   DEFAULT_CODEX_LOCAL_BYPASS_APPROVALS_AND_SANDBOX,
   DEFAULT_CODEX_LOCAL_MODEL
-} from "@fidelios/adapter-codex-local";
-import { DEFAULT_CURSOR_LOCAL_MODEL } from "@fidelios/adapter-cursor-local";
-import { DEFAULT_GEMINI_LOCAL_MODEL } from "@fidelios/adapter-gemini-local";
+} from "@fideliosai/adapter-codex-local";
+import { DEFAULT_CURSOR_LOCAL_MODEL } from "@fideliosai/adapter-cursor-local";
+import { DEFAULT_GEMINI_LOCAL_MODEL } from "@fideliosai/adapter-gemini-local";
 import { resolveRouteOnboardingOptions } from "../lib/onboarding-route";
 import { AsciiArtAnimation } from "./AsciiArtAnimation";
 import { OpenCodeLogoIcon } from "./OpenCodeLogoIcon";

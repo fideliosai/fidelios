@@ -1,12 +1,12 @@
 import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { AGENT_ADAPTER_TYPES } from "@fidelios/shared";
+import { AGENT_ADAPTER_TYPES } from "@fideliosai/shared";
 import type {
   Agent,
   AdapterEnvironmentTestResult,
   CompanySecret,
   EnvBinding,
-} from "@fidelios/shared";
+} from "@fideliosai/shared";
 import type { AdapterModel } from "../api/agents";
 import { agentsApi } from "../api/agents";
 import { secretsApi } from "../api/secrets";
@@ -14,9 +14,9 @@ import { assetsApi } from "../api/assets";
 import {
   DEFAULT_CODEX_LOCAL_BYPASS_APPROVALS_AND_SANDBOX,
   DEFAULT_CODEX_LOCAL_MODEL,
-} from "@fidelios/adapter-codex-local";
-import { DEFAULT_CURSOR_LOCAL_MODEL } from "@fidelios/adapter-cursor-local";
-import { DEFAULT_GEMINI_LOCAL_MODEL } from "@fidelios/adapter-gemini-local";
+} from "@fideliosai/adapter-codex-local";
+import { DEFAULT_CURSOR_LOCAL_MODEL } from "@fideliosai/adapter-cursor-local";
+import { DEFAULT_GEMINI_LOCAL_MODEL } from "@fideliosai/adapter-gemini-local";
 import {
   Popover,
   PopoverContent,
@@ -49,10 +49,10 @@ import { shouldShowLegacyWorkingDirectoryField } from "../lib/legacy-agent-confi
 
 /* ---- Create mode values ---- */
 
-// Canonical type lives in @fidelios/adapter-utils; re-exported here
+// Canonical type lives in @fideliosai/adapter-utils; re-exported here
 // so existing imports from this file keep working.
-export type { CreateConfigValues } from "@fidelios/adapter-utils";
-import type { CreateConfigValues } from "@fidelios/adapter-utils";
+export type { CreateConfigValues } from "@fideliosai/adapter-utils";
+import type { CreateConfigValues } from "@fideliosai/adapter-utils";
 
 /* ---- Props ---- */
 

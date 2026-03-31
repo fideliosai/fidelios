@@ -1,4 +1,4 @@
-import type { CompanySecret, SecretProviderDescriptor, SecretProvider } from "@fidelios/shared";
+import type { CompanySecret, SecretProviderDescriptor, SecretProvider } from "@fideliosai/shared";
 import { api } from "./client";
 
 export const secretsApi = {

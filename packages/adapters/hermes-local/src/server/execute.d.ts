@@ -15,6 +15,6 @@
  *   -v/--verbose       verbose output
  *   --checkpoints      filesystem checkpoints
  */
-import type { AdapterExecutionContext, AdapterExecutionResult } from "@fidelios/adapter-utils";
+import type { AdapterExecutionContext, AdapterExecutionResult } from "@fideliosai/adapter-utils";
 export declare function execute(ctx: AdapterExecutionContext): Promise<AdapterExecutionResult>;
 //# sourceMappingURL=execute.d.ts.map

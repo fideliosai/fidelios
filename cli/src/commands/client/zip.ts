@@ -1,6 +1,6 @@
 import { inflateRawSync } from "node:zlib";
 import path from "node:path";
-import type { CompanyPortabilityFileEntry } from "@fidelios/shared";
+import type { CompanyPortabilityFileEntry } from "@fideliosai/shared";
 
 const textDecoder = new TextDecoder();
 

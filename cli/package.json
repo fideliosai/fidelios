@@ -1,7 +1,7 @@
 {
   "name": "fidelios",
   "version": "0.0.3",
-  "description": "FideliOS CLI \u2014 orchestrate AI agent teams to run a business",
+  "description": "FideliOS CLI — orchestrate AI agent teams to run a business",
   "type": "module",
   "bin": {
     "fidelios": "./dist/index.js"
@@ -27,7 +27,8 @@
     "dist"
   ],
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "registry": "https://npm.pkg.github.com"
   },
   "scripts": {
     "dev": "tsx src/index.ts",
@@ -37,17 +38,17 @@
   },
   "dependencies": {
     "@clack/prompts": "^0.10.0",
-    "@fidelios/adapter-claude-local": "workspace:*",
-    "@fidelios/adapter-codex-local": "workspace:*",
-    "@fidelios/adapter-cursor-local": "workspace:*",
-    "@fidelios/adapter-gemini-local": "workspace:*",
-    "@fidelios/adapter-opencode-local": "workspace:*",
-    "@fidelios/adapter-pi-local": "workspace:*",
-    "@fidelios/adapter-openclaw-gateway": "workspace:*",
-    "@fidelios/adapter-utils": "workspace:*",
-    "@fidelios/db": "workspace:*",
-    "@fidelios/server": "workspace:*",
-    "@fidelios/shared": "workspace:*",
+    "@fideliosai/adapter-claude-local": "workspace:*",
+    "@fideliosai/adapter-codex-local": "workspace:*",
+    "@fideliosai/adapter-cursor-local": "workspace:*",
+    "@fideliosai/adapter-gemini-local": "workspace:*",
+    "@fideliosai/adapter-opencode-local": "workspace:*",
+    "@fideliosai/adapter-pi-local": "workspace:*",
+    "@fideliosai/adapter-openclaw-gateway": "workspace:*",
+    "@fideliosai/adapter-utils": "workspace:*",
+    "@fideliosai/db": "workspace:*",
+    "@fideliosai/server": "workspace:*",
+    "@fideliosai/shared": "workspace:*",
     "drizzle-orm": "0.38.4",
     "dotenv": "^17.0.1",
     "commander": "^13.1.0",

@@ -10,7 +10,7 @@
  * We emit structured tool_call/tool_result pairs so FideliOS renders proper
  * tool cards (with status icons, expand/collapse) instead of raw stdout blocks.
  */
-import type { TranscriptEntry } from "@fidelios/adapter-utils";
+import type { TranscriptEntry } from "@fideliosai/adapter-utils";
 /**
  * Parse a single line of Hermes stdout into transcript entries.
  *

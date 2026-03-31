@@ -1,5 +1,5 @@
 import * as p from "@clack/prompts";
-import type { SecretProvider } from "@fidelios/shared";
+import type { SecretProvider } from "@fideliosai/shared";
 import type { SecretsConfig } from "../config/schema.js";
 import { resolveDefaultSecretsKeyFilePath, resolveFideliOSInstanceId } from "../config/home.js";
 

@@ -41,7 +41,7 @@ find . "${FIND_ARGS[@]}" -exec grep -l 'paperclipai/paperclip' {} \; 2>/dev/null
 done
 
 # Phase 2: NPM scope
-echo "[2/10] NPM scope @paperclipai/ → @fidelios/..."
+echo "[2/10] NPM scope @paperclipai/ → @fideliosai/..."
 find . "${FIND_ARGS[@]}" -exec grep -l '@paperclipai/' {} \; 2>/dev/null | while read -r f; do
   sedi 's/@paperclipai\//@fidelios\//g' "$f"
 done

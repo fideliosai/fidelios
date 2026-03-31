@@ -1,4 +1,4 @@
-import type { CLIAdapterModule } from "@fidelios/adapter-utils";
+import type { CLIAdapterModule } from "@fideliosai/adapter-utils";
 import { printHttpStdoutEvent } from "./format-event.js";
 
 export const httpCLIAdapter: CLIAdapterModule = {

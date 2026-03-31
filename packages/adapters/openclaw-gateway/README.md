@@ -1,6 +1,6 @@
 # OpenClaw Gateway Adapter
 
-This document describes how `@fidelios/adapter-openclaw-gateway` invokes OpenClaw over the Gateway protocol.
+This document describes how `@fideliosai/adapter-openclaw-gateway` invokes OpenClaw over the Gateway protocol.
 
 ## Transport
 

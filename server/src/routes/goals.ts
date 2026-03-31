@@ -1,6 +1,6 @@
 import { Router } from "express";
-import type { Db } from "@fidelios/db";
-import { createGoalSchema, updateGoalSchema } from "@fidelios/shared";
+import type { Db } from "@fideliosai/db";
+import { createGoalSchema, updateGoalSchema } from "@fideliosai/shared";
 import { validate } from "../middleware/validate.js";
 import { goalService, logActivity } from "../services/index.js";
 import { assertCompanyAccess, getActorInfo } from "./authz.js";

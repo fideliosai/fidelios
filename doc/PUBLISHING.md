@@ -19,9 +19,9 @@ FideliOS no longer uses release branches or Changesets for publishing.
 
 The CLI package, `fidelios`, imports code from workspace packages such as:
 
-- `@fidelios/server`
-- `@fidelios/db`
-- `@fidelios/shared`
+- `@fideliosai/server`
+- `@fideliosai/db`
+- `@fideliosai/shared`
 - adapter packages under `packages/adapters/`
 
 Those workspace references are valid in development but not in a publishable npm package. The release flow rewrites versions temporarily, then builds a publishable CLI bundle.
@@ -64,7 +64,7 @@ The version rewrite step now uses [`scripts/release-package-map.mjs`](../scripts
 
 Those rewrites are temporary. The working tree is restored after publish or dry-run.
 
-## `@fidelios/ui` packaging
+## `@fideliosai/ui` packaging
 
 The UI package publishes prebuilt static assets, not the source workspace.
 

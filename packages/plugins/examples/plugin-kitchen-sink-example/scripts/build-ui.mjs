@@ -18,7 +18,7 @@ await esbuild.build({
     "react",
     "react-dom",
     "react/jsx-runtime",
-    "@fidelios/plugin-sdk/ui",
+    "@fideliosai/plugin-sdk/ui",
   ],
   logLevel: "info",
 });

@@ -2,14 +2,14 @@
 set -euo pipefail
 
 # prepare-server-ui-dist.sh — Build the UI and copy it into server/ui-dist.
-# This keeps @fidelios/server publish artifacts self-contained for static UI serving.
+# This keeps @fideliosai/server publish artifacts self-contained for static UI serving.
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 UI_DIST="$REPO_ROOT/ui/dist"
 SERVER_UI_DIST="$REPO_ROOT/server/ui-dist"
 
-echo "  -> Building @fidelios/ui..."
-pnpm --dir "$REPO_ROOT" --filter @fidelios/ui build
+echo "  -> Building @fideliosai/ui..."
+pnpm --dir "$REPO_ROOT" --filter @fideliosai/ui build
 
 if [ ! -f "$UI_DIST/index.html" ]; then
   echo "Error: UI build output missing at $UI_DIST/index.html"

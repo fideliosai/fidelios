@@ -1,7 +1,7 @@
 import { Router } from "express";
-import type { Db } from "@fidelios/db";
+import type { Db } from "@fideliosai/db";
 import { and, eq, sql } from "drizzle-orm";
-import { joinRequests } from "@fidelios/db";
+import { joinRequests } from "@fideliosai/db";
 import { sidebarBadgeService } from "../services/sidebar-badges.js";
 import { accessService } from "../services/access.js";
 import { dashboardService } from "../services/dashboard.js";

@@ -1,4 +1,4 @@
-import { usePluginAction, usePluginData, type PluginWidgetProps } from "@fidelios/plugin-sdk/ui";
+import { usePluginAction, usePluginData, type PluginWidgetProps } from "@fideliosai/plugin-sdk/ui";
 
 type HealthData = {
   status: "ok" | "degraded" | "error";

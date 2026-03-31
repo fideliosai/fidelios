@@ -1,5 +1,5 @@
 {
-  "name": "@fidelios/create-fidelios-plugin",
+  "name": "@fideliosai/create-fidelios-plugin",
   "version": "0.0.3",
   "license": "MIT",
   "homepage": "https://github.com/fideliosai/fidelios",
@@ -30,7 +30,8 @@
       }
     },
     "main": "./dist/index.js",
-    "types": "./dist/index.d.ts"
+    "types": "./dist/index.d.ts",
+    "registry": "https://npm.pkg.github.com"
   },
   "files": [
     "dist"
@@ -41,7 +42,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@fidelios/plugin-sdk": "workspace:*"
+    "@fideliosai/plugin-sdk": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^24.6.0",

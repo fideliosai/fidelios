@@ -1,4 +1,4 @@
-import type { SecretProvider, SecretProviderDescriptor } from "@fidelios/shared";
+import type { SecretProvider, SecretProviderDescriptor } from "@fideliosai/shared";
 
 export interface StoredSecretVersionMaterial {
   [key: string]: unknown;

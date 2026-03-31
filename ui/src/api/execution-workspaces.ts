@@ -1,4 +1,4 @@
-import type { ExecutionWorkspace } from "@fidelios/shared";
+import type { ExecutionWorkspace } from "@fideliosai/shared";
 import { api } from "./client";
 
 export const executionWorkspacesApi = {

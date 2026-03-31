@@ -1,7 +1,7 @@
 import { and, desc, eq, inArray, not, sql } from "drizzle-orm";
-import type { Db } from "@fidelios/db";
-import { agents, approvals, heartbeatRuns } from "@fidelios/db";
-import type { SidebarBadges } from "@fidelios/shared";
+import type { Db } from "@fideliosai/db";
+import { agents, approvals, heartbeatRuns } from "@fideliosai/db";
+import type { SidebarBadges } from "@fideliosai/shared";
 
 const ACTIONABLE_APPROVAL_STATUSES = ["pending", "revision_requested"];
 const FAILED_HEARTBEAT_STATUSES = ["failed", "timed_out"];

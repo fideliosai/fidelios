@@ -1,4 +1,4 @@
-import type { AssetImage } from "@fidelios/shared";
+import type { AssetImage } from "@fideliosai/shared";
 import { api } from "./client";
 
 export const assetsApi = {

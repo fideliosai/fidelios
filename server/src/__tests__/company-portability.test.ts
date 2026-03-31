@@ -4,7 +4,7 @@ import os from "node:os";
 import path from "node:path";
 import { Readable } from "node:stream";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { CompanyPortabilityFileEntry } from "@fidelios/shared";
+import type { CompanyPortabilityFileEntry } from "@fideliosai/shared";
 
 const companySvc = {
   getById: vi.fn(),

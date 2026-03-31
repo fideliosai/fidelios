@@ -2,8 +2,8 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import type { AdapterExecutionContext, AdapterExecutionResult } from "@fidelios/adapter-utils";
-import type { RunProcessResult } from "@fidelios/adapter-utils/server-utils";
+import type { AdapterExecutionContext, AdapterExecutionResult } from "@fideliosai/adapter-utils";
+import type { RunProcessResult } from "@fideliosai/adapter-utils/server-utils";
 import {
   asString,
   asNumber,
@@ -20,7 +20,7 @@ import {
   ensurePathInEnv,
   renderTemplate,
   runChildProcess,
-} from "@fidelios/adapter-utils/server-utils";
+} from "@fideliosai/adapter-utils/server-utils";
 import {
   parseClaudeStreamJson,
   describeClaudeFailure,

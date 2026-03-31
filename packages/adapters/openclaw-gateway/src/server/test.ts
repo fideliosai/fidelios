@@ -2,8 +2,8 @@ import type {
   AdapterEnvironmentCheck,
   AdapterEnvironmentTestContext,
   AdapterEnvironmentTestResult,
-} from "@fidelios/adapter-utils";
-import { asString, parseObject } from "@fidelios/adapter-utils/server-utils";
+} from "@fideliosai/adapter-utils";
+import { asString, parseObject } from "@fideliosai/adapter-utils/server-utils";
 import { randomUUID } from "node:crypto";
 import { WebSocket } from "ws";
 

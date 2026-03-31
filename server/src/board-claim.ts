@@ -1,8 +1,8 @@
 import { randomBytes } from "node:crypto";
 import { and, eq } from "drizzle-orm";
-import type { Db } from "@fidelios/db";
-import { companies, companyMemberships, instanceUserRoles } from "@fidelios/db";
-import type { DeploymentMode } from "@fidelios/shared";
+import type { Db } from "@fideliosai/db";
+import { companies, companyMemberships, instanceUserRoles } from "@fideliosai/db";
+import type { DeploymentMode } from "@fideliosai/shared";
 
 const LOCAL_BOARD_USER_ID = "local-board";
 const CLAIM_TTL_MS = 1000 * 60 * 60 * 24;

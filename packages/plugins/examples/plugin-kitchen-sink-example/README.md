@@ -1,4 +1,4 @@
-# @fidelios/plugin-kitchen-sink-example
+# @fideliosai/plugin-kitchen-sink-example
 
 Kitchen Sink is the first-party reference plugin that demonstrates nearly the full currently implemented FideliOS plugin surface in one package.
 
@@ -20,7 +20,7 @@ This plugin is for local development, contributor onboarding, and runtime regres
 ## Install
 
 ```sh
-pnpm --filter @fidelios/plugin-kitchen-sink-example build
+pnpm --filter @fideliosai/plugin-kitchen-sink-example build
 pnpm fidelios plugin install ./packages/plugins/examples/plugin-kitchen-sink-example
 ```
 

@@ -6,7 +6,7 @@ import {
   resubmitApprovalSchema,
   type Approval,
   type ApprovalComment,
-} from "@fidelios/shared";
+} from "@fideliosai/shared";
 import {
   addCommonClientOptions,
   formatInlineRecord,

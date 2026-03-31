@@ -1,4 +1,4 @@
-import type { QuotaWindow } from "@fidelios/shared";
+import type { QuotaWindow } from "@fideliosai/shared";
 import { cn, quotaSourceDisplayName } from "@/lib/utils";
 
 interface CodexSubscriptionPanelProps {

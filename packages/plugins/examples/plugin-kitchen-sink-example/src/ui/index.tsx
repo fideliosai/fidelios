@@ -13,7 +13,7 @@ import {
   type PluginSettingsPageProps,
   type PluginSidebarProps,
   type PluginWidgetProps,
-} from "@fidelios/plugin-sdk/ui";
+} from "@fideliosai/plugin-sdk/ui";
 import {
   DEFAULT_CONFIG,
   JOB_KEYS,

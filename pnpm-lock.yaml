@@ -38,37 +38,37 @@ importers:
       '@clack/prompts':
         specifier: ^0.10.0
         version: 0.10.1
-      '@fidelios/adapter-claude-local':
+      '@fideliosai/adapter-claude-local':
         specifier: workspace:*
         version: link:../packages/adapters/claude-local
-      '@fidelios/adapter-codex-local':
+      '@fideliosai/adapter-codex-local':
         specifier: workspace:*
         version: link:../packages/adapters/codex-local
-      '@fidelios/adapter-cursor-local':
+      '@fideliosai/adapter-cursor-local':
         specifier: workspace:*
         version: link:../packages/adapters/cursor-local
-      '@fidelios/adapter-gemini-local':
+      '@fideliosai/adapter-gemini-local':
         specifier: workspace:*
         version: link:../packages/adapters/gemini-local
-      '@fidelios/adapter-openclaw-gateway':
+      '@fideliosai/adapter-openclaw-gateway':
         specifier: workspace:*
         version: link:../packages/adapters/openclaw-gateway
-      '@fidelios/adapter-opencode-local':
+      '@fideliosai/adapter-opencode-local':
         specifier: workspace:*
         version: link:../packages/adapters/opencode-local
-      '@fidelios/adapter-pi-local':
+      '@fideliosai/adapter-pi-local':
         specifier: workspace:*
         version: link:../packages/adapters/pi-local
-      '@fidelios/adapter-utils':
+      '@fideliosai/adapter-utils':
         specifier: workspace:*
         version: link:../packages/adapter-utils
-      '@fidelios/db':
+      '@fideliosai/db':
         specifier: workspace:*
         version: link:../packages/db
-      '@fidelios/server':
+      '@fideliosai/server':
         specifier: workspace:*
         version: link:../server
-      '@fidelios/shared':
+      '@fideliosai/shared':
         specifier: workspace:*
         version: link:../packages/shared
       commander:
@@ -108,7 +108,7 @@ importers:
 
   packages/adapters/claude-local:
     dependencies:
-      '@fidelios/adapter-utils':
+      '@fideliosai/adapter-utils':
         specifier: workspace:*
         version: link:../../adapter-utils
       picocolors:
@@ -124,7 +124,7 @@ importers:
 
   packages/adapters/codex-local:
     dependencies:
-      '@fidelios/adapter-utils':
+      '@fideliosai/adapter-utils':
         specifier: workspace:*
         version: link:../../adapter-utils
       picocolors:
@@ -140,7 +140,7 @@ importers:
 
   packages/adapters/cursor-local:
     dependencies:
-      '@fidelios/adapter-utils':
+      '@fideliosai/adapter-utils':
         specifier: workspace:*
         version: link:../../adapter-utils
       picocolors:
@@ -156,7 +156,7 @@ importers:
 
   packages/adapters/gemini-local:
     dependencies:
-      '@fidelios/adapter-utils':
+      '@fideliosai/adapter-utils':
         specifier: workspace:*
         version: link:../../adapter-utils
       picocolors:
@@ -172,7 +172,7 @@ importers:
 
   packages/adapters/hermes-local:
     dependencies:
-      '@fidelios/adapter-utils':
+      '@fideliosai/adapter-utils':
         specifier: workspace:*
         version: link:../../adapter-utils
       picocolors:
@@ -181,7 +181,7 @@ importers:
 
   packages/adapters/openclaw-gateway:
     dependencies:
-      '@fidelios/adapter-utils':
+      '@fideliosai/adapter-utils':
         specifier: workspace:*
         version: link:../../adapter-utils
       picocolors:
@@ -203,7 +203,7 @@ importers:
 
   packages/adapters/opencode-local:
     dependencies:
-      '@fidelios/adapter-utils':
+      '@fideliosai/adapter-utils':
         specifier: workspace:*
         version: link:../../adapter-utils
       picocolors:
@@ -219,7 +219,7 @@ importers:
 
   packages/adapters/pi-local:
     dependencies:
-      '@fidelios/adapter-utils':
+      '@fideliosai/adapter-utils':
         specifier: workspace:*
         version: link:../../adapter-utils
       picocolors:
@@ -238,7 +238,7 @@ importers:
       '@aws-sdk/client-s3':
         specifier: ^3.888.0
         version: 3.994.0
-      '@fidelios/shared':
+      '@fideliosai/shared':
         specifier: workspace:*
         version: link:../shared
       drizzle-orm:
@@ -269,7 +269,7 @@ importers:
 
   packages/plugins/create-fidelios-plugin:
     dependencies:
-      '@fidelios/plugin-sdk':
+      '@fideliosai/plugin-sdk':
         specifier: workspace:*
         version: link:../sdk
     devDependencies:
@@ -282,7 +282,7 @@ importers:
 
   packages/plugins/examples/plugin-authoring-smoke-example:
     dependencies:
-      '@fidelios/plugin-sdk':
+      '@fideliosai/plugin-sdk':
         specifier: workspace:*
         version: link:../../sdk
       react:
@@ -331,7 +331,7 @@ importers:
       '@codemirror/view':
         specifier: ^6.28.0
         version: 6.39.15
-      '@fidelios/plugin-sdk':
+      '@fideliosai/plugin-sdk':
         specifier: workspace:*
         version: link:../../sdk
       '@lezer/highlight':
@@ -365,7 +365,7 @@ importers:
 
   packages/plugins/examples/plugin-hello-world-example:
     dependencies:
-      '@fidelios/plugin-sdk':
+      '@fideliosai/plugin-sdk':
         specifier: workspace:*
         version: link:../../sdk
     devDependencies:
@@ -390,10 +390,10 @@ importers:
 
   packages/plugins/examples/plugin-kitchen-sink-example:
     dependencies:
-      '@fidelios/plugin-sdk':
+      '@fideliosai/plugin-sdk':
         specifier: workspace:*
         version: link:../../sdk
-      '@fidelios/shared':
+      '@fideliosai/shared':
         specifier: workspace:*
         version: link:../../../shared
     devDependencies:
@@ -421,7 +421,7 @@ importers:
 
   packages/plugins/sdk:
     dependencies:
-      '@fidelios/shared':
+      '@fideliosai/shared':
         specifier: workspace:*
         version: link:../../shared
       react:
@@ -456,40 +456,40 @@ importers:
       '@aws-sdk/client-s3':
         specifier: ^3.888.0
         version: 3.994.0
-      '@fidelios/adapter-claude-local':
+      '@fideliosai/adapter-claude-local':
         specifier: workspace:*
         version: link:../packages/adapters/claude-local
-      '@fidelios/adapter-codex-local':
+      '@fideliosai/adapter-codex-local':
         specifier: workspace:*
         version: link:../packages/adapters/codex-local
-      '@fidelios/adapter-cursor-local':
+      '@fideliosai/adapter-cursor-local':
         specifier: workspace:*
         version: link:../packages/adapters/cursor-local
-      '@fidelios/adapter-gemini-local':
+      '@fideliosai/adapter-gemini-local':
         specifier: workspace:*
         version: link:../packages/adapters/gemini-local
-      '@fidelios/adapter-hermes-local':
+      '@fideliosai/adapter-hermes-local':
         specifier: workspace:*
         version: link:../packages/adapters/hermes-local
-      '@fidelios/adapter-openclaw-gateway':
+      '@fideliosai/adapter-openclaw-gateway':
         specifier: workspace:*
         version: link:../packages/adapters/openclaw-gateway
-      '@fidelios/adapter-opencode-local':
+      '@fideliosai/adapter-opencode-local':
         specifier: workspace:*
         version: link:../packages/adapters/opencode-local
-      '@fidelios/adapter-pi-local':
+      '@fideliosai/adapter-pi-local':
         specifier: workspace:*
         version: link:../packages/adapters/pi-local
-      '@fidelios/adapter-utils':
+      '@fideliosai/adapter-utils':
         specifier: workspace:*
         version: link:../packages/adapter-utils
-      '@fidelios/db':
+      '@fideliosai/db':
         specifier: workspace:*
         version: link:../packages/db
-      '@fidelios/plugin-sdk':
+      '@fideliosai/plugin-sdk':
         specifier: workspace:*
         version: link:../packages/plugins/sdk
-      '@fidelios/shared':
+      '@fideliosai/shared':
         specifier: workspace:*
         version: link:../packages/shared
       ajv:
@@ -604,34 +604,34 @@ importers:
       '@dnd-kit/utilities':
         specifier: ^3.2.2
         version: 3.2.2(react@19.2.4)
-      '@fidelios/adapter-claude-local':
+      '@fideliosai/adapter-claude-local':
         specifier: workspace:*
         version: link:../packages/adapters/claude-local
-      '@fidelios/adapter-codex-local':
+      '@fideliosai/adapter-codex-local':
         specifier: workspace:*
         version: link:../packages/adapters/codex-local
-      '@fidelios/adapter-cursor-local':
+      '@fideliosai/adapter-cursor-local':
         specifier: workspace:*
         version: link:../packages/adapters/cursor-local
-      '@fidelios/adapter-gemini-local':
+      '@fideliosai/adapter-gemini-local':
         specifier: workspace:*
         version: link:../packages/adapters/gemini-local
-      '@fidelios/adapter-hermes-local':
+      '@fideliosai/adapter-hermes-local':
         specifier: workspace:*
         version: link:../packages/adapters/hermes-local
-      '@fidelios/adapter-openclaw-gateway':
+      '@fideliosai/adapter-openclaw-gateway':
         specifier: workspace:*
         version: link:../packages/adapters/openclaw-gateway
-      '@fidelios/adapter-opencode-local':
+      '@fideliosai/adapter-opencode-local':
         specifier: workspace:*
         version: link:../packages/adapters/opencode-local
-      '@fidelios/adapter-pi-local':
+      '@fideliosai/adapter-pi-local':
         specifier: workspace:*
         version: link:../packages/adapters/pi-local
-      '@fidelios/adapter-utils':
+      '@fideliosai/adapter-utils':
         specifier: workspace:*
         version: link:../packages/adapter-utils
-      '@fidelios/shared':
+      '@fideliosai/shared':
         specifier: workspace:*
         version: link:../packages/shared
       '@lexical/link':

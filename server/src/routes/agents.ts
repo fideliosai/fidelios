@@ -1,8 +1,8 @@
 import { Router, type Request } from "express";
 import { generateKeyPairSync, randomUUID } from "node:crypto";
 import path from "node:path";
-import type { Db } from "@fidelios/db";
-import { agents as agentsTable, companies, heartbeatRuns } from "@fidelios/db";
+import type { Db } from "@fideliosai/db";
+import { agents as agentsTable, companies, heartbeatRuns } from "@fideliosai/db";
 import { and, desc, eq, inArray, not, sql } from "drizzle-orm";
 import {
   agentSkillSyncSchema,
@@ -21,11 +21,11 @@ import {
   updateAgentInstructionsPathSchema,
   wakeAgentSchema,
   updateAgentSchema,
-} from "@fidelios/shared";
+} from "@fideliosai/shared";
 import {
   readFideliOSSkillSyncPreference,
   writeFideliOSSkillSyncPreference,
-} from "@fidelios/adapter-utils/server-utils";
+} from "@fideliosai/adapter-utils/server-utils";
 import { validate } from "../middleware/validate.js";
 import {
   agentService,
@@ -49,14 +49,14 @@ import { redactEventPayload } from "../redaction.js";
 import { redactCurrentUserValue } from "../log-redaction.js";
 import { renderOrgChartSvg, renderOrgChartPng, type OrgNode, type OrgChartStyle, ORG_CHART_STYLES } from "./org-chart-svg.js";
 import { instanceSettingsService } from "../services/instance-settings.js";
-import { runClaudeLogin } from "@fidelios/adapter-claude-local/server";
+import { runClaudeLogin } from "@fideliosai/adapter-claude-local/server";
 import {
   DEFAULT_CODEX_LOCAL_BYPASS_APPROVALS_AND_SANDBOX,
   DEFAULT_CODEX_LOCAL_MODEL,
-} from "@fidelios/adapter-codex-local";
-import { DEFAULT_CURSOR_LOCAL_MODEL } from "@fidelios/adapter-cursor-local";
-import { DEFAULT_GEMINI_LOCAL_MODEL } from "@fidelios/adapter-gemini-local";
-import { ensureOpenCodeModelConfiguredAndAvailable } from "@fidelios/adapter-opencode-local/server";
+} from "@fideliosai/adapter-codex-local";
+import { DEFAULT_CURSOR_LOCAL_MODEL } from "@fideliosai/adapter-cursor-local";
+import { DEFAULT_GEMINI_LOCAL_MODEL } from "@fideliosai/adapter-gemini-local";
+import { ensureOpenCodeModelConfiguredAndAvailable } from "@fideliosai/adapter-opencode-local/server";
 import {
   loadDefaultAgentInstructionsBundle,
   resolveDefaultAgentInstructionsBundleRole,

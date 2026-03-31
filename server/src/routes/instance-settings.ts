@@ -1,6 +1,6 @@
 import { Router, type Request } from "express";
-import type { Db } from "@fidelios/db";
-import { patchInstanceExperimentalSettingsSchema, patchInstanceGeneralSettingsSchema } from "@fidelios/shared";
+import type { Db } from "@fideliosai/db";
+import { patchInstanceExperimentalSettingsSchema, patchInstanceGeneralSettingsSchema } from "@fideliosai/shared";
 import { forbidden } from "../errors.js";
 import { validate } from "../middleware/validate.js";
 import { instanceSettingsService, logActivity } from "../services/index.js";

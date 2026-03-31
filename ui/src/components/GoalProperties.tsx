@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Link } from "@/lib/router";
 import { useQuery } from "@tanstack/react-query";
-import type { Goal } from "@fidelios/shared";
-import { GOAL_STATUSES, GOAL_LEVELS } from "@fidelios/shared";
+import type { Goal } from "@fideliosai/shared";
+import { GOAL_STATUSES, GOAL_LEVELS } from "@fideliosai/shared";
 import { agentsApi } from "../api/agents";
 import { goalsApi } from "../api/goals";
 import { useCompany } from "../context/CompanyContext";

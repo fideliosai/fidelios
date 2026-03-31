@@ -34,8 +34,8 @@ Do this for every public package that FideliOS publishes.
 At minimum that includes:
 
 - `fidelios`
-- `@fidelios/server`
-- `@fidelios/ui`
+- `@fideliosai/server`
+- `@fideliosai/ui`
 - public packages under `packages/`
 
 ### 2.1. In npm, open each package settings page

@@ -1,11 +1,11 @@
 import { and, eq, isNull } from "drizzle-orm";
-import type { Db } from "@fidelios/db";
-import { plugins, pluginState } from "@fidelios/db";
+import type { Db } from "@fideliosai/db";
+import { plugins, pluginState } from "@fideliosai/db";
 import type {
   PluginStateScopeKind,
   SetPluginState,
   ListPluginState,
-} from "@fidelios/shared";
+} from "@fideliosai/shared";
 import { notFound } from "../errors.js";
 
 // ---------------------------------------------------------------------------

@@ -2,7 +2,7 @@
  * Core types for the FideliOS plugin worker-side SDK.
  *
  * These types define the stable public API surface that plugin workers import
- * from `@fidelios/plugin-sdk`.  The host provides a concrete implementation
+ * from `@fideliosai/plugin-sdk`.  The host provides a concrete implementation
  * of `PluginContext` to the plugin at initialisation time.
  *
  * @see PLUGIN_SPEC.md §14 — SDK Surface
@@ -23,10 +23,10 @@ import type {
   IssueDocumentSummary,
   Agent,
   Goal,
-} from "@fidelios/shared";
+} from "@fideliosai/shared";
 
 // ---------------------------------------------------------------------------
-// Re-exports from @fidelios/shared (plugin authors import from one place)
+// Re-exports from @fideliosai/shared (plugin authors import from one place)
 // ---------------------------------------------------------------------------
 
 export type {
@@ -67,7 +67,7 @@ export type {
   IssueDocumentSummary,
   Agent,
   Goal,
-} from "@fidelios/shared";
+} from "@fideliosai/shared";
 
 // ---------------------------------------------------------------------------
 // Scope key — identifies where plugin state is stored
@@ -1039,7 +1039,7 @@ export interface PluginGoalsClient {
  * ctx.streams.close("chat");
  * ```
  *
- * @see usePluginStream in `@fidelios/plugin-sdk/ui`
+ * @see usePluginStream in `@fideliosai/plugin-sdk/ui`
  */
 export interface PluginStreamsClient {
   /**
@@ -1076,7 +1076,7 @@ export interface PluginStreamsClient {
  *
  * @example
  * ```ts
- * import { definePlugin } from "@fidelios/plugin-sdk";
+ * import { definePlugin } from "@fideliosai/plugin-sdk";
  *
  * export default definePlugin({
  *   async setup(ctx) {

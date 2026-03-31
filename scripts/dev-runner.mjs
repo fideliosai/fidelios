@@ -281,14 +281,14 @@ async function runPnpm(args, options = {}) {
 
 async function getMigrationStatusPayload() {
   const status = await runPnpm(
-    ["--filter", "@fidelios/db", "exec", "tsx", "src/migration-status.ts", "--json"],
+    ["--filter", "@fideliosai/db", "exec", "tsx", "src/migration-status.ts", "--json"],
     { env },
   );
   if (status.code !== 0) {
     process.stderr.write(
       status.stderr ||
         status.stdout ||
-        `[fidelios] Command failed with code ${status.code}: pnpm --filter @fidelios/db exec tsx src/migration-status.ts --json\n`,
+        `[fidelios] Command failed with code ${status.code}: pnpm --filter @fideliosai/db exec tsx src/migration-status.ts --json\n`,
     );
     process.exit(status.code);
   }
@@ -380,7 +380,7 @@ async function maybePreflightMigrations(options = {}) {
 async function buildPluginSdk() {
   console.log("[fidelios] building plugin sdk...");
   const result = await runPnpm(
-    ["--filter", "@fidelios/plugin-sdk", "build"],
+    ["--filter", "@fideliosai/plugin-sdk", "build"],
     { stdio: "inherit" },
   );
   if (result.signal) {
@@ -458,7 +458,7 @@ async function startServerChild() {
   const serverScript = mode === "watch" ? "dev:watch" : "dev";
   child = spawn(
     pnpmBin,
-    ["--filter", "@fidelios/server", serverScript, ...forwardedArgs],
+    ["--filter", "@fideliosai/server", serverScript, ...forwardedArgs],
     { stdio: "inherit", env, shell: process.platform === "win32" },
   );
 

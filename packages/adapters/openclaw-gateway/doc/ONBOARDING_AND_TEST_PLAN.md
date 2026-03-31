@@ -102,8 +102,8 @@ pnpm build
 
 If full suite is too heavy locally, run at least:
 ```bash
-pnpm --filter @fidelios/server test:run -- openclaw-gateway
-pnpm --filter @fidelios/server typecheck
-pnpm --filter @fidelios/ui typecheck
+pnpm --filter @fideliosai/server test:run -- openclaw-gateway
+pnpm --filter @fideliosai/server typecheck
+pnpm --filter @fideliosai/ui typecheck
 pnpm --filter fidelios typecheck
 ```

@@ -9,7 +9,7 @@ import type {
   IssueComment,
   Agent,
   Goal,
-} from "@fidelios/shared";
+} from "@fideliosai/shared";
 import type {
   EventFilter,
   PluginContext,

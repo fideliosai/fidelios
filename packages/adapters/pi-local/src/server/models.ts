@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
-import type { AdapterModel } from "@fidelios/adapter-utils";
-import { asString, runChildProcess } from "@fidelios/adapter-utils/server-utils";
+import type { AdapterModel } from "@fideliosai/adapter-utils";
+import { asString, runChildProcess } from "@fideliosai/adapter-utils/server-utils";
 
 const MODELS_CACHE_TTL_MS = 60_000;
 

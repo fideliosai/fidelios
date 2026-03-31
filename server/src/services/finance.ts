@@ -1,6 +1,6 @@
 import { and, desc, eq, gte, lte, sql } from "drizzle-orm";
-import type { Db } from "@fidelios/db";
-import { agents, costEvents, financeEvents, goals, heartbeatRuns, issues, projects } from "@fidelios/db";
+import type { Db } from "@fideliosai/db";
+import { agents, costEvents, financeEvents, goals, heartbeatRuns, issues, projects } from "@fideliosai/db";
 import { notFound, unprocessable } from "../errors.js";
 
 export interface FinanceDateRange {

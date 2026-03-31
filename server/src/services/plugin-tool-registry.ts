@@ -22,8 +22,8 @@
 import type {
   FideliOSPluginManifestV1,
   PluginToolDeclaration,
-} from "@fidelios/shared";
-import type { ToolRunContext, ToolResult, ExecuteToolParams } from "@fidelios/plugin-sdk";
+} from "@fideliosai/shared";
+import type { ToolRunContext, ToolResult, ExecuteToolParams } from "@fideliosai/plugin-sdk";
 import type { PluginWorkerManager } from "./plugin-worker-manager.js";
 import { logger } from "../middleware/logger.js";
 

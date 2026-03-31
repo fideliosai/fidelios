@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import { parseAgentMentionHref, parseProjectMentionHref } from "@fidelios/shared";
+import { parseAgentMentionHref, parseProjectMentionHref } from "@fideliosai/shared";
 import { getAgentIcon } from "./agent-icons";
 import { hexToRgb, pickTextColorForPillBg } from "./color-contrast";
 

@@ -1,4 +1,4 @@
-# @fidelios/shared
+# @fideliosai/shared
 
 ## 0.3.1
 

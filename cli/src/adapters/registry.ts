@@ -1,11 +1,11 @@
-import type { CLIAdapterModule } from "@fidelios/adapter-utils";
-import { printClaudeStreamEvent } from "@fidelios/adapter-claude-local/cli";
-import { printCodexStreamEvent } from "@fidelios/adapter-codex-local/cli";
-import { printCursorStreamEvent } from "@fidelios/adapter-cursor-local/cli";
-import { printGeminiStreamEvent } from "@fidelios/adapter-gemini-local/cli";
-import { printOpenCodeStreamEvent } from "@fidelios/adapter-opencode-local/cli";
-import { printPiStreamEvent } from "@fidelios/adapter-pi-local/cli";
-import { printOpenClawGatewayStreamEvent } from "@fidelios/adapter-openclaw-gateway/cli";
+import type { CLIAdapterModule } from "@fideliosai/adapter-utils";
+import { printClaudeStreamEvent } from "@fideliosai/adapter-claude-local/cli";
+import { printCodexStreamEvent } from "@fideliosai/adapter-codex-local/cli";
+import { printCursorStreamEvent } from "@fideliosai/adapter-cursor-local/cli";
+import { printGeminiStreamEvent } from "@fideliosai/adapter-gemini-local/cli";
+import { printOpenCodeStreamEvent } from "@fideliosai/adapter-opencode-local/cli";
+import { printPiStreamEvent } from "@fideliosai/adapter-pi-local/cli";
+import { printOpenClawGatewayStreamEvent } from "@fideliosai/adapter-openclaw-gateway/cli";
 import { processCLIAdapter } from "./process/index.js";
 import { httpCLIAdapter } from "./http/index.js";
 

@@ -1,4 +1,4 @@
-import type { DashboardSummary } from "@fidelios/shared";
+import type { DashboardSummary } from "@fideliosai/shared";
 import { api } from "./client";
 
 export const dashboardApi = {

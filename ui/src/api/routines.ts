@@ -7,7 +7,7 @@ import type {
   RoutineRunSummary,
   RoutineTrigger,
   RoutineTriggerSecretMaterial,
-} from "@fidelios/shared";
+} from "@fideliosai/shared";
 import { activityApi } from "./activity";
 import { api } from "./client";
 

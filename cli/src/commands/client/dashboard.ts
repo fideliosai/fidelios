@@ -1,5 +1,5 @@
 import { Command } from "commander";
-import type { DashboardSummary } from "@fidelios/shared";
+import type { DashboardSummary } from "@fideliosai/shared";
 import {
   addCommonClientOptions,
   handleCommandError,

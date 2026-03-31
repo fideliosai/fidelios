@@ -4,7 +4,7 @@ import type {
   BudgetOverview,
   BudgetPolicySummary,
   BudgetPolicyUpsertInput,
-} from "@fidelios/shared";
+} from "@fideliosai/shared";
 import { api } from "./client";
 
 export const budgetsApi = {

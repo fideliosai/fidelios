@@ -1,4 +1,4 @@
-import type { Project, ProjectWorkspace } from "@fidelios/shared";
+import type { Project, ProjectWorkspace } from "@fideliosai/shared";
 import { api } from "./client";
 
 function withCompanyScope(path: string, companyId?: string) {

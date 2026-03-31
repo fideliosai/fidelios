@@ -1,13 +1,13 @@
 /**
- * `@fidelios/plugin-sdk` — FideliOS plugin worker-side SDK.
+ * `@fideliosai/plugin-sdk` — FideliOS plugin worker-side SDK.
  *
  * This is the main entrypoint for plugin worker code.  For plugin UI bundles,
- * import from `@fidelios/plugin-sdk/ui` instead.
+ * import from `@fideliosai/plugin-sdk/ui` instead.
  *
  * @example
  * ```ts
  * // Plugin worker entrypoint (dist/worker.ts)
- * import { definePlugin, runWorker, z } from "@fidelios/plugin-sdk";
+ * import { definePlugin, runWorker, z } from "@fideliosai/plugin-sdk";
  *
  * const plugin = definePlugin({
  *   async setup(ctx) {
@@ -206,9 +206,9 @@ export type {
   Goal,
 } from "./types.js";
 
-// Manifest and constant types re-exported from @fidelios/shared
+// Manifest and constant types re-exported from @fideliosai/shared
 // Plugin authors import manifest types from here so they have a single
-// dependency (@fidelios/plugin-sdk) for all plugin authoring needs.
+// dependency (@fideliosai/plugin-sdk) for all plugin authoring needs.
 export type {
   FideliOSPluginManifestV1,
   PluginJobDeclaration,
@@ -255,7 +255,7 @@ export type {
  *
  * @example
  * ```ts
- * import { z } from "@fidelios/plugin-sdk";
+ * import { z } from "@fideliosai/plugin-sdk";
  *
  * const configSchema = z.object({
  *   apiKey: z.string().describe("Your API key"),
@@ -283,4 +283,4 @@ export {
   PLUGIN_WEBHOOK_DELIVERY_STATUSES,
   PLUGIN_EVENT_TYPES,
   PLUGIN_BRIDGE_ERROR_CODES,
-} from "@fidelios/shared";
+} from "@fideliosai/shared";

@@ -1,8 +1,8 @@
 import { randomUUID } from "node:crypto";
-import type { Db } from "@fidelios/db";
-import { activityLog } from "@fidelios/db";
-import { PLUGIN_EVENT_TYPES, type PluginEventType } from "@fidelios/shared";
-import type { PluginEvent } from "@fidelios/plugin-sdk";
+import type { Db } from "@fideliosai/db";
+import { activityLog } from "@fideliosai/db";
+import { PLUGIN_EVENT_TYPES, type PluginEventType } from "@fideliosai/shared";
+import type { PluginEvent } from "@fideliosai/plugin-sdk";
 import { publishLiveEvent } from "./live-events.js";
 import { redactCurrentUserValue } from "../log-redaction.js";
 import { sanitizeRecord } from "../redaction.js";

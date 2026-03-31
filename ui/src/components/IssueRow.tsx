@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import type { Issue } from "@fidelios/shared";
+import type { Issue } from "@fideliosai/shared";
 import { Link } from "@/lib/router";
 import { X } from "lucide-react";
 import { cn } from "../lib/utils";

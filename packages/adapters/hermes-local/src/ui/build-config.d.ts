@@ -4,7 +4,7 @@
  * Translates FideliOS's CreateConfigValues into the adapterConfig
  * object stored in the agent record.
  */
-import type { CreateConfigValues } from "@fidelios/adapter-utils";
+import type { CreateConfigValues } from "@fideliosai/adapter-utils";
 /**
  * Build a Hermes Agent adapter config from the FideliOS UI form values.
  */

@@ -1,4 +1,4 @@
-import type { FideliOSPluginManifestV1 } from "@fidelios/plugin-sdk";
+import type { FideliOSPluginManifestV1 } from "@fideliosai/plugin-sdk";
 
 const PLUGIN_ID = "fidelios-file-browser-example";
 const FILES_SIDEBAR_SLOT_ID = "files-link";

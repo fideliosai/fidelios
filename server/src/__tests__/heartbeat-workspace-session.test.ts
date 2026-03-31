@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import type { agents } from "@fidelios/db";
-import { sessionCodec as codexSessionCodec } from "@fidelios/adapter-codex-local/server";
+import type { agents } from "@fideliosai/db";
+import { sessionCodec as codexSessionCodec } from "@fideliosai/adapter-codex-local/server";
 import { resolveDefaultAgentWorkspaceDir } from "../home-paths.js";
 import {
   buildExplicitResumeSessionOverride,
