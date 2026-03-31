@@ -129,7 +129,7 @@ git commit -m "docs: update documentation for accuracy
 
 - [list each fix briefly]
 
-Co-Authored-By: FideliOS <noreply@fidelios.ing>"
+Co-Authored-By: FideliOS <noreply@fidelios.nl>"
 
 git push -u origin "$BRANCH"
 

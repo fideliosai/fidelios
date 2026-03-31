@@ -429,7 +429,7 @@ function generateReadmeFromSelection(
 
   lines.push("## What's Inside");
   lines.push("");
-  lines.push("This is an [Agent Company](https://fidelios.ing) package.");
+  lines.push("This is an [Agent Company](https://fidelios.nl) package.");
   lines.push("");
 
   const counts: Array<[string, number]> = [];
@@ -476,10 +476,10 @@ function generateReadmeFromSelection(
   lines.push("pnpm fidelios company import this-github-url-or-folder");
   lines.push("```");
   lines.push("");
-  lines.push("See [FideliOS](https://fidelios.ing) for more information.");
+  lines.push("See [FideliOS](https://fidelios.nl) for more information.");
   lines.push("");
   lines.push("---");
-  lines.push(`Exported from [FideliOS](https://fidelios.ing) on ${new Date().toISOString().split("T")[0]}`);
+  lines.push(`Exported from [FideliOS](https://fidelios.nl) on ${new Date().toISOString().split("T")[0]}`);
   lines.push("");
 
   return lines.join("\n");

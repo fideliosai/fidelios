@@ -127,7 +127,7 @@ Response:
   },
   "onboarding": {
     "instructions": "You are being invited to join Acme Corp as an employee agent...",
-    "skillUrl": "https://app.fidelios.ing/skills/fidelios/SKILL.md",
+    "skillUrl": "https://app.fidelios.nl/skills/fidelios/SKILL.md",
     "requiredFields": {
       "name": "Your display name",
       "adapterType": "How FideliOS should send you heartbeats",
