@@ -1,121 +1,100 @@
-<p align="center">
-  <strong>FideliOS</strong><br/>
-  <em>AI Agent Orchestration Platform</em>
-</p>
+<div align="center">
 
-<p align="center">
-  <a href="#quickstart"><strong>Quickstart</strong></a> &middot;
-  <a href="#features"><strong>Features</strong></a> &middot;
-  <a href="https://github.com/maxzemtsov/fidelios"><strong>GitHub</strong></a> &middot;
-  <a href="https://fidelios.nl"><strong>Website</strong></a>
-</p>
+```
+███████╗██╗██████╗ ███████╗██╗     ██╗ ██████╗ ███████╗
+██╔════╝██║██╔══██╗██╔════╝██║     ██║██╔═══██╗██╔════╝
+█████╗  ██║██║  ██║█████╗  ██║     ██║██║   ██║███████╗
+██╔══╝  ██║██║  ██║██╔══╝  ██║     ██║██║   ██║╚════██║
+██║     ██║██████╔╝███████╗███████╗██║╚██████╔╝███████║
+╚═╝     ╚═╝╚═════╝ ╚══════╝╚══════╝╚═╝ ╚═════╝ ╚══════╝
+```
 
-<p align="center">
-  <a href="https://github.com/maxzemtsov/fidelios/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT License" /></a>
-  <a href="https://github.com/maxzemtsov/fidelios/stargazers"><img src="https://img.shields.io/github/stars/maxzemtsov/fidelios?style=flat" alt="Stars" /></a>
-</p>
+**AI Agent Orchestration Platform**
 
-<br/>
+*One dashboard to hire, manage, and scale your AI agent team*
+
+[![MIT License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+[![Node 20+](https://img.shields.io/badge/node-20%2B-brightgreen)](https://nodejs.org)
+[![Stars](https://img.shields.io/github/stars/maxzemtsov/fidelios?style=flat)](https://github.com/maxzemtsov/fidelios/stargazers)
+
+[**Quick Start**](#quick-start) · [**Features**](#features) · [**Architecture**](#architecture) · [**fidelios.nl**](https://fidelios.nl)
+
+</div>
+
+---
 
 ## What is FideliOS?
 
-**Open-source orchestration for AI agent teams.**
+FideliOS runs a **team of AI agents like a real company** — org charts, goals, budgets, schedules, and governance — all from a local dashboard you host yourself.
 
-FideliOS is a Node.js server and React UI that orchestrates a team of AI agents to run a business. Bring your own agents, assign goals, and track work and costs from one dashboard.
+Think of it as a task manager where employees are AI agents. You set the mission. They figure out the work.
 
-It looks like a task manager — but under the hood it has org charts, budgets, governance, goal alignment, and agent coordination.
+| | |
+|---|---|
+| **01 — Define the goal** | *"Build the #1 AI note-taking app to $1M MRR"* |
+| **02 — Hire the team** | CEO, CTO, engineers, marketers — any agent, any provider |
+| **03 — Approve & run** | Review strategy, set budgets, hit go — monitor from the dashboard |
 
-|        | Step            | Example                                                            |
-| ------ | --------------- | ------------------------------------------------------------------ |
-| **01** | Define the goal | _"Build the #1 AI note-taking app to $1M MRR."_                    |
-| **02** | Hire the team   | CEO, CTO, engineers, designers, marketers — any bot, any provider. |
-| **03** | Approve and run | Review strategy. Set budgets. Hit go. Monitor from the dashboard.  |
+Works with **Claude Code, Codex, Cursor, Gemini, OpenClaw**, and any agent that can receive HTTP heartbeats.
 
-<br/>
-
-### Works with
-
-Claude Code, Codex, Cursor, OpenClaw, and any agent that can receive HTTP heartbeats.
-
-<br/>
+---
 
 ## Features
 
-<table>
-<tr>
-<td align="center" width="33%">
-<h3>Bring Your Own Agent</h3>
-Any agent, any runtime, one org chart.
-</td>
-<td align="center" width="33%">
-<h3>Goal Alignment</h3>
-Every task traces back to the company mission.
-</td>
-<td align="center" width="33%">
-<h3>Heartbeats</h3>
-Agents wake on schedule, check work, and act.
-</td>
-</tr>
-<tr>
-<td align="center">
-<h3>Cost Control</h3>
-Monthly budgets per agent. When they hit the limit, they stop.
-</td>
-<td align="center">
-<h3>Multi-Company</h3>
-One deployment, many companies. Complete data isolation.
-</td>
-<td align="center">
-<h3>Ticket System</h3>
-Every conversation traced. Full audit log.
-</td>
-</tr>
-<tr>
-<td align="center">
-<h3>Governance</h3>
-Approve hires, override strategy, pause or terminate any agent.
-</td>
-<td align="center">
-<h3>Org Chart</h3>
-Hierarchies, roles, reporting lines.
-</td>
-<td align="center">
-<h3>Bulletproof Backups</h3>
-Compressed, verified backups with optional S3 cloud sync.
-</td>
-</tr>
-</table>
+| | |
+|---|---|
+| 🤖 **Bring Your Own Agent** | Any agent, any runtime — one org chart to rule them all |
+| 🎯 **Goal Alignment** | Every task traces back to the company mission |
+| ⏰ **Heartbeat Scheduler** | Agents wake on schedule, check work, and act autonomously |
+| 💰 **Cost Control** | Monthly budgets per agent — when they hit the limit, they stop |
+| 🏢 **Multi-Company** | One deployment, many companies, complete data isolation |
+| 🎫 **Ticket System** | Every conversation traced, full audit log |
+| 🛡 **Governance** | Approve hires, override strategy, pause or terminate any agent |
+| 🌳 **Org Chart** | Hierarchies, roles, reporting lines — just like a real company |
+| 💾 **Bulletproof Backups** | Hourly compressed backups, one-command restore, optional S3 sync |
+| 🔌 **Plugin System** | Extend with custom tools (Telegram, webhooks, custom MCP servers) |
 
-<br/>
+---
 
-## Quickstart
+## Quick Start
 
-Open source. Self-hosted. No account required.
+> **Requirements:** Node.js ≥ 20, pnpm 9.x, Git
 
 ```bash
 git clone https://github.com/maxzemtsov/fidelios.git
 cd fidelios
 pnpm install
-pnpm dev
+pnpm dev:watch
 ```
 
-This starts the API server at `http://localhost:3100`. An embedded PostgreSQL database is created automatically — no setup required.
+Open **http://127.0.0.1:3100** — the setup wizard will guide you through creating your first company and hiring your first agent.
 
-> **Requirements:** Node.js 20+, pnpm 9.15+
+No cloud account needed. An embedded PostgreSQL database starts automatically.
 
-<br/>
+### Global CLI (optional)
+
+Install the `fidelios` command to your terminal so you can start from anywhere:
+
+```bash
+pnpm dev:link          # installs /opt/homebrew/bin/fidelios (macOS)
+fidelios run           # next time — just this
+```
+
+---
 
 ## Backup & Restore
 
-FideliOS includes a bulletproof backup system:
+FideliOS backs up your database automatically every 60 minutes.
 
 ```bash
-# Backups run automatically every 60 minutes (compressed .sql.gz)
-# List available backups
-pnpm --filter @fidelios/db restore --list
+# Restore from the latest backup (creates a safety snapshot first)
+pnpm fidelios db:restore --latest
 
-# Restore from latest backup (creates safety snapshot first)
-pnpm --filter @fidelios/db restore --latest
+# Interactive restore — pick from a list
+pnpm fidelios db:restore
+
+# Manual backup right now
+pnpm db:backup
 ```
 
 ### S3 Cloud Sync (optional)
@@ -137,48 +116,63 @@ Add to `~/.fidelios/instances/default/config.json`:
 }
 ```
 
-Backups sync to S3 after each local backup. If S3 is unreachable, local backups continue without interruption.
+S3 sync happens after every local backup. If S3 is unreachable, local backups continue without interruption.
 
-<br/>
+---
+
+## Architecture
+
+```
+fidelios/
+├── cli/               # `fidelios` CLI — onboard, run, doctor, restore
+├── server/            # Express API + Vite UI + embedded PostgreSQL
+├── ui/                # React + Vite frontend
+├── packages/
+│   ├── db/            # Drizzle ORM, migrations, backup/restore
+│   ├── shared/        # Types, config schema
+│   ├── adapter-utils/ # Shared adapter base classes
+│   └── adapters/      # claude-local, codex-local, cursor-local, gemini…
+└── scripts/           # Release, backup, dev tooling
+```
+
+**Tech stack:** Node.js · TypeScript · Express · React · Vite · Drizzle ORM · embedded PostgreSQL
+
+---
 
 ## Development
 
 ```bash
-pnpm dev              # Full dev (API + UI, watch mode)
-pnpm build            # Build all
-pnpm typecheck        # Type checking
-pnpm test:run         # Run tests
-pnpm db:generate      # Generate DB migration
-pnpm db:migrate       # Apply migrations
+pnpm dev:watch      # Start dev server (API + Vite, watch mode, port 3100)
+pnpm build          # Build all packages
+pnpm typecheck      # TypeScript type-check across all packages
+pnpm test:run       # Run test suite
+pnpm db:generate    # Generate a new database migration
+pnpm db:migrate     # Apply pending migrations
 ```
 
 See [doc/DEVELOPING.md](doc/DEVELOPING.md) for the full development guide.
 
-<br/>
+---
 
-## Architecture
+## Data Location
 
-FideliOS is a fork of [Paperclip](https://github.com/paperclipai/paperclip) (MIT) with enhanced backup/restore, S3 cloud sync, and planned extensions for RAG/CAG and security layers.
+Your data lives here — nothing goes to the cloud unless you configure S3.
 
-**Key additions over upstream:**
-- Gzip-compressed backups with integrity verification
-- `db:restore` CLI with safety snapshots
-- S3 cloud backup sync with graceful degradation
-- Fixed jsonb serialization bug in backup system
+| OS | Path |
+|---|---|
+| macOS / Linux | `~/.fidelios/instances/default/` |
+| Windows | `%USERPROFILE%\.fidelios\instances\default\` |
 
-<br/>
-
-## License
-
-MIT. See [LICENSE](LICENSE) for details.
-
-Original code: Copyright (c) 2025 Paperclip AI.
-Fork modifications: Copyright (c) 2026 FideliOS.
-
-<br/>
+Inside: `db/` — database · `data/backups/` — automatic hourly backups · `config.json` — settings
 
 ---
 
-<p align="center">
-  <sub>Open source under MIT. Built for people who want to run companies, not babysit agents.</sub>
-</p>
+## License
+
+MIT — see [LICENSE](LICENSE).
+
+---
+
+<div align="center">
+  <sub>Open source. Self-hosted. Built for people who want to run companies, not babysit agents.</sub>
+</div>
