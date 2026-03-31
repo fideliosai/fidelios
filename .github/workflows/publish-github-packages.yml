@@ -1,0 +1,114 @@
+name: Publish to GitHub Packages
+
+# Publishes @fidelios/* packages to GitHub Packages (npm.pkg.github.com)
+# after the main release workflow creates a versioned tag.
+#
+# REQUIREMENT: GitHub Packages enforces that the npm scope matches the GitHub
+# owner. For @fidelios/* packages this workflow must run from a repository
+# owned by the `fidelios` GitHub organisation (not a personal account).
+# Transfer the repo to the fidelios org (or mirror it there) before enabling.
+#
+# Steps to enable:
+#   1. Create the `fidelios` GitHub organisation at github.com/organizations/new
+#   2. Transfer (or fork) this repo to fidelios/fidelios
+#   3. The workflow uses GITHUB_TOKEN — no extra secrets needed.
+
+on:
+  push:
+    tags:
+      - 'v*'
+      - 'canary/v*'
+
+concurrency:
+  group: github-packages-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@fidelios'
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Restore tracked install-time changes
+        run: git checkout -- pnpm-lock.yaml
+
+      - name: Build workspace
+        run: pnpm build
+
+      - name: Prepare server UI dist
+        run: bash scripts/prepare-server-ui-dist.sh
+
+      - name: Copy skills to adapter packages
+        run: |
+          for pkg_dir in server packages/adapters/claude-local packages/adapters/codex-local; do
+            rm -rf "$pkg_dir/skills"
+            cp -r skills "$pkg_dir/skills"
+          done
+
+      - name: Resolve version and dist-tag from git tag
+        id: meta
+        run: |
+          tag="${GITHUB_REF#refs/tags/}"
+          if [[ "$tag" == canary/* ]]; then
+            version="${tag#canary/v}"
+            dist_tag="canary"
+          else
+            version="${tag#v}"
+            dist_tag="latest"
+          fi
+          echo "version=$version"   >> "$GITHUB_OUTPUT"
+          echo "dist_tag=$dist_tag" >> "$GITHUB_OUTPUT"
+
+      - name: Set workspace versions
+        run: node scripts/release-package-map.mjs set-version "${{ steps.meta.outputs.version }}"
+
+      - name: Build CLI bundle
+        run: ./scripts/build-npm.sh --skip-checks --skip-typecheck
+
+      - name: Configure pnpm auth for GitHub Packages
+        run: |
+          pnpm config set @fidelios:registry https://npm.pkg.github.com
+          pnpm config set //npm.pkg.github.com/:_authToken "${NODE_AUTH_TOKEN}"
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish all public packages to GitHub Packages
+        run: |
+          while IFS=$'\t' read -r pkg_dir pkg_name pkg_version; do
+            [ -z "$pkg_dir" ] && continue
+            echo "→ Publishing $pkg_name@$pkg_version"
+            (
+              cd "$pkg_dir"
+              pnpm publish \
+                --no-git-checks \
+                --tag "${{ steps.meta.outputs.dist_tag }}" \
+                --access public \
+                --registry https://npm.pkg.github.com
+            )
+          done < <(node scripts/release-package-map.mjs list)
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
