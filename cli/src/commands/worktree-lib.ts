@@ -205,6 +205,13 @@ export function buildWorktreeConfig(input: {
         intervalMinutes: source?.database.backup.intervalMinutes ?? 60,
         retentionDays: source?.database.backup.retentionDays ?? 30,
         dir: paths.backupDir,
+        s3: {
+          enabled: source?.database.backup.s3.enabled ?? false,
+          bucket: source?.database.backup.s3.bucket ?? "",
+          region: source?.database.backup.s3.region ?? "eu-west-1",
+          prefix: source?.database.backup.s3.prefix ?? "fidelios/backups/",
+          retentionDays: source?.database.backup.s3.retentionDays ?? 90,
+        },
       },
     },
     logging: {

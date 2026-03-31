@@ -56,6 +56,13 @@ function buildSourceConfig(): FideliOSConfig {
         intervalMinutes: 60,
         retentionDays: 30,
         dir: "/tmp/main/backups",
+        s3: {
+          enabled: false,
+          bucket: "",
+          region: "eu-west-1",
+          prefix: "fidelios/backups/",
+          retentionDays: 90,
+        },
       },
     },
     logging: {
@@ -368,6 +375,13 @@ describe("worktree helpers", () => {
                 intervalMinutes: 60,
                 retentionDays: 30,
                 dir: path.join(siblingInstanceRoot, "backups"),
+                s3: {
+                  enabled: false,
+                  bucket: "",
+                  region: "eu-west-1",
+                  prefix: "fidelios/backups/",
+                  retentionDays: 90,
+                },
               },
             },
             logging: {

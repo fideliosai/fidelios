@@ -28,6 +28,13 @@ function createTempConfig(): string {
         intervalMinutes: 60,
         retentionDays: 30,
         dir: path.join(runtimeRoot, "backups"),
+        s3: {
+          enabled: false,
+          bucket: "",
+          region: "eu-west-1",
+          prefix: "fidelios/backups/",
+          retentionDays: 90,
+        },
       },
     },
     logging: {

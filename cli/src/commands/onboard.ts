@@ -169,6 +169,13 @@ function quickstartDefaultsFromEnv(): {
         intervalMinutes: databaseBackupIntervalMinutes,
         retentionDays: databaseBackupRetentionDays,
         dir: resolvePathFromEnv(process.env.FIDELIOS_DB_BACKUP_DIR) ?? resolveDefaultBackupDir(instanceId),
+        s3: {
+          enabled: false,
+          bucket: "",
+          region: "eu-west-1",
+          prefix: "fidelios/backups/",
+          retentionDays: 90,
+        },
       },
     },
     logging: {

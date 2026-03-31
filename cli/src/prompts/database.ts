@@ -19,6 +19,13 @@ export async function promptDatabase(current?: DatabaseConfig): Promise<Database
       intervalMinutes: 60,
       retentionDays: 30,
       dir: defaultBackupDir,
+      s3: {
+        enabled: false,
+        bucket: "",
+        region: "eu-west-1",
+        prefix: "fidelios/backups/",
+        retentionDays: 90,
+      },
     },
   };
 
@@ -152,6 +159,7 @@ export async function promptDatabase(current?: DatabaseConfig): Promise<Database
       intervalMinutes: Number(backupIntervalInput || "60"),
       retentionDays: Number(backupRetentionInput || "30"),
       dir: backupDirInput || defaultBackupDir,
+      s3: base.backup.s3,
     },
   };
 }

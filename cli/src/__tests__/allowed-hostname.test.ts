@@ -26,6 +26,13 @@ function writeBaseConfig(configPath: string) {
         intervalMinutes: 60,
         retentionDays: 30,
         dir: "/tmp/fidelios-backups",
+        s3: {
+          enabled: false,
+          bucket: "",
+          region: "eu-west-1",
+          prefix: "fidelios/backups/",
+          retentionDays: 90,
+        },
       },
     },
     logging: {
