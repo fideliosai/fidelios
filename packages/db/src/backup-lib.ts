@@ -469,8 +469,14 @@ export async function runDatabaseBackup(opts: RunDatabaseBackupOptions): Promise
       for (const row of rows) {
         const values = row.map((rawValue: unknown, index) => {
           const columnName = cols[index]?.column_name;
+          const columnType = cols[index]?.data_type;
           const val = columnName && nullifiedColumns.has(columnName) ? null : rawValue;
           if (val === null || val === undefined) return "NULL";
+          // jsonb/json columns: always serialize as text to avoid bare number/boolean literals
+          if (columnType === "jsonb" || columnType === "json") {
+            if (typeof val === "string") return formatSqlLiteral(val);
+            return formatSqlLiteral(JSON.stringify(val));
+          }
           if (typeof val === "boolean") return val ? "true" : "false";
           if (typeof val === "number") return String(val);
           if (val instanceof Date) return formatSqlLiteral(val.toISOString());
