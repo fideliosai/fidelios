@@ -91,6 +91,11 @@ jobs:
         run: |
           while IFS=$'\t' read -r pkg_dir pkg_name pkg_version; do
             [ -z "$pkg_dir" ] && continue
+            # GitHub Packages only supports scoped packages (@org/name)
+            if [[ "$pkg_name" != @* ]]; then
+              echo "⏭ Skipping unscoped package: $pkg_name (npmjs.com only)"
+              continue
+            fi
             echo "→ Publishing $pkg_name@$pkg_version"
             (
               cd "$pkg_dir"

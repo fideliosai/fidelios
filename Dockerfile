@@ -29,9 +29,9 @@ FROM base AS build
 WORKDIR /app
 COPY --from=deps /app /app
 COPY . .
-RUN pnpm --filter @fidelios/ui build
-RUN pnpm --filter @fidelios/plugin-sdk build
-RUN pnpm --filter @fidelios/server build
+RUN pnpm --filter @fideliosai/ui build
+RUN pnpm --filter @fideliosai/plugin-sdk build
+RUN pnpm --filter @fideliosai/server build
 RUN test -f server/dist/index.js || (echo "ERROR: server build output missing" && exit 1)
 
 FROM base AS production
