@@ -46,13 +46,13 @@ import {
   Github,
   Link2,
   ExternalLink,
-  Paperclip,
   Pencil,
   Plus,
   RefreshCw,
   Save,
   Search,
 } from "lucide-react";
+import { FideliOSIcon } from "@/components/FideliOSIcon";
 
 type SkillTreeNode = {
   name: string;
@@ -159,7 +159,7 @@ function sourceMeta(sourceBadge: CompanySkillSourceBadge, sourceLabel: string | 
     case "local":
       return { icon: Folder, label: sourceLabel ?? "Folder", managedLabel: "Folder managed" };
     case "fidelios":
-      return { icon: Paperclip, label: sourceLabel ?? "FideliOS", managedLabel: "FideliOS managed" };
+      return { icon: FideliOSIcon, label: sourceLabel ?? "FideliOS", managedLabel: "FideliOS managed" };
     default:
       return { icon: Boxes, label: sourceLabel ?? "Catalog", managedLabel: "Catalog managed" };
   }

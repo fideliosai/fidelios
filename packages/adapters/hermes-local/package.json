@@ -1,0 +1,27 @@
+{
+  "name": "@fidelios/adapter-hermes-local",
+  "version": "0.0.2",
+  "license": "MIT",
+  "description": "Hermes AI agent adapter for FideliOS (forked from hermes adapter by NousResearch)",
+  "homepage": "https://github.com/maxzemtsov/fidelios",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/maxzemtsov/fidelios",
+    "directory": "packages/adapters/hermes-local"
+  },
+  "type": "module",
+  "exports": {
+    ".": "./src/index.js",
+    "./server": "./src/server/index.js",
+    "./ui": "./src/ui/index.js",
+    "./cli": "./src/cli/index.js"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": ["src"],
+  "dependencies": {
+    "@fidelios/adapter-utils": "workspace:*",
+    "picocolors": "^1.1.0"
+  }
+}
