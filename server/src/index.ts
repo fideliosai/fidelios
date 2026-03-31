@@ -630,12 +630,39 @@ export async function startServer(): Promise<StartedServer> {
           {
             backupFile: result.backupFile,
             sizeBytes: result.sizeBytes,
+            uncompressedSizeBytes: result.uncompressedSizeBytes,
             prunedCount: result.prunedCount,
             backupDir: config.databaseBackupDir,
             retentionDays: config.databaseBackupRetentionDays,
           },
           `Automatic database backup complete: ${formatDatabaseBackupResult(result)}`,
         );
+
+        // S3 cloud sync (non-blocking, graceful degradation)
+        if (config.databaseBackupS3Enabled) {
+          try {
+            const { uploadBackupToS3, pruneS3Backups } = await import("@fidelios/db/s3-sync");
+            const s3Config = {
+              enabled: true,
+              bucket: config.databaseBackupS3Bucket,
+              region: config.databaseBackupS3Region,
+              prefix: config.databaseBackupS3Prefix,
+              retentionDays: config.databaseBackupS3RetentionDays,
+              accessKeyId: config.databaseBackupS3AccessKeyId,
+              secretAccessKey: config.databaseBackupS3SecretAccessKey,
+            };
+            const s3Result = await uploadBackupToS3(result.backupFile, s3Config);
+            if (s3Result) {
+              logger.info({ s3Key: s3Result.key, bucket: s3Result.bucket }, "Backup synced to S3");
+              const s3Pruned = await pruneS3Backups(s3Config);
+              if (s3Pruned > 0) {
+                logger.info({ prunedCount: s3Pruned }, "Pruned old S3 backups");
+              }
+            }
+          } catch (s3Err) {
+            logger.warn({ err: s3Err }, "S3 backup sync failed (non-fatal)");
+          }
+        }
       } catch (err) {
         logger.error({ err, backupDir: config.databaseBackupDir }, "Automatic database backup failed");
       } finally {

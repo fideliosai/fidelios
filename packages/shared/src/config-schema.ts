@@ -18,11 +18,28 @@ export const llmConfigSchema = z.object({
   apiKey: z.string().optional(),
 });
 
+export const s3BackupConfigSchema = z.object({
+  enabled: z.boolean().default(false),
+  bucket: z.string().default(""),
+  region: z.string().default("eu-west-1"),
+  prefix: z.string().default("fidelios/backups/"),
+  retentionDays: z.number().int().min(1).max(3650).default(90),
+  accessKeyId: z.string().optional(),
+  secretAccessKey: z.string().optional(),
+});
+
 export const databaseBackupConfigSchema = z.object({
   enabled: z.boolean().default(true),
   intervalMinutes: z.number().int().min(1).max(7 * 24 * 60).default(60),
   retentionDays: z.number().int().min(1).max(3650).default(30),
   dir: z.string().default("~/.fidelios/instances/default/data/backups"),
+  s3: s3BackupConfigSchema.default({
+    enabled: false,
+    bucket: "",
+    region: "eu-west-1",
+    prefix: "fidelios/backups/",
+    retentionDays: 90,
+  }),
 });
 
 export const databaseConfigSchema = z.object({
@@ -176,3 +193,4 @@ export type SecretsLocalEncryptedConfig = z.infer<typeof secretsLocalEncryptedCo
 export type AuthConfig = z.infer<typeof authConfigSchema>;
 export type ConfigMeta = z.infer<typeof configMetaSchema>;
 export type DatabaseBackupConfig = z.infer<typeof databaseBackupConfigSchema>;
+export type S3BackupConfig = z.infer<typeof s3BackupConfigSchema>;

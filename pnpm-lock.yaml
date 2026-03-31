@@ -12,6 +12,10 @@ patchedDependencies:
 importers:
 
   .:
+    dependencies:
+      '@aws-sdk/client-s3':
+        specifier: ^3.888.0
+        version: 3.994.0
     devDependencies:
       '@playwright/test':
         specifier: ^1.58.2
@@ -222,6 +226,9 @@ importers:
 
   packages/db:
     dependencies:
+      '@aws-sdk/client-s3':
+        specifier: ^3.888.0
+        version: 3.994.0
       '@fidelios/shared':
         specifier: workspace:*
         version: link:../shared

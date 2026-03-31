@@ -58,6 +58,13 @@ export interface Config {
   databaseBackupIntervalMinutes: number;
   databaseBackupRetentionDays: number;
   databaseBackupDir: string;
+  databaseBackupS3Enabled: boolean;
+  databaseBackupS3Bucket: string;
+  databaseBackupS3Region: string;
+  databaseBackupS3Prefix: string;
+  databaseBackupS3RetentionDays: number;
+  databaseBackupS3AccessKeyId?: string;
+  databaseBackupS3SecretAccessKey?: string;
   serveUi: boolean;
   uiDevMiddleware: boolean;
   secretsProvider: SecretProvider;
@@ -232,6 +239,13 @@ export function loadConfig(): Config {
     databaseBackupIntervalMinutes,
     databaseBackupRetentionDays,
     databaseBackupDir,
+    databaseBackupS3Enabled: fileDatabaseBackup?.s3?.enabled ?? false,
+    databaseBackupS3Bucket: process.env.FIDELIOS_S3_BACKUP_BUCKET ?? fileDatabaseBackup?.s3?.bucket ?? "",
+    databaseBackupS3Region: process.env.FIDELIOS_S3_BACKUP_REGION ?? fileDatabaseBackup?.s3?.region ?? "eu-west-1",
+    databaseBackupS3Prefix: process.env.FIDELIOS_S3_BACKUP_PREFIX ?? fileDatabaseBackup?.s3?.prefix ?? "fidelios/backups/",
+    databaseBackupS3RetentionDays: Number(process.env.FIDELIOS_S3_BACKUP_RETENTION_DAYS) || fileDatabaseBackup?.s3?.retentionDays || 90,
+    databaseBackupS3AccessKeyId: process.env.AWS_ACCESS_KEY_ID ?? fileDatabaseBackup?.s3?.accessKeyId,
+    databaseBackupS3SecretAccessKey: process.env.AWS_SECRET_ACCESS_KEY ?? fileDatabaseBackup?.s3?.secretAccessKey,
     serveUi:
       process.env.SERVE_UI !== undefined
         ? process.env.SERVE_UI === "true"
