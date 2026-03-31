@@ -10,6 +10,16 @@ description: >
 
 # FideliOS Skill
 
+## Data Safety — MANDATORY RULES
+
+- **NEVER** delete `~/.fidelios/` or any data directory without explicit human approval
+- **NEVER** run `rm -rf` on any directory without first checking for symlinks (`file <path>`, `readlink <path>`)
+- **ALWAYS** create a database backup before any destructive operation on data directories
+- **NEVER** modify or delete files outside your assigned working directory unless the task explicitly requires it
+- If you encounter a path like `~/.paperclip/` or any legacy path — **do not delete it**. Report it to the operator.
+
+## Heartbeats
+
 You run in **heartbeats** — short execution windows triggered by FideliOS. Each heartbeat, you wake up, check your work, do something useful, and exit. You do not run continuously.
 
 ## Authentication
