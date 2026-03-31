@@ -296,15 +296,19 @@ export function Layout() {
             </div>
             <div className="border-t border-r border-border px-3 py-2 bg-background">
               <div className="flex items-center gap-1">
-                <a
-                  href="https://docs.fidelios.nl/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2.5 px-3 py-2 text-[13px] font-medium transition-colors text-foreground/80 hover:bg-accent/50 hover:text-foreground flex-1 min-w-0"
-                >
-                  <BookOpen className="h-4 w-4 shrink-0" />
-                  <span className="truncate">Documentation</span>
-                </a>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      type="button"
+                      className="flex items-center gap-2.5 px-3 py-2 text-[13px] font-medium text-muted-foreground/60 cursor-default flex-1 min-w-0"
+                      onClick={(e) => e.preventDefault()}
+                    >
+                      <BookOpen className="h-4 w-4 shrink-0" />
+                      <span className="truncate">Documentation</span>
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent>Coming Soon</TooltipContent>
+                </Tooltip>
                 {health?.version && (
                   <Tooltip>
                     <TooltipTrigger asChild>
@@ -354,15 +358,19 @@ export function Layout() {
             </div>
             <div className="border-t border-r border-border px-3 py-2">
               <div className="flex items-center gap-1">
-                <a
-                  href="https://docs.fidelios.nl/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2.5 px-3 py-2 text-[13px] font-medium transition-colors text-foreground/80 hover:bg-accent/50 hover:text-foreground flex-1 min-w-0"
-                >
-                  <BookOpen className="h-4 w-4 shrink-0" />
-                  <span className="truncate">Documentation</span>
-                </a>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      type="button"
+                      className="flex items-center gap-2.5 px-3 py-2 text-[13px] font-medium text-muted-foreground/60 cursor-default flex-1 min-w-0"
+                      onClick={(e) => e.preventDefault()}
+                    >
+                      <BookOpen className="h-4 w-4 shrink-0" />
+                      <span className="truncate">Documentation</span>
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent>Coming Soon</TooltipContent>
+                </Tooltip>
                 {health?.version && (
                   <Tooltip>
                     <TooltipTrigger asChild>
