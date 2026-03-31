@@ -1,6 +1,7 @@
 import { existsSync, mkdirSync, readdirSync, statSync, unlinkSync } from "node:fs";
 import { readFile, writeFile } from "node:fs/promises";
 import { basename, resolve } from "node:path";
+import { gzipSync, gunzipSync } from "node:zlib";
 import postgres from "postgres";
 
 export type RunDatabaseBackupOptions = {
@@ -17,7 +18,9 @@ export type RunDatabaseBackupOptions = {
 export type RunDatabaseBackupResult = {
   backupFile: string;
   sizeBytes: number;
+  uncompressedSizeBytes?: number;
   prunedCount: number;
+  tableCounts?: Record<string, number>;
 };
 
 export type RunDatabaseRestoreOptions = {
@@ -76,7 +79,7 @@ function pruneOldBackups(backupDir: string, retentionDays: number, filenamePrefi
   let pruned = 0;
 
   for (const name of readdirSync(backupDir)) {
-    if (!name.startsWith(`${filenamePrefix}-`) || !name.endsWith(".sql")) continue;
+    if (!name.startsWith(`${filenamePrefix}-`) || !(name.endsWith(".sql") || name.endsWith(".sql.gz"))) continue;
     const fullPath = resolve(backupDir, name);
     const stat = statSync(fullPath);
     if (stat.mtimeMs < cutoff) {
@@ -509,22 +512,71 @@ export async function runDatabaseBackup(opts: RunDatabaseBackupOptions): Promise
     emitStatement("COMMIT;");
     emit("");
 
-    // Write the backup file
+    // Write the backup file (with gzip compression)
     mkdirSync(opts.backupDir, { recursive: true });
-    const backupFile = resolve(opts.backupDir, `${filenamePrefix}-${timestamp()}.sql`);
-    await writeFile(backupFile, lines.join("\n"), "utf8");
+    const rawContent = lines.join("\n");
+    const compressed = gzipSync(Buffer.from(rawContent, "utf8"), { level: 6 });
+    const backupFile = resolve(opts.backupDir, `${filenamePrefix}-${timestamp()}.sql.gz`);
+    await writeFile(backupFile, compressed);
 
     const sizeBytes = statSync(backupFile).size;
+
+    // Verify backup integrity
+    const verification = verifyBackupContent(rawContent);
+    if (!verification.valid) {
+      // Don't delete the file — it may still be partially useful
+      throw new Error(`Backup verification failed: ${verification.reason}`);
+    }
+
     const prunedCount = pruneOldBackups(opts.backupDir, retentionDays, filenamePrefix);
 
     return {
       backupFile,
       sizeBytes,
       prunedCount,
+      uncompressedSizeBytes: Buffer.byteLength(rawContent, "utf8"),
+      tableCounts: verification.tableCounts,
     };
   } finally {
     await sql.end();
   }
+}
+
+type BackupVerification = {
+  valid: boolean;
+  reason?: string;
+  tableCounts: Record<string, number>;
+};
+
+function verifyBackupContent(content: string): BackupVerification {
+  const tableCounts: Record<string, number> = {};
+  const trimmed = content.trim();
+
+  // Check transaction boundaries
+  if (!trimmed.includes("BEGIN;")) {
+    return { valid: false, reason: "Missing BEGIN statement", tableCounts };
+  }
+  if (!trimmed.includes("COMMIT;")) {
+    return { valid: false, reason: "Missing COMMIT statement", tableCounts };
+  }
+
+  // Count inserts per table
+  const insertRegex = /INSERT INTO "public"\."([^"]+)"/g;
+  let match;
+  while ((match = insertRegex.exec(content)) !== null) {
+    const table = match[1]!;
+    tableCounts[table] = (tableCounts[table] ?? 0) + 1;
+  }
+
+  return { valid: true, tableCounts };
+}
+
+async function readBackupFile(filePath: string): Promise<string> {
+  const raw = await readFile(filePath);
+  if (filePath.endsWith(".gz")) {
+    return gunzipSync(raw).toString("utf8");
+  }
+  return raw.toString("utf8");
 }
 
 export async function runDatabaseRestore(opts: RunDatabaseRestoreOptions): Promise<void> {
@@ -533,7 +585,7 @@ export async function runDatabaseRestore(opts: RunDatabaseRestoreOptions): Promi
 
   try {
     await sql`SELECT 1`;
-    const contents = await readFile(opts.backupFile, "utf8");
+    const contents = await readBackupFile(opts.backupFile);
     const statements = contents
       .split(STATEMENT_BREAKPOINT)
       .map((statement) => statement.trim())
@@ -559,6 +611,12 @@ export async function runDatabaseRestore(opts: RunDatabaseRestoreOptions): Promi
 
 export function formatDatabaseBackupResult(result: RunDatabaseBackupResult): string {
   const size = formatBackupSize(result.sizeBytes);
+  const compression = result.uncompressedSizeBytes
+    ? ` (${Math.round((1 - result.sizeBytes / result.uncompressedSizeBytes) * 100)}% compression)`
+    : "";
   const pruned = result.prunedCount > 0 ? `; pruned ${result.prunedCount} old backup(s)` : "";
-  return `${result.backupFile} (${size}${pruned})`;
+  const tables = result.tableCounts
+    ? `; ${Object.keys(result.tableCounts).length} tables, ${Object.values(result.tableCounts).reduce((a, b) => a + b, 0)} rows`
+    : "";
+  return `${result.backupFile} (${size}${compression}${tables}${pruned})`;
 }
