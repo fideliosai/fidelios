@@ -424,10 +424,15 @@ export async function startServer(): Promise<StartedServer> {
   }
   
   if (config.deploymentMode === "local_trusted" && !isLoopbackHost(config.host)) {
-    throw new Error(
-      `local_trusted mode requires loopback host binding (received: ${config.host}). ` +
-        "Use authenticated mode for non-loopback deployments.",
-    );
+    // Allow 0.0.0.0 when allowedHostnames is configured (e.g. Tailscale remote access)
+    const hasAllowedHostnames = config.allowedHostnames && config.allowedHostnames.length > 0;
+    if (!hasAllowedHostnames) {
+      throw new Error(
+        `local_trusted mode requires loopback host binding (received: ${config.host}). ` +
+          "Use authenticated mode for non-loopback deployments, or add allowedHostnames for remote access.",
+      );
+    }
+    logger.info({ host: config.host, allowedHostnames: config.allowedHostnames }, "local_trusted with remote access via allowedHostnames");
   }
   
   if (config.deploymentMode === "local_trusted" && config.deploymentExposure !== "private") {
