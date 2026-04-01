@@ -230,7 +230,8 @@ export async function execute(ctx: AdapterExecutionContext): Promise<AdapterExec
           `The above agent instructions were loaded from ${resolvedInstructionsFilePath}. ` +
           `Resolve any relative file references from ${instructionsDir}. ` +
           `Your personal home directory ($AGENT_HOME) is ${agentHome || instructionsDir}. ` +
-          `Use $AGENT_HOME for memory, life, and personal files — NOT the instructions directory.\n\n`;
+          `Use $AGENT_HOME for memory, life, and personal files — NOT the instructions directory.\n` +
+          `IMPORTANT: You MUST Read a file before using Edit or Write on it. Calls to Edit/Write without a prior Read will fail.\n\n`;
       } catch (err) {
         const reason = err instanceof Error ? err.message : String(err);
         await onLog(
