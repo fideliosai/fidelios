@@ -268,7 +268,11 @@ if [ "$dry_run" = true ]; then
   release_info "Dry run complete for ${TARGET_VERSION}."
 else
   release_info "Published ${TARGET_VERSION}."
-  release_info "Next steps:"
-  release_info "  git push ${PUBLISH_REMOTE} refs/tags/${tag_name}"
-  release_info "  ./scripts/create-github-release.sh $TARGET_VERSION"
+
+  release_info ""
+  release_info "==> Pushing tag and creating GitHub Release..."
+  git -C "$REPO_ROOT" push "${PUBLISH_REMOTE}" "refs/tags/${tag_name}" 2>&1 || true
+  "$REPO_ROOT/scripts/create-github-release.sh" "$TARGET_VERSION" 2>&1 || {
+    release_info "  ⚠ GitHub Release failed locally — the GitHub Action will handle it on tag push."
+  }
 fi
