@@ -1756,25 +1756,15 @@ export function heartbeatService(db: Db) {
 
       const tracksLocalChild = isTrackedLocalChildProcessAdapter(adapterType);
       if (tracksLocalChild && run.processPid && isProcessAlive(run.processPid)) {
-        if (run.errorCode !== DETACHED_PROCESS_ERROR_CODE) {
-          const detachedMessage = `Lost in-memory process handle, but child pid ${run.processPid} is still alive`;
-          const detachedRun = await setRunStatus(run.id, "running", {
-            error: detachedMessage,
-            errorCode: DETACHED_PROCESS_ERROR_CODE,
-          });
-          if (detachedRun) {
-            await appendRunEvent(detachedRun, await nextRunEventSeq(detachedRun.id), {
-              eventType: "lifecycle",
-              stream: "system",
-              level: "warn",
-              message: detachedMessage,
-              payload: {
-                processPid: run.processPid,
-              },
-            });
-          }
-        }
-        continue;
+        // Kill the orphaned process instead of letting it hang forever
+        const detachedMessage = `Lost in-memory process handle, but child pid ${run.processPid} is still alive — killing and marking failed`;
+        logger.info({ runId: run.id, pid: run.processPid }, detachedMessage);
+        try { process.kill(run.processPid, "SIGTERM"); } catch {}
+        setTimeout(() => {
+          try { if (isProcessAlive(run.processPid!)) process.kill(run.processPid!, "SIGKILL"); } catch {}
+        }, 5000);
+
+        // Fall through to the same fail+retry logic below (don't continue)
       }
 
       const shouldRetry = tracksLocalChild && !!run.processPid && (run.processLossRetryCount ?? 0) < 1;
@@ -3586,6 +3576,13 @@ export function heartbeatService(db: Db) {
           running.child.kill("SIGKILL");
         }
       }, graceMs);
+    } else if (run.processPid && isProcessAlive(run.processPid)) {
+      // Fallback: kill by PID when in-memory handle is lost (e.g. after server restart)
+      logger.info({ runId, pid: run.processPid }, "Killing detached process by PID (no in-memory handle)");
+      try { process.kill(run.processPid, "SIGTERM"); } catch {}
+      setTimeout(() => {
+        try { if (isProcessAlive(run.processPid!)) process.kill(run.processPid!, "SIGKILL"); } catch {}
+      }, 5000);
     }
 
     const cancelled = await setRunStatus(run.id, "cancelled", {
@@ -3865,6 +3862,65 @@ export function heartbeatService(db: Db) {
         .orderBy(desc(heartbeatRuns.startedAt))
         .limit(1);
       return run ?? null;
+    },
+
+    /**
+     * On server startup, kill any orphaned processes from a previous server lifetime
+     * and mark their runs as failed. This prevents "process_detached" hangs.
+     */
+    reconcileOrphanedRunsOnStartup: async () => {
+      const staleRuns = await db
+        .select({
+          id: heartbeatRuns.id,
+          agentId: heartbeatRuns.agentId,
+          processPid: heartbeatRuns.processPid,
+          wakeupRequestId: heartbeatRuns.wakeupRequestId,
+          processLossRetryCount: heartbeatRuns.processLossRetryCount,
+        })
+        .from(heartbeatRuns)
+        .innerJoin(agents, eq(heartbeatRuns.agentId, agents.id))
+        .where(eq(heartbeatRuns.status, "running"));
+
+      if (staleRuns.length === 0) return;
+
+      const now = new Date();
+      logger.info({ count: staleRuns.length }, "Reconciling stale running heartbeat runs from previous server lifetime");
+
+      for (const run of staleRuns) {
+        // Kill orphaned process if still alive
+        if (run.processPid && isProcessAlive(run.processPid)) {
+          logger.info({ runId: run.id, pid: run.processPid }, "Killing orphaned process from previous server lifetime");
+          try { process.kill(run.processPid, "SIGTERM"); } catch {}
+          // SIGKILL will follow from reapOrphanedRuns if needed
+        }
+
+        const message = run.processPid
+          ? `Orphaned run from previous server lifetime — pid ${run.processPid} killed`
+          : "Stale running run from previous server lifetime";
+
+        await setRunStatus(run.id, "failed", {
+          error: message,
+          errorCode: "process_lost",
+          finishedAt: now,
+        });
+        await setWakeupStatus(run.wakeupRequestId, "failed", {
+          finishedAt: now,
+          error: message,
+        });
+
+        // Queue retry if under limit
+        if ((run.processLossRetryCount ?? 0) < 1) {
+          const agent = await getAgent(run.agentId);
+          const fullRun = await getRun(run.id);
+          if (agent && fullRun) {
+            await enqueueProcessLossRetry(fullRun, agent, now);
+          }
+        }
+
+        await finalizeAgentStatus(run.agentId, "failed");
+      }
+
+      logger.info({ reconciled: staleRuns.length }, "Startup reconciliation complete");
     },
   };
 }

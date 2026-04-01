@@ -29,6 +29,7 @@ import { loadConfig } from "./config.js";
 import { logger } from "./middleware/logger.js";
 import { setupLiveEventsWebSocketServer } from "./realtime/live-events-ws.js";
 import { heartbeatService, reconcilePersistedRuntimeServicesOnStartup, routineService } from "./services/index.js";
+import { runningProcesses } from "./adapters/index.js";
 import { createStorageServiceFromConfig } from "./storage/index.js";
 import { printStartupBanner } from "./startup-banner.js";
 import { getBoardClaimWarningUrl, initializeBoardClaimChallenge } from "./board-claim.js";
@@ -571,10 +572,10 @@ export async function startServer(): Promise<StartedServer> {
     const heartbeat = heartbeatService(db as any);
     const routines = routineService(db as any);
   
-    // Reap orphaned running runs at startup while in-memory execution state is empty,
-    // then resume any persisted queued runs that were waiting on the previous process.
+    // Kill orphaned processes from previous server lifetime, then reap and resume.
     void heartbeat
-      .reapOrphanedRuns()
+      .reconcileOrphanedRunsOnStartup()
+      .then(() => heartbeat.reapOrphanedRuns())
       .then(() => heartbeat.resumeQueuedRuns())
       .catch((err) => {
         logger.error({ err }, "startup heartbeat recovery failed");
@@ -752,18 +753,42 @@ export async function startServer(): Promise<StartedServer> {
     });
   });
   
-  if (embeddedPostgres && embeddedPostgresStartedByThisProcess) {
+  {
     const shutdown = async (signal: "SIGINT" | "SIGTERM") => {
-      logger.info({ signal }, "Stopping embedded PostgreSQL");
-      try {
-        await embeddedPostgres?.stop();
-      } catch (err) {
-        logger.error({ err }, "Failed to stop embedded PostgreSQL cleanly");
-      } finally {
-        process.exit(0);
+      // Kill all running agent child processes before exiting
+      if (runningProcesses.size > 0) {
+        logger.info({ signal, count: runningProcesses.size }, "Sending SIGTERM to running agent processes");
+        for (const [runId, entry] of runningProcesses) {
+          try {
+            entry.child.kill("SIGTERM");
+          } catch (err) {
+            logger.warn({ runId, err: err instanceof Error ? err.message : String(err) }, "Failed to SIGTERM child process");
+          }
+        }
+        // Give children a grace period to exit, then force kill survivors
+        await new Promise((resolve) => setTimeout(resolve, 5000));
+        for (const [runId, entry] of runningProcesses) {
+          try {
+            if (!entry.child.killed) {
+              entry.child.kill("SIGKILL");
+              logger.info({ runId }, "Force-killed lingering child process");
+            }
+          } catch {}
+        }
       }
+
+      if (embeddedPostgres && embeddedPostgresStartedByThisProcess) {
+        logger.info({ signal }, "Stopping embedded PostgreSQL");
+        try {
+          await embeddedPostgres?.stop();
+        } catch (err) {
+          logger.error({ err }, "Failed to stop embedded PostgreSQL cleanly");
+        }
+      }
+
+      process.exit(0);
     };
-  
+
     process.once("SIGINT", () => {
       void shutdown("SIGINT");
     });

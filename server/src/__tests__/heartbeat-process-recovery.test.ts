@@ -149,7 +149,7 @@ describeEmbeddedPostgres("heartbeat orphaned process recovery", () => {
     return { companyId, agentId, runId, wakeupRequestId, issueId };
   }
 
-  it("keeps a local run active when the recorded pid is still alive", async () => {
+  it("kills and fails a local run when the recorded pid is still alive (orphan recovery)", async () => {
     const child = spawnAliveProcess();
     childProcesses.add(child);
     expect(child.pid).toBeTypeOf("number");
@@ -161,11 +161,10 @@ describeEmbeddedPostgres("heartbeat orphaned process recovery", () => {
     const heartbeat = heartbeatService(db);
 
     const result = await heartbeat.reapOrphanedRuns();
-    expect(result.reaped).toBe(0);
+    expect(result.reaped).toBe(1);
 
     const run = await heartbeat.getRun(runId);
-    expect(run?.status).toBe("running");
-    expect(run?.errorCode).toBe("process_detached");
+    expect(run?.status).toBe("failed");
     expect(run?.error).toContain(String(child.pid));
 
     const wakeup = await db
@@ -173,7 +172,7 @@ describeEmbeddedPostgres("heartbeat orphaned process recovery", () => {
       .from(agentWakeupRequests)
       .where(eq(agentWakeupRequests.id, wakeupRequestId))
       .then((rows) => rows[0] ?? null);
-    expect(wakeup?.status).toBe("claimed");
+    expect(wakeup?.status).toBe("failed");
   });
 
   it("queues exactly one retry when the recorded local pid is dead", async () => {
