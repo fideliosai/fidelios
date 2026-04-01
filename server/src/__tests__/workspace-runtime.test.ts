@@ -420,13 +420,12 @@ describe("realizeExecutionWorkspace", () => {
         path.join(expectedInstanceRoot, "secrets", "master.key"),
       );
       expect(envContents).not.toContain("DATABASE_URL=");
-      expect(envContents).toContain(`FIDELIOS_HOME=${JSON.stringify(isolatedWorktreeHome)}`);
-      expect(envContents).toContain(`FIDELIOS_INSTANCE_ID=${JSON.stringify(expectedInstanceId)}`);
-      expect(envContents).toContain(`FIDELIOS_CONFIG=${JSON.stringify(configPath)}`);
+      // CLI writes paths unquoted (only special chars get quoted via formatEnvValue)
+      expect(envContents).toMatch(new RegExp(`FIDELIOS_HOME=["']?${isolatedWorktreeHome.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}["']?`));
+      expect(envContents).toMatch(new RegExp(`FIDELIOS_INSTANCE_ID=["']?${expectedInstanceId}["']?`));
+      expect(envContents).toMatch(new RegExp(`FIDELIOS_CONFIG=["']?${configPath.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}["']?`));
       expect(envContents).toContain("FIDELIOS_IN_WORKTREE=true");
-      expect(envContents).toContain(
-        `FIDELIOS_WORKTREE_NAME=${JSON.stringify("PAP-885-show-worktree-banner")}`,
-      );
+      expect(envContents).toMatch(/FIDELIOS_WORKTREE_NAME=["']?PAP-885-show-worktree-banner["']?/);
 
       process.chdir(workspace.cwd);
       expect(resolveFideliOSConfigPath()).toBe(configPath);
