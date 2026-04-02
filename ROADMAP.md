@@ -1,16 +1,20 @@
 # FideliOS Roadmap
 
-> Last updated: 2026-04-01
+> Last updated: 2026-04-02
 
-## Current: v0.0.11
+## Current: v0.0.13
 
 ### Recently Shipped
 
-- **Routines engine** — scheduled and on-demand recurring tasks with concurrency policies
-- **Telegram gateway plugin** — bidirectional messaging with inline approval buttons and voice transcription
-- **Company skills library** — shared skill system with GitHub import, project scanning, and per-agent assignment
+- **Level 2 context caching (CAG)** — pre-compiled heartbeat context bundles with incremental comment deltas, stable prompt prefix ordering for Ollama KV / Claude prompt cache hits
+- **Transient error auto-retry** — MCP timeouts, rate limits, and exit 143 errors trigger automatic retry after 30 seconds instead of leaving agents stuck in error state
+- **Headless permissions overhaul** — all adapters (Claude, OpenCode, Codex) now default to full tool access in unattended heartbeat mode; no more "user rejected permission" blocks
+- **Session handoff with PARA memory** — session rotation includes pointers to agent's persistent memory files for context recovery
+- **Gemini 3.x models** — adapter updated with Gemini 3.1 Pro Preview, 3 Pro, 3 Flash (free tier)
+- **Glob-before-read directive** — all adapters instruct agents to discover file paths before reading, preventing hallucinated path failures
 - **Orphaned process recovery** — graceful shutdown, startup reconciliation, and PID-based cancel fallback for detached agent runs
-- **Adapter improvements** — `$AGENT_HOME` resolution, Read-before-Write directive, project-scoped routine context
+- **Routines engine** — scheduled and on-demand recurring tasks with Telegram notification routing
+- **Company skills library** — shared skill system with project-scoped 1Password token support
 
 ### Known Issues
 
@@ -26,21 +30,18 @@ This will be addressed by the **Context Caching** initiative below.
 
 ## Near-Term: v0.1.x
 
-### Context Caching (CAG) — Level 1 ✅ (In Progress)
-
-Adapter-level caching to reduce redundant token usage:
+### Context Caching (CAG) — Level 1 ✅ Shipped
 
 - [x] Persistent skills directory for Claude adapter (avoid tmpdir rebuild every run)
 - [x] In-memory instructions file cache for OpenCode adapter (mtime-based invalidation)
-- [x] Read-before-Write directive injected into all OpenCode agent runs
-- [ ] Ollama MLX acceleration with NVFP4 quantization (qwen3.5:35b-a3b-coding-nvfp4)
+- [x] Read-before-Write and glob-before-read directives for all adapters
+- [x] Ollama MLX acceleration with NVFP4 quantization (qwen3.5:35b-a3b-coding-nvfp4)
 
-### Context Caching (CAG) — Level 2 (Planned)
+### Context Caching (CAG) — Level 2 ✅ Shipped
 
-FideliOS middleware-level context optimization:
-
-- [ ] **Pre-compiled context bundles** — issue + ancestors + comments assembled once per heartbeat instead of N API calls per agent
-- [ ] **Incremental context deltas** — agent receives only changes since last run ("2 new comments, status changed to blocked") instead of full thread replay
+- [x] **Pre-compiled context bundles** — issue + ancestors + comments assembled server-side before adapter execution
+- [x] **Incremental comment deltas** — `lastSeenCommentId` tracking per agent per issue; only new comments in bundle
+- [x] **Stable prefix ordering** — all 6 adapters inject bundle between instructions and dynamic content for cache-friendly prompts
 - [ ] **Shared agent context store** — cross-agent context deduplication for agents working on the same issue tree
 
 ### Egress & Data Controls (Planned)
