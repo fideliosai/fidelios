@@ -2,10 +2,13 @@
 
 > Last updated: 2026-04-02
 
-## Current: v0.0.13
+## Current: v0.0.17
 
 ### Recently Shipped
 
+- **Unified Claude adapter deployment** — All 26 agents on `claude_local` with tiered model assignment: Haiku 4.5 (IC/support), Sonnet 4.6 (CEO/CTO/QA Lead), Opus 4.6 (CISO). Thinking effort tuned per role (low/medium).
+- **Comprehensive model benchmark** — Tested 8 Ollama local + 3 cloud + Claude Haiku/Sonnet/Opus × 3 effort levels. Haiku Low = 130% quality at lowest cost. Opus Med/High = overthinking penalty.
+- **Hermes Agent adapter** — Validated with 6 concurrent agents. Supports all Ollama local/cloud models with 30+ native tools. `--yolo` flag for headless mode, 600s timeout.
 - **Level 2 context caching (CAG)** — pre-compiled heartbeat context bundles with incremental comment deltas, stable prompt prefix ordering for Ollama KV / Claude prompt cache hits
 - **Transient error auto-retry** — MCP timeouts, rate limits, and exit 143 errors trigger automatic retry after 30 seconds instead of leaving agents stuck in error state
 - **Headless permissions overhaul** — all adapters (Claude, OpenCode, Codex) now default to full tool access in unattended heartbeat mode; no more "user rejected permission" blocks
