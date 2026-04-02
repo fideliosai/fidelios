@@ -987,11 +987,11 @@ export function heartbeatService(db: Db) {
       `- Rotation reason: ${reason}`,
       latestTextSummary ? `- Last run summary: ${latestTextSummary}` : "",
       "",
-      "Your persistent memory survives session rotation:",
-      `- Daily notes: ${agentHome}/memory/${today}.md`,
+      "Your persistent memory (if you have written any) survives session rotation:",
+      `- Daily notes: ${agentHome}/memory/ (check for ${today}.md or recent dates)`,
       `- Knowledge graph: ${agentHome}/life/ (PARA structure)`,
-      `- Lessons learned: ${agentHome}/MEMORY.md`,
-      "Read your daily notes first to recover full context before taking action.",
+      `- Lessons learned: ${agentHome}/MEMORY.md (may not exist yet)`,
+      "Use glob or ls to check which memory files exist before reading. Do NOT assume files exist — create them if missing.",
     ]
       .filter(Boolean)
       .join("\n");
