@@ -52,3 +52,4 @@ tests/release-smoke/playwright-report/
 .claude/worktrees/
 
 .remember/
+public/
