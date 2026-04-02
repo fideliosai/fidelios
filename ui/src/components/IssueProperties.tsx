@@ -490,6 +490,9 @@ export function IssueProperties({ issue, onUpdate, inline }: IssuePropertiesProp
 
   return (
     <div className="space-y-4">
+      {issue.identifier && (
+        <div className="font-mono text-sm font-semibold text-foreground">{issue.identifier}</div>
+      )}
       <div className="space-y-1">
         <PropertyRow label="Status">
           <StatusIcon
