@@ -249,7 +249,13 @@ export async function execute(ctx: AdapterExecutionContext): Promise<AdapterExec
           `Your personal home directory ($AGENT_HOME) is ${agentHome || instructionsDir}. ` +
           `Use $AGENT_HOME for memory, life, and personal files — NOT the instructions directory.\n` +
           `IMPORTANT: You MUST Read a file before using Edit or Write on it. Calls to Edit/Write without a prior Read will fail.\n` +
-          `IMPORTANT: NEVER guess file paths. ALWAYS use glob or ls to discover the actual file structure before Read/Edit. Hallucinated paths cause failures.\n\n`;
+          `IMPORTANT: NEVER guess file paths. ALWAYS use glob or ls to discover the actual file structure before Read/Edit. Hallucinated paths cause failures.\n` +
+          `CRITICAL WORKFLOW: Your FIRST action in every heartbeat MUST be FideliOS coordination. Before ANY technical work:\n` +
+          `  1. curl -s -H "Authorization: Bearer $FIDELIOS_API_KEY" "$FIDELIOS_API_URL/api/agents/me/inbox-lite"\n` +
+          `  2. curl -s -X POST -H "Authorization: Bearer $FIDELIOS_API_KEY" -H "Content-Type: application/json" -H "X-FideliOS-Run-Id: $FIDELIOS_RUN_ID" "$FIDELIOS_API_URL/api/issues/{issueId}/checkout" -d \'{"agentId":"\'$FIDELIOS_AGENT_ID\'","expectedStatuses":["todo","backlog","blocked"]}\'\n` +
+          `  3. Do your work\n` +
+          `  4. Post a comment and update status when done: curl -s -X PATCH -H "Authorization: Bearer $FIDELIOS_API_KEY" -H "Content-Type: application/json" -H "X-FideliOS-Run-Id: $FIDELIOS_RUN_ID" "$FIDELIOS_API_URL/api/issues/{issueId}" -d \'{"status":"done","comment":"summary of what was done"}\'\n` +
+          `  NEVER skip steps 1-2. NEVER skip step 4. An issue left in "todo" after work is done is a BUG.\n\n`;
       } catch (err) {
         const reason = err instanceof Error ? err.message : String(err);
         await onLog(
