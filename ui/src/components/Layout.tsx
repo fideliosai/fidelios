@@ -392,15 +392,7 @@ export function Layout() {
                       {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
                     </Button>
                   </div>
-                ) : (
-                  <div className="flex flex-col items-center gap-1">
-                    <Button variant="ghost" size="icon-sm" className="text-muted-foreground" asChild>
-                      <Link to={instanceSettingsTarget} aria-label="Instance settings" title="Instance settings">
-                        <Settings className="h-4 w-4" />
-                      </Link>
-                    </Button>
-                  </div>
-                )}
+                ) : null}
               </div>
             </div>
           </div>

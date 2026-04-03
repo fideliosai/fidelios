@@ -1,5 +1,5 @@
 import { Link } from "@/lib/router";
-import { Menu, PanelLeftClose, PanelLeftOpen } from "lucide-react";
+import { Menu, SidebarClose, SidebarOpen } from "lucide-react";
 import { useBreadcrumbs } from "../context/BreadcrumbContext";
 import { useSidebar } from "../context/SidebarContext";
 import { useCompany } from "../context/CompanyContext";
@@ -56,9 +56,9 @@ export function BreadcrumbBar() {
       {isMobile ? (
         <Menu className="h-5 w-5" />
       ) : sidebarOpen ? (
-        <PanelLeftClose className="h-5 w-5" />
+        <SidebarClose className="h-5 w-5" />
       ) : (
-        <PanelLeftOpen className="h-5 w-5" />
+        <SidebarOpen className="h-5 w-5" />
       )}
     </Button>
   );
