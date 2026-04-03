@@ -253,7 +253,7 @@ export function KanbanBoard({
       onDragOver={handleDragOver}
       onDragEnd={handleDragEnd}
     >
-      <div className="flex gap-3 pb-4">
+      <div className="inline-flex gap-3 pb-4 min-w-full">
         {boardStatuses.map((status) => (
           <KanbanColumn
             key={status}

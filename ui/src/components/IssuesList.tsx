@@ -659,15 +659,13 @@ export function IssuesList({
       )}
 
       {viewState.viewMode === "board" ? (
-        <div className="-mx-4 md:-mx-6 overflow-x-auto">
-          <div className="px-4 md:px-6">
-            <KanbanBoard
-              issues={filtered}
-              agents={agents}
-              liveIssueIds={liveIssueIds}
-              onUpdateIssue={onUpdateIssue}
-            />
-          </div>
+        <div className="overflow-x-auto max-w-full">
+          <KanbanBoard
+            issues={filtered}
+            agents={agents}
+            liveIssueIds={liveIssueIds}
+            onUpdateIssue={onUpdateIssue}
+          />
         </div>
       ) : (
         groupedContent.map((group) => (
