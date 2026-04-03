@@ -664,7 +664,7 @@ export function IssuesList({
           ref={(el) => {
             if (!el) return;
             const onWheel = (e: WheelEvent) => {
-              if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return; // already horizontal
+              if (!e.metaKey) return;
               e.preventDefault();
               el.scrollLeft += e.deltaY;
             };
