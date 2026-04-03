@@ -1,5 +1,5 @@
 import { Link } from "@/lib/router";
-import { Menu } from "lucide-react";
+import { Menu, PanelLeftClose, PanelLeftOpen } from "lucide-react";
 import { useBreadcrumbs } from "../context/BreadcrumbContext";
 import { useSidebar } from "../context/SidebarContext";
 import { useCompany } from "../context/CompanyContext";
@@ -32,7 +32,7 @@ function GlobalToolbarPlugins({ context }: { context: GlobalToolbarContext }) {
 
 export function BreadcrumbBar() {
   const { breadcrumbs } = useBreadcrumbs();
-  const { toggleSidebar, isMobile } = useSidebar();
+  const { toggleSidebar, isMobile, sidebarOpen } = useSidebar();
   const { selectedCompanyId, selectedCompany } = useCompany();
 
   const globalToolbarSlotContext = useMemo(
@@ -47,21 +47,29 @@ export function BreadcrumbBar() {
 
   if (breadcrumbs.length === 0) {
     return (
-      <div className="border-b border-border px-4 md:px-6 h-12 shrink-0 flex items-center justify-end">
+      <div className="border-b border-border px-4 md:px-6 h-12 shrink-0 flex items-center">
+        {menuButton}
+        <div className="flex-1" />
         {globalToolbarSlots}
       </div>
     );
   }
 
-  const menuButton = isMobile && (
+  const menuButton = (
     <Button
       variant="ghost"
       size="icon-sm"
       className="mr-2 shrink-0"
       onClick={toggleSidebar}
-      aria-label="Open sidebar"
+      aria-label={sidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
     >
-      <Menu className="h-5 w-5" />
+      {isMobile ? (
+        <Menu className="h-5 w-5" />
+      ) : sidebarOpen ? (
+        <PanelLeftClose className="h-5 w-5" />
+      ) : (
+        <PanelLeftOpen className="h-5 w-5" />
+      )}
     </Button>
   );
 
