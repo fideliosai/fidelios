@@ -207,7 +207,7 @@ export function Dashboard() {
         </div>
       )}
 
-      <PeakHoursBanner peakHours={selectedCompany?.peakHours} />
+      <PeakHoursBanner peakHours={selectedCompany?.peakHours} agents={agents} />
 
       <ActiveAgentsPanel companyId={selectedCompanyId!} />
 
