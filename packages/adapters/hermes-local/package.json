@@ -1,6 +1,6 @@
 {
   "name": "@fideliosai/adapter-hermes-local",
-  "version": "0.0.3",
+  "version": "0.0.0-dev",
   "license": "MIT",
   "description": "Hermes AI agent adapter for FideliOS",
   "homepage": "https://github.com/fideliosai/fidelios",

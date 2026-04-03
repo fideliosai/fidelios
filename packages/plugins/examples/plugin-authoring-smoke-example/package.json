@@ -1,6 +1,6 @@
 {
   "name": "@fideliosai/plugin-authoring-smoke-example",
-  "version": "0.0.3",
+  "version": "0.0.0-dev",
   "type": "module",
   "private": true,
   "description": "A FideliOS plugin",

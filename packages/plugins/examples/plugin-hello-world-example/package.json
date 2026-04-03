@@ -1,6 +1,6 @@
 {
   "name": "@fideliosai/plugin-hello-world-example",
-  "version": "0.0.3",
+  "version": "0.0.0-dev",
   "description": "First-party reference plugin that adds a Hello World dashboard widget",
   "type": "module",
   "private": true,

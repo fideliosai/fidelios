@@ -1,6 +1,6 @@
 {
   "name": "@fideliosai/plugin-sdk",
-  "version": "0.0.3",
+  "version": "0.0.0-dev",
   "description": "Stable public API for FideliOS plugins — worker-side context and UI bridge hooks",
   "license": "MIT",
   "homepage": "https://github.com/fideliosai/fidelios",
