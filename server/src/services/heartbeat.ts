@@ -2779,7 +2779,10 @@ export function heartbeatService(db: Db) {
           errorMsg.includes("MCP error") ||
           errorMsg.includes("rate limit") ||
           errorMsg.includes("429") ||
+          errorMsg.includes("500") ||
           errorMsg.includes("503") ||
+          errorMsg.includes("Internal server error") ||
+          errorMsg.includes("api_error") ||
           errorMsg.includes("ECONNRESET") ||
           errorMsg.includes("ETIMEDOUT") ||
           errorCode === "claude_auth_required" ||
