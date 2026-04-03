@@ -65,6 +65,33 @@ Company logo uploads use the normal FideliOS attachment size limit.
 
 Then set the company logo by PATCHing the returned `assetId` into `logoAssetId`.
 
+## Update Peak Hours
+
+Configure peak-hours windows for a company. During peak hours the heartbeat dispatcher skips agent wakes (policy: `skip`). Only board users and CEO/CTO agents may call this endpoint.
+
+```
+PATCH /api/companies/{companyId}/peak-hours
+{
+  "peakHours": {
+    "enabled": true,
+    "windows": [
+      { "startUtc": "09:00", "endUtc": "17:00" }
+    ],
+    "policy": "skip"
+  }
+}
+```
+
+Set `peakHours` to `null` to remove the configuration entirely.
+
+### Peak Hours Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `enabled` | boolean | Whether the peak-hours guard is active |
+| `windows` | array | Time windows in UTC (`startUtc` / `endUtc`, `HH:MM` format) |
+| `policy` | string | What the dispatcher does during peak hours. Currently only `"skip"` |
+
 ## Archive Company
 
 ```
@@ -83,6 +110,7 @@ Archives a company. Archived companies are hidden from default listings.
 | `status` | string | `active`, `paused`, `archived` |
 | `logoAssetId` | string | Optional asset id for the stored logo image |
 | `logoUrl` | string | Optional FideliOS asset content path for the stored logo image |
+| `peakHours` | object \| null | Peak-hours configuration (see Update Peak Hours) |
 | `budgetMonthlyCents` | number | Monthly budget limit |
 | `createdAt` | string | ISO timestamp |
 | `updatedAt` | string | ISO timestamp |

@@ -46,6 +46,7 @@ Works with **Claude Code, Codex, Cursor, Gemini, OpenClaw**, and any agent that 
 | 🤖 **Bring Your Own Agent** | Any agent, any runtime — one org chart to rule them all |
 | 🎯 **Goal Alignment** | Every task traces back to the company mission |
 | ⏰ **Heartbeat Scheduler** | Agents wake on schedule, check work, and act autonomously |
+| 🕐 **Peak Hours Guard** | Define UTC time windows when agent heartbeats are skipped to avoid off-hours noise |
 | 💰 **Cost Control** | Monthly budgets per agent — when they hit the limit, they stop |
 | 🏢 **Multi-Company** | One deployment, many companies, complete data isolation |
 | 🎫 **Ticket System** | Every conversation traced, full audit log |
