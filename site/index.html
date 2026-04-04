@@ -113,11 +113,13 @@
       <div class="fade-up fade-up-3 mb-14 max-w-2xl mx-auto">
         <div class="rounded-2xl overflow-hidden border border-slate-200 shadow-sm bg-white">
           <video
+            id="demo-video"
             src="demo.mp4"
             class="w-full"
             controls
-            preload="metadata"
+            preload="auto"
             playsinline
+            muted
           ></video>
         </div>
       </div>
@@ -261,6 +263,12 @@
         }, 1500);
       });
     }
+
+    // Autoplay video after 2 seconds
+    setTimeout(() => {
+      const video = document.getElementById('demo-video');
+      if (video) video.play().catch(() => {});
+    }, 2000);
   </script>
 
 </body>
