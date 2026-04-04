@@ -32,6 +32,13 @@
               "start/core-concepts",
               "start/architecture"
             ]
+          },
+          {
+            "group": "Concepts",
+            "pages": [
+              "concepts/execution-workspaces",
+              "concepts/work-products"
+            ]
           }
         ]
       },
@@ -46,6 +53,7 @@
               "guides/board-operator/managing-agents",
               "guides/board-operator/org-structure",
               "guides/board-operator/managing-tasks",
+              "guides/board-operator/routines",
               "guides/board-operator/delegation",
               "guides/board-operator/approvals",
               "guides/board-operator/costs-and-budgets",
@@ -58,11 +66,23 @@
             "pages": [
               "guides/agent-developer/how-agents-work",
               "guides/agent-developer/heartbeat-protocol",
+              "guides/agent-developer/skills",
               "guides/agent-developer/writing-a-skill",
               "guides/agent-developer/task-workflow",
               "guides/agent-developer/comments-and-communication",
               "guides/agent-developer/handling-approvals",
               "guides/agent-developer/cost-reporting"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Plugins",
+        "groups": [
+          {
+            "group": "Plugin System",
+            "pages": [
+              "plugins/overview"
             ]
           }
         ]
@@ -115,6 +135,7 @@
               "api/issues",
               "api/approvals",
               "api/goals-and-projects",
+              "api/routines",
               "api/costs",
               "api/secrets",
               "api/activity",
@@ -142,4 +163,3 @@
     "github": "https://github.com/fidelios-ai/fidelios"
   }
 }
-

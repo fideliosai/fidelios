@@ -1,0 +1,88 @@
+export const CopyMarkdownButton = ({ label = "Copy page as Markdown" }) => {
+  const [copied, setCopied] = React.useState(false);
+
+  const handleCopy = async () => {
+    // Grab the main prose content rendered by Mintlify
+    const prose =
+      document.querySelector("article") ||
+      document.querySelector(".prose") ||
+      document.querySelector("main");
+
+    if (!prose) return;
+
+    // Walk the DOM and reconstruct a rough markdown representation.
+    // For most doc pages this produces clean, LLM-friendly text.
+    const lines = [];
+    const walk = (node, depth = 0) => {
+      if (node.nodeType === Node.TEXT_NODE) {
+        const t = node.textContent.trim();
+        if (t) lines.push(t);
+        return;
+      }
+      const tag = node.tagName ? node.tagName.toLowerCase() : "";
+      const hLevel = tag.match(/^h([1-6])$/);
+      if (hLevel) {
+        lines.push("\n" + "#".repeat(Number(hLevel[1])) + " " + node.textContent.trim() + "\n");
+      } else if (tag === "pre") {
+        lines.push("\n```\n" + node.textContent.trim() + "\n```\n");
+      } else if (tag === "li") {
+        lines.push("- " + node.textContent.trim());
+      } else if (tag === "tr") {
+        const cells = Array.from(node.querySelectorAll("th,td"))
+          .map((c) => c.textContent.trim())
+          .join(" | ");
+        if (cells) lines.push("| " + cells + " |");
+      } else if (tag === "p" || tag === "blockquote") {
+        lines.push("\n" + node.textContent.trim() + "\n");
+      } else {
+        node.childNodes.forEach((c) => walk(c, depth + 1));
+        return;
+      }
+    };
+    prose.childNodes.forEach((n) => walk(n));
+
+    const markdown = lines.join("\n").replace(/\n{3,}/g, "\n\n").trim();
+
+    try {
+      await navigator.clipboard.writeText(markdown);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // Fallback: create a temporary textarea
+      const ta = document.createElement("textarea");
+      ta.value = markdown;
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
+  return (
+    <button
+      onClick={handleCopy}
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        gap: "6px",
+        padding: "6px 12px",
+        fontSize: "13px",
+        fontWeight: 500,
+        color: copied ? "#16a34a" : "#6b7280",
+        background: "transparent",
+        border: "1px solid",
+        borderColor: copied ? "#86efac" : "#e5e7eb",
+        borderRadius: "6px",
+        cursor: "pointer",
+        transition: "all 0.15s ease",
+      }}
+      title="Copy this page as Markdown for use with LLMs"
+    >
+      {copied ? "✓ Copied" : label}
+    </button>
+  );
+};
