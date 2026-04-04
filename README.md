@@ -1,25 +1,27 @@
-<div align="center">
+<p align="center">
+  <img src="doc/assets/header.png" alt="FideliOS" width="200" />
+</p>
 
-```
-███████╗██╗██████╗ ███████╗██╗     ██╗ ██████╗ ███████╗
-██╔════╝██║██╔══██╗██╔════╝██║     ██║██╔═══██╗██╔════╝
-█████╗  ██║██║  ██║█████╗  ██║     ██║██║   ██║███████╗
-██╔══╝  ██║██║  ██║██╔══╝  ██║     ██║██║   ██║╚════██║
-██║     ██║██████╔╝███████╗███████╗██║╚██████╔╝███████║
-╚═╝     ╚═╝╚═════╝ ╚══════╝╚══════╝╚═╝ ╚═════╝ ╚══════╝
-```
+<h1 align="center">FideliOS</h1>
 
-**AI Agent Orchestration Platform**
+<p align="center">
+  <strong>AI Agent Orchestration Platform</strong><br>
+  <em>One dashboard to hire, manage, and scale your AI agent team</em>
+</p>
 
-*One dashboard to hire, manage, and scale your AI agent team*
+<p align="center">
+  <a href="https://github.com/fideliosai/fidelios/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT License" /></a>
+  <a href="https://nodejs.org"><img src="https://img.shields.io/badge/node-20%2B-brightgreen" alt="Node 20+" /></a>
+  <a href="https://github.com/fideliosai/fidelios/stargazers"><img src="https://img.shields.io/github/stars/fideliosai/fidelios?style=flat" alt="Stars" /></a>
+</p>
 
-[![MIT License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
-[![Node 20+](https://img.shields.io/badge/node-20%2B-brightgreen)](https://nodejs.org)
-[![Stars](https://img.shields.io/github/stars/fideliosai/fidelios?style=flat)](https://github.com/fideliosai/fidelios/stargazers)
-
-[**Quick Start**](#quick-start) · [**Features**](#features) · [**Architecture**](#architecture) · [**Roadmap**](ROADMAP.md) · [**fidelios.nl**](https://fidelios.nl)
-
-</div>
+<p align="center">
+  <a href="#quick-start"><strong>Quick Start</strong></a> &middot;
+  <a href="#features"><strong>Features</strong></a> &middot;
+  <a href="#problems-fidelios-solves"><strong>Why FideliOS</strong></a> &middot;
+  <a href="#architecture"><strong>Architecture</strong></a> &middot;
+  <a href="https://fidelios.nl"><strong>fidelios.nl</strong></a>
+</p>
 
 <br>
 
@@ -29,23 +31,56 @@
 
 <br>
 
+---
+
 ## What is FideliOS?
 
-# Open-source operating system for AI-driven companies
+<h2 align="center">Open-source operating system for AI-driven companies</h2>
 
-FideliOS runs a **team of AI agents like a real company** — org charts, goals, budgets, schedules, and governance — all from a local dashboard you host yourself.
+<p align="center">
+  <em>It looks like a task manager — but under the hood it has org charts, budgets,<br>governance, goal alignment, agent coordination, plugins, and mobile access.</em>
+</p>
 
-It looks like a task manager — but under the hood it has org charts, budgets, governance, goal alignment, agent coordination, plugin integrations, and mobile access.
+<br>
 
-**Manage business goals, not terminal windows.**
+<div align="center">
+<table>
+  <tr>
+    <td align="center"><strong>01</strong></td>
+    <td><strong>Define the goal</strong></td>
+    <td><em>"Build the #1 AI note-taking app to $1M MRR."</em></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>02</strong></td>
+    <td><strong>Hire the team</strong></td>
+    <td>CEO, CTO, engineers, designers, marketers — any agent, any provider</td>
+  </tr>
+  <tr>
+    <td align="center"><strong>03</strong></td>
+    <td><strong>Approve and run</strong></td>
+    <td>Review strategy. Set budgets. Hit go. Monitor from the dashboard.</td>
+  </tr>
+</table>
+</div>
 
-|        | Step            | Example                                                            |
-| ------ | --------------- | ------------------------------------------------------------------ |
-| **01** | Define the goal | *"Build the #1 AI note-taking app to $1M MRR."*                   |
-| **02** | Hire the team   | CEO, CTO, engineers, designers, marketers — any agent, any provider |
-| **03** | Approve and run | Review strategy. Set budgets. Hit go. Monitor from the dashboard.  |
+<br>
 
-Works with **Claude Code, Codex, Cursor, Gemini, OpenClaw**, and any agent that can receive HTTP heartbeats.
+<div align="center">
+<table>
+  <tr>
+    <td align="center"><strong>Works<br/>with</strong></td>
+    <td align="center"><img src="doc/assets/logos/claude.svg" width="32" alt="Claude" /><br/><sub>Claude Code</sub></td>
+    <td align="center"><img src="doc/assets/logos/codex.svg" width="32" alt="Codex" /><br/><sub>Codex</sub></td>
+    <td align="center"><img src="doc/assets/logos/cursor.svg" width="32" alt="Cursor" /><br/><sub>Cursor</sub></td>
+    <td align="center"><img src="doc/assets/logos/openclaw.svg" width="32" alt="OpenClaw" /><br/><sub>OpenClaw</sub></td>
+    <td align="center"><img src="doc/assets/logos/bash.svg" width="32" alt="Bash" /><br/><sub>Bash</sub></td>
+    <td align="center"><img src="doc/assets/logos/http.svg" width="32" alt="HTTP" /><br/><sub>HTTP</sub></td>
+  </tr>
+</table>
+
+<em>If it can receive a heartbeat, it's hired.</em>
+
+</div>
 
 <br>
 
@@ -53,14 +88,20 @@ Works with **Claude Code, Codex, Cursor, Gemini, OpenClaw**, and any agent that 
 
 ## FideliOS is right for you if
 
+<table>
+<tr><td>
+
 - You want to build **autonomous AI companies** — not just run scripts
 - You **coordinate many different agents** (Claude, Codex, Cursor, Gemini) toward a common goal
 - You have **20 simultaneous agent terminals** open and lose track of what everyone is doing
 - You want agents running **autonomously 24/7**, but still want to audit work and chime in when needed
 - You want to **monitor costs** and enforce budgets before they spiral
 - You want a process for managing agents that **feels like using a task manager**
-- You want to manage your autonomous businesses **from your phone** via PWA or Telegram
+- You want to manage your AI companies **from your phone** via PWA or Telegram
 - You need **plugins** — Telegram gateway, webhooks, custom MCP servers — not just a closed system
+
+</td></tr>
+</table>
 
 <br>
 
@@ -69,51 +110,15 @@ Works with **Claude Code, Codex, Cursor, Gemini, OpenClaw**, and any agent that 
 ## Problems FideliOS solves
 
 | Without FideliOS | With FideliOS |
-|---|---|
-| You have 20 Claude Code tabs open and can't track which one does what. On reboot you lose everything. | Tasks are ticket-based, conversations are threaded, sessions persist across reboots. |
-| You manually gather context from several places to remind your agent what you're working on. | Context flows from the task up through the project and company goals — your agent always knows what to do and why. |
-| Folders of agent configs are disorganized and you're re-inventing task management and coordination between agents. | FideliOS gives you org charts, ticketing, delegation, and governance out of the box — so you run a company, not a pile of scripts. |
-| Runaway loops waste hundreds of dollars of tokens and max your quota before you even know what happened. | Cost tracking surfaces token budgets and throttles agents when they're out. Peak Hours Guard blocks heartbeats during expensive time windows. |
-| You have recurring jobs (customer support, social, reports) and have to remember to manually kick them off. | Heartbeats handle regular work on a schedule. Management supervises. |
-| You have an idea, you have to find your repo, fire up Claude Code, keep a tab open, and babysit it. | Add a task in FideliOS. Your coding agent works on it until it's done. Management reviews their work. |
-| You can't manage agents from your phone — you need a laptop with terminal open. | PWA works on any device. Telegram plugin lets you receive updates, approve work, and create tasks from your phone. |
-| Adding integrations means writing glue code from scratch every time. | Plugin system lets you add Telegram, webhooks, custom tools — without touching core code. |
-
-<br>
-
----
-
-## Why FideliOS is special
-
-FideliOS handles the hard orchestration details correctly.
-
-| | |
-|---|---|
-| **Atomic execution.** | Task checkout and budget enforcement are atomic — no double-work and no runaway spend. |
-| **Persistent agent state.** | Agents resume the same task context across heartbeats instead of restarting from scratch. |
-| **Runtime skill injection.** | Agents learn FideliOS workflows and project context at runtime, without retraining. |
-| **Governance with rollback.** | Approval gates are enforced, config changes are revisioned, and bad changes can be rolled back. |
-| **Goal-aware execution.** | Tasks carry full goal ancestry so agents consistently see the "why," not just a title. |
-| **Peak Hours Guard.** | Define UTC time windows to block automated heartbeats — avoid expensive API calls during peak pricing. |
-| **Plugin architecture.** | Extend with Telegram, webhooks, MCP servers — first-class plugin SDK with hot-reload in development. |
-| **Bulletproof backups.** | Automatic compressed backups every 15 minutes, one-command restore, optional S3 cloud sync. |
-| **True multi-company isolation.** | Every entity is company-scoped — one deployment can run many companies with separate data and audit trails. |
-| **Self-updating.** | Built-in version checker notifies you when a new release is available — update with one command. |
-
-<br>
-
----
-
-## What FideliOS is not
-
-| | |
-|---|---|
-| **Not a chatbot.** | Agents have jobs, not chat windows. |
-| **Not an agent framework.** | We don't tell you how to build agents. We tell you how to run a company made of them. |
-| **Not a workflow builder.** | No drag-and-drop pipelines. FideliOS models companies — with org charts, goals, budgets, and governance. |
-| **Not a prompt manager.** | Agents bring their own prompts, models, and runtimes. FideliOS manages the organization they work in. |
-| **Not a single-agent tool.** | This is for teams. If you have one agent, you probably don't need FideliOS. If you have twenty — you definitely do. |
-| **Not cloud-dependent.** | Everything runs locally. Your data never leaves your machine unless you configure S3 backups. |
+|:---|:---|
+| 🔴 You have 20 Claude Code tabs open and can't track which one does what. On reboot you lose everything. | 🟢 Tasks are ticket-based, conversations are threaded, sessions persist across reboots. |
+| 🔴 You manually gather context from several places to remind your agent what you're working on. | 🟢 Context flows from the task up through the project and company goals — your agent always knows what to do and why. |
+| 🔴 Folders of agent configs are disorganized and you're re-inventing coordination between agents. | 🟢 Org charts, ticketing, delegation, and governance out of the box — run a company, not a pile of scripts. |
+| 🔴 Runaway loops waste hundreds of dollars and max your quota before you even know. | 🟢 Cost tracking, budget throttling, Peak Hours Guard blocks runs during expensive windows. |
+| 🔴 Recurring jobs (support, social, reports) — you have to remember to manually kick them off. | 🟢 Heartbeats handle regular work on a schedule. Management supervises. |
+| 🔴 You have an idea — find repo, fire up Claude Code, keep a tab open, babysit it. | 🟢 Add a task. Your agent works on it until done. Management reviews. |
+| 🔴 Can't manage agents from your phone — need a laptop with terminal. | 🟢 PWA on any device. Telegram plugin for updates, approvals, task creation. |
+| 🔴 Adding integrations means writing glue code from scratch. | 🟢 Plugin system — Telegram, webhooks, custom tools — without touching core. |
 
 <br>
 
@@ -125,7 +130,7 @@ FideliOS handles the hard orchestration details correctly.
 <tr>
 <td align="center" width="33%">
 <h3>🔌 Bring Your Own Agent</h3>
-Any agent, any runtime, one org chart. Claude, Codex, Cursor, Gemini, OpenClaw — if it can receive a heartbeat, it's hired.
+Any agent, any runtime, one org chart. If it can receive a heartbeat, it's hired.
 </td>
 <td align="center" width="33%">
 <h3>🎯 Goal Alignment</h3>
@@ -139,7 +144,7 @@ Agents wake on a schedule, check work, and act. Delegation flows up and down the
 <tr>
 <td align="center">
 <h3>💰 Cost Control</h3>
-Monthly budgets per agent. When they hit the limit, they stop. Peak Hours Guard blocks runs during expensive windows.
+Monthly budgets per agent. Peak Hours Guard blocks runs during expensive time windows.
 </td>
 <td align="center">
 <h3>🏢 Multi-Company</h3>
@@ -147,13 +152,13 @@ One deployment, many companies. Complete data isolation. One control plane for y
 </td>
 <td align="center">
 <h3>🎫 Ticket System</h3>
-Every conversation traced. Every decision explained. Full tool-call tracing and immutable audit log.
+Every conversation traced. Every decision explained. Full audit log.
 </td>
 </tr>
 <tr>
 <td align="center">
 <h3>🛡️ Governance</h3>
-You're the board. Approve hires, override strategy, pause or terminate any agent — at any time.
+You're the board. Approve hires, override strategy, pause or terminate any agent.
 </td>
 <td align="center">
 <h3>📊 Org Chart</h3>
@@ -161,13 +166,13 @@ Hierarchies, roles, reporting lines. Your agents have a boss, a title, and a job
 </td>
 <td align="center">
 <h3>📱 Mobile + Telegram</h3>
-PWA works on any device. Telegram plugin for updates, approvals, and task creation from your phone.
+PWA on any device. Telegram plugin for updates, approvals, and task creation.
 </td>
 </tr>
 <tr>
 <td align="center">
 <h3>🔌 Plugin System</h3>
-Extend with Telegram, webhooks, custom MCP servers. First-class SDK with hot-reload in development.
+Extend with Telegram, webhooks, MCP servers. First-class SDK with hot-reload.
 </td>
 <td align="center">
 <h3>💾 Bulletproof Backups</h3>
@@ -175,10 +180,44 @@ Automatic compressed backups, one-command restore, optional S3 cloud sync.
 </td>
 <td align="center">
 <h3>🔄 Self-Updating</h3>
-Built-in version checker. Blue banner when update available. One command to upgrade.
+Built-in version checker. Update notification banner. One command to upgrade.
 </td>
 </tr>
 </table>
+
+<br>
+
+---
+
+## Why FideliOS is special
+
+| | |
+|:---|:---|
+| **Atomic execution.** | Task checkout and budget enforcement are atomic — no double-work and no runaway spend. |
+| **Persistent agent state.** | Agents resume the same task context across heartbeats instead of restarting from scratch. |
+| **Runtime skill injection.** | Agents learn FideliOS workflows and project context at runtime, without retraining. |
+| **Governance with rollback.** | Approval gates are enforced, config changes are revisioned, bad changes can be rolled back. |
+| **Goal-aware execution.** | Tasks carry full goal ancestry so agents see the "why," not just a title. |
+| **Peak Hours Guard.** | Block automated heartbeats during expensive API pricing windows. |
+| **Plugin architecture.** | Telegram, webhooks, MCP servers — first-class plugin SDK with hot-reload. |
+| **Bulletproof backups.** | Automatic every 15 minutes, one-command restore, optional S3 cloud sync. |
+| **Multi-company isolation.** | One deployment runs many companies with separate data and audit trails. |
+| **Self-updating.** | Version checker notifies when a new release is available. |
+
+<br>
+
+---
+
+## What FideliOS is not
+
+| | |
+|:---|:---|
+| **Not a chatbot.** | Agents have jobs, not chat windows. |
+| **Not an agent framework.** | We don't tell you how to build agents. We tell you how to run a company made of them. |
+| **Not a workflow builder.** | No drag-and-drop pipelines. FideliOS models companies — with org charts, goals, and governance. |
+| **Not a prompt manager.** | Agents bring their own prompts, models, and runtimes. FideliOS manages the organization. |
+| **Not a single-agent tool.** | For teams. One agent? You don't need FideliOS. Twenty? You definitely do. |
+| **Not cloud-dependent.** | Everything runs locally. Your data never leaves your machine unless you configure S3 backups. |
 
 <br>
 
@@ -188,23 +227,17 @@ Built-in version checker. Blue banner when update available. One command to upgr
 
 > **Requirements:** Node.js 20+
 
-### Install
-
 ```bash
 npm install -g fidelios
-```
-
-### Run
-
-```bash
 fidelios run
 ```
 
-Open **http://127.0.0.1:3100** — the setup wizard will guide you through creating your first company and hiring your first agent.
+Open **http://127.0.0.1:3100** — the setup wizard guides you through creating your first company and hiring your first agent.
 
-No cloud account needed. An embedded PostgreSQL database starts automatically.
+No cloud account needed. Embedded PostgreSQL starts automatically.
 
-### Useful commands
+<details>
+<summary><strong>More commands</strong></summary>
 
 ```bash
 fidelios run           # Start the server
@@ -215,7 +248,10 @@ fidelios db:restore    # Restore from a backup
 fidelios --help        # See all commands
 ```
 
-### Development (from source)
+</details>
+
+<details>
+<summary><strong>Development (from source)</strong></summary>
 
 ```bash
 git clone https://github.com/fideliosai/fidelios.git
@@ -223,6 +259,10 @@ cd fidelios
 pnpm install
 pnpm dev:watch
 ```
+
+See [doc/DEVELOPING.md](doc/DEVELOPING.md) for the full development guide.
+
+</details>
 
 <br>
 
@@ -233,14 +273,12 @@ pnpm dev:watch
 FideliOS backs up your database automatically every 15 minutes.
 
 ```bash
-# Restore from the latest backup (creates a safety snapshot first)
-fidelios db:restore --latest
-
-# Interactive restore — pick from a list
-fidelios db:restore
+fidelios db:restore --latest    # Restore from the latest backup
+fidelios db:restore             # Interactive restore — pick from a list
 ```
 
-### S3 Cloud Sync (optional)
+<details>
+<summary><strong>S3 Cloud Sync (optional)</strong></summary>
 
 Add to `~/.fidelios/instances/default/config.json`:
 
@@ -261,6 +299,8 @@ Add to `~/.fidelios/instances/default/config.json`:
 
 S3 sync happens after every local backup. If S3 is unreachable, local backups continue without interruption.
 
+</details>
+
 <br>
 
 ---
@@ -268,9 +308,9 @@ S3 sync happens after every local backup. If S3 is unreachable, local backups co
 ## Guides
 
 | Guide | Description |
-|-------|-------------|
-| [Tailscale Remote Access](doc/TAILSCALE.md) | Access FideliOS from your phone or any device over a secure private network |
-| [Telegram Gateway Plugin](doc/TELEGRAM-PLUGIN.md) | Manage FideliOS via Telegram — agent updates, approvals, two-way messaging |
+|:------|:------------|
+| [Tailscale Remote Access](doc/TAILSCALE.md) | Access FideliOS from your phone over a secure private network |
+| [Telegram Gateway Plugin](doc/TELEGRAM-PLUGIN.md) | Manage FideliOS via Telegram — updates, approvals, two-way messaging |
 | [Developing](doc/DEVELOPING.md) | Full development guide for contributors |
 | [CLI Reference](doc/CLI.md) | All CLI commands and options |
 
@@ -300,30 +340,12 @@ fidelios/
 
 ---
 
-## Development
-
-```bash
-pnpm dev:watch      # Start dev server (API + Vite, watch mode, port 3100)
-pnpm build          # Build all packages
-pnpm typecheck      # TypeScript type-check across all packages
-pnpm test:run       # Run test suite
-pnpm db:generate    # Generate a new database migration
-pnpm db:migrate     # Apply pending migrations
-pnpm db:restore     # Restore database from a backup
-```
-
-See [doc/DEVELOPING.md](doc/DEVELOPING.md) for the full development guide.
-
-<br>
-
----
-
 ## Data Location
 
 Your data lives here — nothing goes to the cloud unless you configure S3.
 
 | OS | Path |
-|---|---|
+|:---|:-----|
 | macOS / Linux | `~/.fidelios/instances/default/` |
 | Windows | `%USERPROFILE%\.fidelios\instances\default\` |
 
@@ -337,8 +359,14 @@ Inside: `db/` — database · `data/backups/` — automatic backups · `config.j
 
 MIT — see [LICENSE](LICENSE).
 
+<br>
+
 ---
 
-<div align="center">
+<p align="center">
+  <img src="doc/assets/footer.jpg" alt="" width="720" />
+</p>
+
+<p align="center">
   <sub>Open source. Self-hosted. Built for people who want to run companies, not babysit agents.</sub>
-</div>
+</p>
