@@ -27,15 +27,21 @@
 
 <br>
 
-> ### 🚨 BREAKING: Third-party agent harnesses now cost extra. FideliOS doesn't.
+> ### 🚀 Zero extra fees. Smarter token usage. No provider restrictions.
 >
-> Starting April 2025, AI providers classify third-party harnesses (OpenClaw, Cline, and others) as **extra usage** — every agent run eats premium credits on top of your subscription. **FideliOS is immune.** We connect through official first-party CLIs (Claude Code, Codex, Gemini CLI) that run on your existing plan. No middleman. No markup. No surprise bills.
+> As of April 2025, AI providers started charging extra fees for third-party tools like OpenClaw and Cline — every agent action now costs premium credits on top of your subscription. Many users are already seeing unexpected bills.
 >
-> But we don't just save you from surcharges — we **actively cut your token spend**. CAG pre-compiles full project context into ready-made bundles so agents get everything in one shot instead of burning tokens on repeated lookups. RAG retrieves only what's relevant instead of stuffing entire histories into every prompt. Session persistence and smart skip-detection eliminate redundant runs.
+> **FideliOS is not affected.** We connect through official provider tools (Claude Code, Codex, Gemini CLI), so your agents run entirely within your existing subscription. No extra charges. No restrictions. No surprises.
 >
-> Take it even further — plug in local models (Ollama, LM Studio, llama.cpp) and your cost approaches **literally zero** without sacrificing quality. Cloud for heavy lifting, local for routine tasks. Same orchestration, same governance, same audit trails.
+> But we go further — FideliOS **actively saves your money:**
 >
-> **Your subscription. Your tokens. Your rules.**
+> | | |
+> |:---|:---|
+> | **🛡️ No extra fees** | While third-party tools now burn premium credits per action, FideliOS runs on your existing plan. You pay what you already pay — nothing more. |
+> | **⚡ Tokens stay in your pocket** | Built-in context caching (CAG/RAG) means agents don't re-read the same data over and over. Less tokens spent = more work done for the same money. |
+> | **💸 Go near-zero** | Add local AI models (Ollama, LM Studio) for routine tasks — same management, same quality, near-zero cost. Cloud when you need power, local when you don't. |
+>
+> **Your subscription. Your savings. Your rules.**
 
 <br>
 
