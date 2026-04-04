@@ -27,21 +27,21 @@
 
 <br>
 
-> ### 🚀 Zero extra fees. Smarter token usage. No provider restrictions.
->
-> As of April 2025, AI providers started charging extra fees for third-party tools like OpenClaw and Cline — every agent action now costs premium credits on top of your subscription. Many users are already seeing unexpected bills.
->
-> **FideliOS is not affected.** We connect through official provider tools (Claude Code, Codex, Gemini CLI), so your agents run entirely within your existing subscription. No extra charges. No restrictions. No surprises.
->
-> But we go further — FideliOS **actively saves your money:**
->
-> | | |
-> |:---|:---|
-> | **🛡️ No extra fees** | While third-party tools now burn premium credits per action, FideliOS runs on your existing plan. You pay what you already pay — nothing more. |
-> | **⚡ Tokens stay in your pocket** | Built-in context caching (CAG/RAG) means agents don't re-read the same data over and over. Less tokens spent = more work done for the same money. |
-> | **💸 Go near-zero** | Add local AI models (Ollama, LM Studio) for routine tasks — same management, same quality, near-zero cost. Cloud when you need power, local when you don't. |
->
-> **Your subscription. Your savings. Your rules.**
+## 🚀 Zero extra fees. Smarter token usage. No provider restrictions.
+
+As of April 2025, AI providers started charging extra fees for third-party tools like OpenClaw and Cline — every agent action now costs premium credits on top of your subscription. Many users are already seeing unexpected bills.
+
+**FideliOS is not affected.** We connect through official provider tools (Claude Code, Codex, Gemini CLI), so your agents run entirely within your existing subscription. No extra charges. No restrictions. No surprises.
+
+But we go further — FideliOS **actively saves your money:**
+
+| | |
+|:---|:---|
+| **🛡️ No extra fees** | While third-party tools now burn premium credits per action, FideliOS runs on your existing plan. You pay what you already pay — nothing more. |
+| **⚡ Tokens stay in your pocket** | Built-in context caching (CAG/RAG) means agents don't re-read the same data over and over. Less tokens spent = more work done for the same money. |
+| **💸 Go near-zero** | Add local AI models (Ollama, LM Studio) for routine tasks — same management, same quality, near-zero cost. Cloud when you need power, local when you don't. |
+
+### Your subscription. Your savings. Your rules.
 
 <br>
 
