@@ -1,4 +1,5 @@
 import { Router, type Request } from "express";
+import { execFile } from "node:child_process";
 import { generateKeyPairSync, randomUUID } from "node:crypto";
 import path from "node:path";
 import type { Db } from "@fideliosai/db";
@@ -712,7 +713,91 @@ export function agentRoutes(db: Db) {
         config: runtimeAdapterConfig,
       });
 
+      // Include installCommand when a check indicates the CLI is missing
+      if (
+        adapter.installCommand &&
+        result.checks.some(
+          (c) =>
+            c.level === "error" &&
+            (c.code.endsWith("_command_unresolvable") || c.code.endsWith("_not_found") || c.code.endsWith("_cli_not_found")),
+        )
+      ) {
+        result.installCommand = adapter.installCommand;
+      }
+
       res.json(result);
+    },
+  );
+
+  // ---- Install CLI for an adapter ----
+  router.post(
+    "/companies/:companyId/adapters/:type/install-cli",
+    async (req, res) => {
+      const companyId = req.params.companyId as string;
+      const type = req.params.type as string;
+      await assertCanReadConfigurations(req, companyId);
+
+      const adapter = findServerAdapter(type);
+      if (!adapter) {
+        res.status(404).json({ error: `Unknown adapter type: ${type}` });
+        return;
+      }
+
+      if (!adapter.installCommand) {
+        res.status(400).json({ error: `Adapter "${type}" does not have an install command` });
+        return;
+      }
+
+      // Parse the install command — only allow known package managers
+      const parts = adapter.installCommand.split(/\s+/);
+      const bin = parts[0];
+      if (!bin || !["npm", "pip", "pip3", "brew"].includes(bin)) {
+        res.status(400).json({ error: `Unsupported package manager: ${bin}` });
+        return;
+      }
+      const args = parts.slice(1);
+
+      try {
+        const output = await new Promise<string>((resolve, reject) => {
+          execFile(bin, args, { timeout: 120_000 }, (err, stdout, stderr) => {
+            if (err) {
+              reject(new Error(stderr || err.message));
+            } else {
+              resolve(stdout + (stderr ? `\n${stderr}` : ""));
+            }
+          });
+        });
+
+        // After install succeeds, auto-run testEnvironment
+        const inputAdapterConfig =
+          (req.body?.adapterConfig ?? {}) as Record<string, unknown>;
+        const normalizedAdapterConfig = await secretsSvc.normalizeAdapterConfigForPersistence(
+          companyId,
+          inputAdapterConfig,
+          { strictMode: strictSecretsMode },
+        );
+        const { config: runtimeAdapterConfig } = await secretsSvc.resolveAdapterConfigForRuntime(
+          companyId,
+          normalizedAdapterConfig,
+        );
+
+        const testResult = await adapter.testEnvironment({
+          companyId,
+          adapterType: type,
+          config: runtimeAdapterConfig,
+        });
+
+        res.json({
+          success: true,
+          installOutput: output,
+          testResult,
+        });
+      } catch (err) {
+        res.status(500).json({
+          success: false,
+          error: err instanceof Error ? err.message : "Install command failed",
+        });
+      }
     },
   );
 

@@ -178,6 +178,20 @@ export const agentsApi = {
       `/companies/${companyId}/adapters/${type}/test-environment`,
       data,
     ),
+  installCli: (
+    companyId: string,
+    type: string,
+    data?: { adapterConfig?: Record<string, unknown> },
+  ) =>
+    api.post<{
+      success: boolean;
+      installOutput?: string;
+      testResult?: AdapterEnvironmentTestResult;
+      error?: string;
+    }>(
+      `/companies/${companyId}/adapters/${type}/install-cli`,
+      data ?? {},
+    ),
   invoke: (id: string, companyId?: string) => api.post<HeartbeatRun>(agentPath(id, companyId, "/heartbeat/invoke"), {}),
   wakeup: (
     id: string,

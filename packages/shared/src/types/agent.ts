@@ -126,4 +126,6 @@ export interface AdapterEnvironmentTestResult {
   status: AdapterEnvironmentTestStatus;
   checks: AdapterEnvironmentCheck[];
   testedAt: string;
+  /** npm/pip install command to install the CLI, if applicable */
+  installCommand?: string | null;
 }

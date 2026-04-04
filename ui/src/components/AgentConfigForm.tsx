@@ -23,7 +23,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import { FolderOpen, Heart, ChevronDown, X } from "lucide-react";
+import { FolderOpen, Heart, ChevronDown, X, Download, Loader2, CheckCircle2 } from "lucide-react";
 import { cn } from "../lib/utils";
 import { extractModelName, extractProviderId } from "../lib/model-utils";
 import { queryKeys } from "../lib/queryKeys";
@@ -402,6 +402,25 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
     },
   });
 
+  const installCli = useMutation({
+    mutationFn: async () => {
+      if (!selectedCompanyId) {
+        throw new Error("Select a company to install CLI");
+      }
+      return agentsApi.installCli(selectedCompanyId, adapterType, {
+        adapterConfig: buildAdapterConfigForTest(),
+      });
+    },
+    onSuccess: (data) => {
+      // If install succeeded and we got a test result back, update the test data
+      if (data.success && data.testResult) {
+        testEnvironment.reset();
+        // Re-run test to refresh UI state
+        testEnvironment.mutate();
+      }
+    },
+  });
+
   // Current model for display
   const currentModelId = isCreate
     ? val!.model
@@ -640,7 +659,13 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
           )}
 
           {testEnvironment.data && (
-            <AdapterEnvironmentResult result={testEnvironment.data} />
+            <AdapterEnvironmentResult
+              result={testEnvironment.data}
+              onInstall={() => installCli.mutate()}
+              installPending={installCli.isPending}
+              installError={installCli.error instanceof Error ? installCli.error.message : installCli.isError ? "Install failed" : null}
+              installSuccess={installCli.isSuccess && installCli.data?.success === true}
+            />
           )}
 
           {/* Working directory */}
@@ -985,7 +1010,19 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
   );
 }
 
-function AdapterEnvironmentResult({ result }: { result: AdapterEnvironmentTestResult }) {
+function AdapterEnvironmentResult({
+  result,
+  onInstall,
+  installPending,
+  installError,
+  installSuccess,
+}: {
+  result: AdapterEnvironmentTestResult;
+  onInstall?: () => void;
+  installPending?: boolean;
+  installError?: string | null;
+  installSuccess?: boolean;
+}) {
   const statusLabel =
     result.status === "pass" ? "Passed" : result.status === "warn" ? "Warnings" : "Failed";
   const statusClass =
@@ -994,6 +1031,12 @@ function AdapterEnvironmentResult({ result }: { result: AdapterEnvironmentTestRe
       : result.status === "warn"
         ? "text-amber-700 dark:text-amber-300 border-amber-300 dark:border-amber-500/40 bg-amber-50 dark:bg-amber-500/10"
         : "text-red-700 dark:text-red-300 border-red-300 dark:border-red-500/40 bg-red-50 dark:bg-red-500/10";
+
+  const hasCommandMissing = result.installCommand && result.checks.some(
+    (c) =>
+      c.level === "error" &&
+      (c.code.endsWith("_command_unresolvable") || c.code.endsWith("_not_found") || c.code.endsWith("_cli_not_found")),
+  );
 
   return (
     <div className={`rounded-md border px-3 py-2 text-xs ${statusClass}`}>
@@ -1016,6 +1059,44 @@ function AdapterEnvironmentResult({ result }: { result: AdapterEnvironmentTestRe
           </div>
         ))}
       </div>
+
+      {hasCommandMissing && onInstall && (
+        <div className="mt-2.5 pt-2 border-t border-current/20">
+          <div className="flex items-center gap-2">
+            <code className="text-[11px] opacity-80 flex-1 truncate">{result.installCommand}</code>
+            {installSuccess ? (
+              <span className="inline-flex items-center gap-1 text-[11px] font-medium text-green-700 dark:text-green-300">
+                <CheckCircle2 className="h-3.5 w-3.5" />
+                Installed
+              </span>
+            ) : (
+              <button
+                type="button"
+                onClick={onInstall}
+                disabled={installPending}
+                className="inline-flex items-center gap-1.5 rounded-md border border-current/30 bg-background/50 px-2.5 py-1 text-[11px] font-medium hover:bg-background/80 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                {installPending ? (
+                  <>
+                    <Loader2 className="h-3 w-3 animate-spin" />
+                    Installing...
+                  </>
+                ) : (
+                  <>
+                    <Download className="h-3 w-3" />
+                    Install
+                  </>
+                )}
+              </button>
+            )}
+          </div>
+          {installError && (
+            <div className="mt-1.5 text-[11px] text-red-600 dark:text-red-400 break-words">
+              {installError}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }

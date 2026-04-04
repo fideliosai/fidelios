@@ -93,6 +93,7 @@ const claudeLocalAdapter: ServerAdapterModule = {
   supportsLocalAgentJwt: true,
   agentConfigurationDoc: claudeAgentConfigurationDoc,
   getQuotaWindows: claudeGetQuotaWindows,
+  installCommand: "npm install -g @anthropic-ai/claude-code",
 };
 
 const codexLocalAdapter: ServerAdapterModule = {
@@ -108,6 +109,7 @@ const codexLocalAdapter: ServerAdapterModule = {
   supportsLocalAgentJwt: true,
   agentConfigurationDoc: codexAgentConfigurationDoc,
   getQuotaWindows: codexGetQuotaWindows,
+  installCommand: "npm install -g @openai/codex",
 };
 
 const cursorLocalAdapter: ServerAdapterModule = {
@@ -122,6 +124,7 @@ const cursorLocalAdapter: ServerAdapterModule = {
   listModels: listCursorModels,
   supportsLocalAgentJwt: true,
   agentConfigurationDoc: cursorAgentConfigurationDoc,
+  installCommand: "npm install -g @anthropic-ai/claude-code",
 };
 
 const geminiLocalAdapter: ServerAdapterModule = {
@@ -135,6 +138,7 @@ const geminiLocalAdapter: ServerAdapterModule = {
   models: geminiModels,
   supportsLocalAgentJwt: true,
   agentConfigurationDoc: geminiAgentConfigurationDoc,
+  installCommand: "npm install -g @google/gemini-cli",
 };
 
 const openclawGatewayAdapter: ServerAdapterModule = {
@@ -158,6 +162,7 @@ const openCodeLocalAdapter: ServerAdapterModule = {
   listModels: listOpenCodeModels,
   supportsLocalAgentJwt: true,
   agentConfigurationDoc: openCodeAgentConfigurationDoc,
+  installCommand: "npm install -g opencode-ai",
 };
 
 const piLocalAdapter: ServerAdapterModule = {
@@ -185,6 +190,7 @@ const hermesLocalAdapter: ServerAdapterModule = {
   supportsLocalAgentJwt: true,
   agentConfigurationDoc: hermesAgentConfigurationDoc,
   detectModel: () => detectModelFromHermes(),
+  installCommand: "pip install hermes-agent",
 };
 
 const adaptersByType = new Map<string, ServerAdapterModule>(

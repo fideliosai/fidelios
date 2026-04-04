@@ -146,6 +146,8 @@ export interface AdapterEnvironmentTestResult {
   status: AdapterEnvironmentTestStatus;
   checks: AdapterEnvironmentCheck[];
   testedAt: string;
+  /** npm/pip install command to install the CLI, if applicable */
+  installCommand?: string | null;
 }
 
 export type AdapterSkillSyncMode = "unsupported" | "persistent" | "ephemeral";
@@ -293,6 +295,8 @@ export interface ServerAdapterModule {
    * the adapter does not support detection or no config is found.
    */
   detectModel?: () => Promise<{ model: string; provider: string; source: string } | null>;
+  /** npm/pip install command to install the adapter CLI, shown when command is missing */
+  installCommand?: string;
 }
 
 // ---------------------------------------------------------------------------
