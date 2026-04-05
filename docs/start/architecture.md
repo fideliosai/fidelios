@@ -5,25 +5,6 @@ summary: Stack overview, request flow, and adapter model
 
 FideliOS is a monorepo with four main layers.
 
-## Stack Overview
-
-```
-┌─────────────────────────────────────┐
-│  React UI (Vite)                    │
-│  Dashboard, org management, tasks   │
-├─────────────────────────────────────┤
-│  Express.js REST API (Node.js)      │
-│  Routes, services, auth, adapters   │
-├─────────────────────────────────────┤
-│  PostgreSQL (Drizzle ORM)           │
-│  Schema, migrations, embedded mode  │
-├─────────────────────────────────────┤
-│  Adapters                           │
-│  Claude Local, Codex Local,         │
-│  Process, HTTP                      │
-└─────────────────────────────────────┘
-```
-
 ## Technology Stack
 
 | Layer | Technology |

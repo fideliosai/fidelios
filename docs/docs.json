@@ -4,9 +4,9 @@
   "description": "The control plane for autonomous AI companies",
   "theme": "mint",
   "colors": {
-    "primary": "#2563EB",
-    "light": "#3B82F6",
-    "dark": "#1D4ED8"
+    "primary": "#18181b",
+    "light": "#52525b",
+    "dark": "#09090b"
   },
   "favicon": "/favicon.svg",
   "logo": {
@@ -174,7 +174,16 @@
       }
     ]
   },
-  "footerSocials": {
-    "github": "https://github.com/fidelios-ai/fidelios"
+  "footer": {
+    "socials": {
+      "github": "https://github.com/fidelios-ai/fidelios"
+    },
+    "links": [
+      {
+        "items": [
+          { "label": "Docs", "href": "https://docs.fidelios.nl" }
+        ]
+      }
+    ]
   }
 }
