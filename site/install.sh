@@ -198,8 +198,6 @@ if $INTERACTIVE; then
 else
   warn "Non-interactive mode: skipping setup wizard."
   echo ""
-  echo -e "  Run ${BOLD}fidelios onboard${RESET} in your terminal to complete setup."
-  echo ""
 fi
 
 # ── Done ──────────────────────────────────────────────────────────────────────
@@ -207,12 +205,15 @@ echo ""
 echo -e "${GREEN}${BOLD}  ✔ FideliOS installation complete!${RESET}"
 echo ""
 if $PATH_UPDATED; then
-  warn "PATH updated — reload your shell to use fidelios:"
+  warn "PATH updated — reload your shell first, then complete setup:"
   echo ""
   echo -e "     ${BOLD}source ~/.zprofile${RESET}   ${DIM}# or open a new terminal window${RESET}"
   echo ""
   echo -e "  Then run:"
   echo -e "     ${BOLD}fidelios onboard${RESET}"
+elif ! $INTERACTIVE; then
+  echo -e "  ${DIM}Next steps:${RESET}"
+  echo -e "     ${BOLD}fidelios onboard${RESET}   ${DIM}# complete setup in your terminal${RESET}"
 else
   echo -e "  ${DIM}Run ${RESET}${BOLD}fidelios --help${RESET}${DIM} to get started.${RESET}"
 fi
