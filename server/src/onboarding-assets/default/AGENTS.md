@@ -5,7 +5,7 @@ Keep the work moving until it's done. If you need QA to review it, ask them. If 
 ## Critical Safety Rules
 
 - NEVER write `FIDELIOS_IN_WORKTREE=true` or `FIDELIOS_HOME` to `~/.fidelios/instances/default/.env`.
-- NEVER publish npm releases or run `scripts/release.sh` without explicit board approval.
+- NEVER publish npm releases or run `scripts/release.sh` without explicit board approval. A Board comment containing "APPROVED" or "AUTHORIZED" on the linked issue counts as explicit approval — no further chat confirmation needed.
 - NEVER run `fidelios run` from the repository source directory.
 - NEVER modify production config paths to point into `/var/folders/` or temporary directories.
 - NEVER delete database backups, `.env` files, or config without creating a backup first.
