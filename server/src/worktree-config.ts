@@ -379,6 +379,15 @@ export function maybeRepairLegacyWorktreeConfigAndEnvFiles(): {
   process.env.FIDELIOS_WORKTREE_NAME = context.worktreeName;
 
   let repairedConfig = false;
+
+  // Guard: never overwrite the default instance config.json with worktree paths.
+  // This prevents the self-reinforcing loop where worktree repair redirects
+  // production config to /var/folders/ temporary directories.
+  const defaultInstanceConfigDir = path.resolve(os.homedir(), ".fidelios", "instances", "default");
+  if (isPathInside(context.configPath, defaultInstanceConfigDir)) {
+    return { repairedConfig: false, repairedEnv: false };
+  }
+
   if (fs.existsSync(context.configPath)) {
     try {
       const parsed = JSON.parse(fs.readFileSync(context.configPath, "utf8")) as FideliOSConfig;
@@ -415,15 +424,6 @@ export function maybeRepairLegacyWorktreeConfigAndEnvFiles(): {
     } catch {
       // Leave invalid configs to the normal startup validation path.
     }
-  }
-
-  // Guard: never write worktree env vars into the default instance .env file.
-  // If the env path resolves to the default instance directory, skip env repair
-  // entirely — a poisoned .env here would cause every subsequent non-worktree
-  // launch to re-enter worktree mode, creating a self-reinforcing loop.
-  const defaultInstanceEnvDir = path.resolve(os.homedir(), ".fidelios", "instances", "default");
-  if (isPathInside(context.envPath, defaultInstanceEnvDir)) {
-    return { repairedConfig, repairedEnv: false };
   }
 
   const existingEnvEntries = readEnvEntries(context.envPath);
