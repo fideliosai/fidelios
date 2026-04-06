@@ -1,0 +1,10 @@
+/* Hide Mintlify search — non-functional in static Netlify export */
+#search-bar-entry,
+#search-bar-entry-mobile {
+  display: none !important;
+}
+
+/* Collapse the desktop search container to prevent empty space in the navbar */
+div:has(> #search-bar-entry) {
+  display: none !important;
+}
