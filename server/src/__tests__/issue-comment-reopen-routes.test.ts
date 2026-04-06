@@ -70,7 +70,7 @@ function makeIssue(status: "todo" | "done") {
     assigneeAgentId: "22222222-2222-4222-8222-222222222222",
     assigneeUserId: null,
     createdByUserId: "local-board",
-    identifier: "PAP-580",
+    identifier: "TST-580",
     title: "Comment reopen default",
   };
 }

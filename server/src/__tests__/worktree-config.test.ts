@@ -84,7 +84,7 @@ function buildLegacyConfig(sharedRoot: string) {
 describe("worktree config repair", () => {
   it("repairs legacy repo-local worktree config and env files into an isolated instance", async () => {
     const tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "fidelios-worktree-repair-"));
-    const worktreeRoot = path.join(tempRoot, "PAP-884-ai-commits-component");
+    const worktreeRoot = path.join(tempRoot, "TST-884-ai-commits-component");
     const fideliosDir = path.join(worktreeRoot, ".fidelios");
     const configPath = path.join(fideliosDir, "config.json");
     const envPath = path.join(fideliosDir, ".env");
@@ -98,7 +98,7 @@ describe("worktree config repair", () => {
       [
         "# FideliOS environment variables",
         "FIDELIOS_IN_WORKTREE=true",
-        "FIDELIOS_WORKTREE_NAME=PAP-884-ai-commits-component",
+        "FIDELIOS_WORKTREE_NAME=TST-884-ai-commits-component",
         "FIDELIOS_AGENT_JWT_SECRET=shared-secret",
         "",
       ].join("\n"),
@@ -107,7 +107,7 @@ describe("worktree config repair", () => {
 
     process.chdir(worktreeRoot);
     process.env.FIDELIOS_IN_WORKTREE = "true";
-    process.env.FIDELIOS_WORKTREE_NAME = "PAP-884-ai-commits-component";
+    process.env.FIDELIOS_WORKTREE_NAME = "TST-884-ai-commits-component";
     process.env.FIDELIOS_WORKTREES_DIR = isolatedHome;
     delete process.env.FIDELIOS_HOME;
     delete process.env.FIDELIOS_INSTANCE_ID;
@@ -141,7 +141,7 @@ describe("worktree config repair", () => {
 
   it("avoids sibling worktree ports when repairing legacy configs", async () => {
     const tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "fidelios-worktree-repair-ports-"));
-    const worktreeRoot = path.join(tempRoot, "PAP-880-thumbs-capture-for-evals-feature");
+    const worktreeRoot = path.join(tempRoot, "TST-880-thumbs-capture-for-evals-feature");
     const fideliosDir = path.join(worktreeRoot, ".fidelios");
     const configPath = path.join(fideliosDir, "config.json");
     const envPath = path.join(fideliosDir, ".env");
@@ -157,7 +157,7 @@ describe("worktree config repair", () => {
       [
         "# FideliOS environment variables",
         "FIDELIOS_IN_WORKTREE=true",
-        "FIDELIOS_WORKTREE_NAME=PAP-880-thumbs-capture-for-evals-feature",
+        "FIDELIOS_WORKTREE_NAME=TST-880-thumbs-capture-for-evals-feature",
         "",
       ].join("\n"),
       "utf8",
@@ -195,7 +195,7 @@ describe("worktree config repair", () => {
 
     process.chdir(worktreeRoot);
     process.env.FIDELIOS_IN_WORKTREE = "true";
-    process.env.FIDELIOS_WORKTREE_NAME = "PAP-880-thumbs-capture-for-evals-feature";
+    process.env.FIDELIOS_WORKTREE_NAME = "TST-880-thumbs-capture-for-evals-feature";
     process.env.FIDELIOS_WORKTREES_DIR = isolatedHome;
 
     const result = maybeRepairLegacyWorktreeConfigAndEnvFiles();
@@ -210,9 +210,9 @@ describe("worktree config repair", () => {
     const tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "fidelios-worktree-rebalance-"));
     const isolatedHome = path.join(tempRoot, ".fidelios-worktrees");
     const repoWorktreesRoot = path.join(tempRoot, "repo", ".fidelios", "worktrees");
-    const siblingWorktreeRoot = path.join(repoWorktreesRoot, "PAP-878-create-a-mine-tab-in-inbox");
+    const siblingWorktreeRoot = path.join(repoWorktreesRoot, "TST-878-create-a-mine-tab-in-inbox");
     const siblingInstanceRoot = path.join(isolatedHome, "instances", "pap-878-create-a-mine-tab-in-inbox");
-    const currentWorktreeRoot = path.join(repoWorktreesRoot, "PAP-884-ai-commits-component");
+    const currentWorktreeRoot = path.join(repoWorktreesRoot, "TST-884-ai-commits-component");
     const fideliosDir = path.join(currentWorktreeRoot, ".fidelios");
     const configPath = path.join(fideliosDir, "config.json");
     const envPath = path.join(fideliosDir, ".env");
@@ -279,7 +279,7 @@ describe("worktree config repair", () => {
       [
         "# FideliOS environment variables",
         "FIDELIOS_IN_WORKTREE=true",
-        "FIDELIOS_WORKTREE_NAME=PAP-884-ai-commits-component",
+        "FIDELIOS_WORKTREE_NAME=TST-884-ai-commits-component",
         "",
       ].join("\n"),
       "utf8",
@@ -317,7 +317,7 @@ describe("worktree config repair", () => {
 
     process.chdir(currentWorktreeRoot);
     process.env.FIDELIOS_IN_WORKTREE = "true";
-    process.env.FIDELIOS_WORKTREE_NAME = "PAP-884-ai-commits-component";
+    process.env.FIDELIOS_WORKTREE_NAME = "TST-884-ai-commits-component";
     process.env.FIDELIOS_WORKTREES_DIR = isolatedHome;
 
     const result = maybeRepairLegacyWorktreeConfigAndEnvFiles();
@@ -330,7 +330,7 @@ describe("worktree config repair", () => {
 
   it("persists runtime-selected worktree ports back into config", async () => {
     const tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "fidelios-worktree-ports-"));
-    const worktreeRoot = path.join(tempRoot, "PAP-878-create-a-mine-tab-in-inbox");
+    const worktreeRoot = path.join(tempRoot, "TST-878-create-a-mine-tab-in-inbox");
     const fideliosDir = path.join(worktreeRoot, ".fidelios");
     const configPath = path.join(fideliosDir, "config.json");
     const isolatedHome = path.join(tempRoot, ".fidelios-worktrees");
@@ -393,7 +393,7 @@ describe("worktree config repair", () => {
 
     process.chdir(worktreeRoot);
     process.env.FIDELIOS_IN_WORKTREE = "true";
-    process.env.FIDELIOS_WORKTREE_NAME = "PAP-878-create-a-mine-tab-in-inbox";
+    process.env.FIDELIOS_WORKTREE_NAME = "TST-878-create-a-mine-tab-in-inbox";
     process.env.FIDELIOS_HOME = isolatedHome;
     process.env.FIDELIOS_INSTANCE_ID = "pap-878-create-a-mine-tab-in-inbox";
     process.env.FIDELIOS_CONFIG = configPath;

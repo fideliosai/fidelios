@@ -5,7 +5,7 @@ describe("shouldTrackDevServerPath", () => {
   it("ignores repo-local FideliOS state and common test file paths", () => {
     expect(
       shouldTrackDevServerPath(
-        ".fidelios/worktrees/PAP-712-for-project-configuration-get-rid-of-the-overview-tab-for-now/.agents/skills/fidelios",
+        ".fidelios/worktrees/TST-712-for-project-configuration-get-rid-of-the-overview-tab-for-now/.agents/skills/fidelios",
       ),
     ).toBe(false);
     expect(shouldTrackDevServerPath("server/src/__tests__/health.test.ts")).toBe(false);

@@ -97,7 +97,7 @@ Supports: critical, high, medium, low. Use alongside StatusIcon in entity row le
 ```tsx
 <EntityRow
   leading={<><StatusIcon status="todo" /><PriorityIcon priority="medium" /></>}
-  identifier="PAP-003"
+  identifier="EX-003"
   title="Write API documentation"
   trailing={<StatusBadge status="todo" />}
   onClick={() => navigate(`/issues/${id}`)}

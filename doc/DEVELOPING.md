@@ -209,9 +209,9 @@ fidelios worktree init --force
 Repair an already-created repo-managed worktree and reseed its isolated instance from the main default install:
 
 ```sh
-cd ~/.fidelios/worktrees/PAP-884-ai-commits-component
+cd ~/.fidelios/worktrees/feature-branch-name
 pnpm fidelios worktree init --force --seed-mode minimal \
-  --name PAP-884-ai-commits-component \
+  --name feature-branch-name \
   --from-config ~/.fidelios/instances/default/config.json
 ```
 

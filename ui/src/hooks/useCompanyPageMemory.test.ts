@@ -55,10 +55,10 @@ describe("sanitizeRememberedPathForCompany", () => {
   it("keeps remembered issue paths that belong to the target company", () => {
     expect(
       sanitizeRememberedPathForCompany({
-        path: "/issues/PAP-12",
+        path: "/issues/TST-12",
         companyPrefix: "PAP",
       }),
-    ).toBe("/issues/PAP-12");
+    ).toBe("/issues/TST-12");
   });
 
   it("falls back to dashboard for remembered issue identifiers from another company", () => {

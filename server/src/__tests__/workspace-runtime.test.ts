@@ -151,7 +151,7 @@ describe("realizeExecutionWorkspace", () => {
       },
       issue: {
         id: "issue-1",
-        identifier: "PAP-447",
+        identifier: "TST-447",
         title: "Add Worktree Support",
       },
       agent: {
@@ -163,7 +163,7 @@ describe("realizeExecutionWorkspace", () => {
 
     expect(first.strategy).toBe("git_worktree");
     expect(first.created).toBe(true);
-    expect(first.branchName).toBe("PAP-447-add-worktree-support");
+    expect(first.branchName).toBe("TST-447-add-worktree-support");
     expect(first.cwd).toContain(path.join(".fidelios", "worktrees"));
     await expect(fs.stat(path.join(first.cwd, ".git"))).resolves.toBeTruthy();
 
@@ -184,7 +184,7 @@ describe("realizeExecutionWorkspace", () => {
       },
       issue: {
         id: "issue-1",
-        identifier: "PAP-447",
+        identifier: "TST-447",
         title: "Add Worktree Support",
       },
       agent: {
@@ -234,7 +234,7 @@ describe("realizeExecutionWorkspace", () => {
       },
       issue: {
         id: "issue-1",
-        identifier: "PAP-448",
+        identifier: "TST-448",
         title: "Run provision command",
       },
       agent: {
@@ -245,7 +245,7 @@ describe("realizeExecutionWorkspace", () => {
     });
 
     await expect(fs.readFile(path.join(workspace.cwd, ".fidelios-provision-branch"), "utf8")).resolves.toBe(
-      "PAP-448-run-provision-command\n",
+      "TST-448-run-provision-command\n",
     );
     await expect(fs.readFile(path.join(workspace.cwd, ".fidelios-provision-base"), "utf8")).resolves.toBe(
       `${repoRoot}\n`,
@@ -272,7 +272,7 @@ describe("realizeExecutionWorkspace", () => {
       },
       issue: {
         id: "issue-1",
-        identifier: "PAP-448",
+        identifier: "TST-448",
         title: "Run provision command",
       },
       agent: {
@@ -390,7 +390,7 @@ describe("realizeExecutionWorkspace", () => {
         },
         issue: {
           id: "issue-1",
-          identifier: "PAP-885",
+          identifier: "TST-885",
           title: "Show worktree banner",
         },
         agent: {
@@ -425,7 +425,7 @@ describe("realizeExecutionWorkspace", () => {
       expect(envContents).toMatch(new RegExp(`FIDELIOS_INSTANCE_ID=["']?${expectedInstanceId}["']?`));
       expect(envContents).toMatch(new RegExp(`FIDELIOS_CONFIG=["']?${configPath.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}["']?`));
       expect(envContents).toContain("FIDELIOS_IN_WORKTREE=true");
-      expect(envContents).toMatch(/FIDELIOS_WORKTREE_NAME=["']?PAP-885-show-worktree-banner["']?/);
+      expect(envContents).toMatch(/FIDELIOS_WORKTREE_NAME=["']?TST-885-show-worktree-banner["']?/);
 
       process.chdir(workspace.cwd);
       expect(resolveFideliOSConfigPath()).toBe(configPath);
@@ -469,7 +469,7 @@ describe("realizeExecutionWorkspace", () => {
       },
       issue: {
         id: "issue-1",
-        identifier: "PAP-540",
+        identifier: "TST-540",
         title: "Record workspace operations",
       },
       agent: {
@@ -486,7 +486,7 @@ describe("realizeExecutionWorkspace", () => {
     ]);
     expect(operations[0]?.command).toContain("git worktree add");
     expect(operations[0]?.metadata).toMatchObject({
-      branchName: "PAP-540-record-workspace-operations",
+      branchName: "TST-540-record-workspace-operations",
       created: true,
     });
     expect(operations[1]?.command).toBe("bash ./scripts/provision.sh");
@@ -494,7 +494,7 @@ describe("realizeExecutionWorkspace", () => {
 
   it("reuses an existing branch without resetting it when recreating a missing worktree", async () => {
     const repoRoot = await createTempRepo();
-    const branchName = "PAP-450-recreate-missing-worktree";
+    const branchName = "TST-450-recreate-missing-worktree";
 
     await runGit(repoRoot, ["checkout", "-b", branchName]);
     await fs.writeFile(path.join(repoRoot, "feature.txt"), "preserve me\n", "utf8");
@@ -520,7 +520,7 @@ describe("realizeExecutionWorkspace", () => {
       },
       issue: {
         id: "issue-1",
-        identifier: "PAP-450",
+        identifier: "TST-450",
         title: "Recreate missing worktree",
       },
       agent: {
@@ -556,7 +556,7 @@ describe("realizeExecutionWorkspace", () => {
       },
       issue: {
         id: "issue-1",
-        identifier: "PAP-449",
+        identifier: "TST-449",
         title: "Cleanup workspace",
       },
       agent: {
@@ -618,7 +618,7 @@ describe("realizeExecutionWorkspace", () => {
       },
       issue: {
         id: "issue-1",
-        identifier: "PAP-451",
+        identifier: "TST-451",
         title: "Keep unmerged branch",
       },
       agent: {
@@ -685,7 +685,7 @@ describe("realizeExecutionWorkspace", () => {
       },
       issue: {
         id: "issue-1",
-        identifier: "PAP-541",
+        identifier: "TST-541",
         title: "Cleanup recorder",
       },
       agent: {
@@ -1042,7 +1042,7 @@ describe("normalizeAdapterManagedRuntimeServices", () => {
       },
       issue: {
         id: "issue-1",
-        identifier: "PAP-447",
+        identifier: "TST-447",
         title: "Worktree support",
       },
       workspace,
@@ -1067,7 +1067,7 @@ describe("normalizeAdapterManagedRuntimeServices", () => {
       },
       issue: {
         id: "issue-1",
-        identifier: "PAP-447",
+        identifier: "TST-447",
         title: "Worktree support",
       },
       workspace,

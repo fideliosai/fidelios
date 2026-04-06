@@ -2,7 +2,7 @@
 
 Date: 2026-03-17
 
-This document summarizes the memory systems referenced in task `PAP-530` and extracts the design patterns that matter for FideliOS.
+This document summarizes the memory systems referenced in task `ISSUE-530` and extracts the design patterns that matter for FideliOS.
 
 ## What FideliOS Needs From This Survey
 

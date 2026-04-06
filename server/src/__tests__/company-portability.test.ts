@@ -701,7 +701,7 @@ describe("company portability", () => {
     issueSvc.list.mockResolvedValue([
       {
         id: "issue-1",
-        identifier: "PAP-1",
+        identifier: "TST-1",
         title: "Write launch task",
         description: "Task body",
         projectId: "project-1",
@@ -800,7 +800,7 @@ describe("company portability", () => {
     issueSvc.list.mockResolvedValue([
       {
         id: "issue-1",
-        identifier: "PAP-1",
+        identifier: "TST-1",
         title: "Write launch task",
         description: "Task body",
         projectId: "project-1",
@@ -975,7 +975,7 @@ describe("company portability", () => {
     issueSvc.list.mockResolvedValue([
       {
         id: "issue-1",
-        identifier: "PAP-1",
+        identifier: "TST-1",
         title: "Task one",
         description: "Task body",
         projectId: "project-1",
@@ -1049,7 +1049,7 @@ describe("company portability", () => {
     issueSvc.list.mockResolvedValue([
       {
         id: "issue-1",
-        identifier: "PAP-1",
+        identifier: "TST-1",
         title: "Task one",
         description: null,
         projectId: "project-1",
@@ -1064,7 +1064,7 @@ describe("company portability", () => {
       },
       {
         id: "issue-2",
-        identifier: "PAP-2",
+        identifier: "TST-2",
         title: "Task two",
         description: null,
         projectId: "project-1",
@@ -1079,7 +1079,7 @@ describe("company portability", () => {
       },
       {
         id: "issue-3",
-        identifier: "PAP-3",
+        identifier: "TST-3",
         title: "Task three",
         description: null,
         projectId: "project-1",

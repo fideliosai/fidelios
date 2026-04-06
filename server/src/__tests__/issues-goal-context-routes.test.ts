@@ -74,7 +74,7 @@ function createApp() {
 const legacyProjectLinkedIssue = {
   id: "11111111-1111-4111-8111-111111111111",
   companyId: "company-1",
-  identifier: "PAP-581",
+  identifier: "TST-581",
   title: "Legacy onboarding task",
   description: "Seed the first CEO task",
   status: "todo",

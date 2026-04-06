@@ -94,7 +94,7 @@ Use these exact patterns — do not invent new ones:
 | Body | `text-sm` | Default body text |
 | Muted | `text-sm text-muted-foreground` | Descriptions, secondary text |
 | Tiny label | `text-xs text-muted-foreground` | Metadata, timestamps, property labels |
-| Mono identifier | `text-xs font-mono text-muted-foreground` | Issue keys (PAP-001), CSS vars |
+| Mono identifier | `text-xs font-mono text-muted-foreground` | Issue keys (EX-001), CSS vars |
 | Large stat | `text-2xl font-bold` | Dashboard metric values |
 | Code/log | `font-mono text-xs` | Log output, code snippets |
 
@@ -163,7 +163,7 @@ The standard list item for issues and similar entities:
 ```tsx
 <EntityRow
   leading={<><StatusIcon status="in_progress" /><PriorityIcon priority="high" /></>}
-  identifier="PAP-001"
+  identifier="EX-001"
   title="Implement authentication flow"
   subtitle="Assigned to Agent Alpha"
   trailing={<StatusBadge status="in_progress" />}
