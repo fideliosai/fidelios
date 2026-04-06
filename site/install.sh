@@ -103,6 +103,14 @@ fi
 
 # ── Step 3: Node.js ───────────────────────────────────────────────────────────
 header "📦 Checking Node.js…"
+
+# Helper: load nvm into the current shell session if available
+_load_nvm() {
+  export NVM_DIR="${NVM_DIR:-$HOME/.nvm}"
+  # shellcheck disable=SC1091
+  [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+}
+
 if command -v node &>/dev/null; then
   NODE_VERSION="$(node --version)"
   success "Node.js already installed ($NODE_VERSION)"
@@ -110,18 +118,64 @@ else
   warn "Node.js is not installed."
   echo ""
   echo -e "  Node.js is required to run the FideliOS CLI."
+  echo -e "  FideliOS installs Node.js via ${BOLD}nvm${RESET}${DIM} (Node Version Manager), which keeps"
+  echo -e "  global packages in your home directory — no sudo required.${RESET}"
   echo ""
-  if ! ask "Install Node.js via Homebrew?"; then
+  if ! ask "Install Node.js via nvm?"; then
     error "Node.js is required. Aborting."
     exit 1
   fi
-  info "Installing Node.js…"
-  brew install node
+
+  # Install nvm if not present
+  export NVM_DIR="${NVM_DIR:-$HOME/.nvm}"
+  if [ ! -s "$NVM_DIR/nvm.sh" ]; then
+    info "Installing nvm…"
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
+  else
+    info "nvm already present — skipping nvm install"
+  fi
+
+  _load_nvm
+
+  if ! command -v nvm &>/dev/null; then
+    error "nvm failed to load. Please open a new terminal and re-run the installer."
+    exit 1
+  fi
+
+  info "Installing Node.js LTS…"
+  nvm install --lts
+  nvm use --lts
   success "Node.js installed ($(node --version))"
 fi
 
 # ── Step 4: FideliOS CLI ──────────────────────────────────────────────────────
 header "🤖 Installing FideliOS CLI…"
+
+# Ensure npm global prefix is user-writable (Homebrew Node sets it to a root-owned dir).
+# If not writable, redirect npm globals to ~/.npm-global and persist the PATH update.
+NPM_PREFIX="$(npm config get prefix 2>/dev/null || true)"
+if [ -n "$NPM_PREFIX" ] && [ ! -w "$NPM_PREFIX" ]; then
+  warn "npm global prefix '${NPM_PREFIX}' is not user-writable."
+  info "Configuring user-local npm prefix at ~/.npm-global…"
+  mkdir -p "$HOME/.npm-global"
+  npm config set prefix "$HOME/.npm-global"
+  export PATH="$HOME/.npm-global/bin:$PATH"
+
+  # Persist to shell profile(s) so the PATH survives after this session
+  NPM_PATH_LINE='export PATH="$HOME/.npm-global/bin:$PATH"'
+  for profile in "$HOME/.zprofile" "$HOME/.bash_profile"; do
+    if [ -f "$profile" ] || [[ "$profile" == *zprofile* && "$SHELL" == */zsh ]]; then
+      if ! grep -qF '.npm-global/bin' "$profile" 2>/dev/null; then
+        echo "" >> "$profile"
+        echo "# Added by FideliOS installer" >> "$profile"
+        echo "$NPM_PATH_LINE" >> "$profile"
+        info "Added npm-global PATH to $profile"
+      fi
+    fi
+  done
+  success "npm prefix updated — global packages will install to ~/.npm-global"
+fi
+
 if command -v fidelios &>/dev/null; then
   CURRENT_VERSION="$(fidelios --version 2>/dev/null || echo 'unknown')"
   info "Updating FideliOS CLI (current: $CURRENT_VERSION)…"
