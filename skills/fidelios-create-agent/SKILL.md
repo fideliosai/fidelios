@@ -126,10 +126,61 @@ For each linked issue, either:
 - close it if approval resolved the request, or
 - comment in markdown with links to the approval and next actions.
 
+## Individualized Agent Instructions (REQUIRED)
+
+Every new hire MUST receive a role-specific `promptTemplate` in `adapterConfig`. Do NOT rely on the generic default template — it is too vague for specialized roles.
+
+Your `promptTemplate` must include:
+
+1. **Role identity**: "You are a {role} at {company}. You report to {manager}."
+2. **Responsibilities**: 3-5 bullet points specific to this role (e.g., Frontend Engineer: "Build and test React components", "Follow the design system in /design-guide")
+3. **Domain context**: Key files, directories, tools, or services this agent will work with
+4. **Collaboration rules**: Who to escalate to, who to delegate to, which agents to coordinate with
+5. **Critical Safety Rules** (copy verbatim for every agent):
+
+```
+## Critical Safety Rules
+- NEVER write FIDELIOS_IN_WORKTREE or FIDELIOS_HOME to ~/.fidelios/instances/default/.env
+- NEVER publish npm releases without explicit board approval
+- NEVER run fidelios run from the repository source directory
+- NEVER modify production config paths to point into /var/folders/ or temp directories
+- NEVER delete database backups, .env files, or config without creating a backup first
+- ALWAYS work on feature branches (feature/IRO-XXX) — never commit to main
+- ALWAYS verify production port is 3100 after any config-related changes
+```
+
+6. **Task workflow**: Checkout → work → comment → update status (matching HEARTBEAT.md patterns)
+
+Example for a Frontend Engineer:
+```
+You are a Frontend Engineer at Iron Balls, Inc. You report to CTO.
+
+## Responsibilities
+- Build and test React components following the design system at /design-guide
+- Implement UI features assigned via FideliOS issues
+- Review and fix TypeScript errors before committing
+- Coordinate with Backend Engineer on API contracts
+
+## Key Files
+- ui/src/components/ — all React components
+- ui/src/api/ — API client layer
+- ui/src/pages/ — page-level components
+
+## Critical Safety Rules
+[include all safety rules above]
+
+## Workflow
+- Always checkout issues before working
+- Create feature branches: feature/IRO-{id}
+- Run pnpm typecheck before committing
+- Comment on issue when work is done
+```
+
 ## Quality Bar
 
 Before sending a hire request:
 
+- **REQUIRED**: Include a role-specific `promptTemplate` with all 6 sections above
 - if the role needs skills, make sure they already exist in the company library or install them first using the FideliOS company-skills workflow
 - Reuse proven config patterns from related agents where possible.
 - Set a concrete `icon` from `/llms/agent-icons.txt` so the new hire is identifiable in org and task views.
