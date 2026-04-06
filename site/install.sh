@@ -153,6 +153,7 @@ header "🤖 Installing FideliOS CLI…"
 
 # Ensure npm global prefix is user-writable (Homebrew Node sets it to a root-owned dir).
 # If not writable, redirect npm globals to ~/.npm-global and persist the PATH update.
+PATH_UPDATED=false
 NPM_PREFIX="$(npm config get prefix 2>/dev/null || true)"
 if [ -n "$NPM_PREFIX" ] && [ ! -w "$NPM_PREFIX" ]; then
   warn "npm global prefix '${NPM_PREFIX}' is not user-writable."
@@ -170,6 +171,7 @@ if [ -n "$NPM_PREFIX" ] && [ ! -w "$NPM_PREFIX" ]; then
         echo "# Added by FideliOS installer" >> "$profile"
         echo "$NPM_PATH_LINE" >> "$profile"
         info "Added npm-global PATH to $profile"
+        PATH_UPDATED=true
       fi
     fi
   done
@@ -204,5 +206,14 @@ fi
 echo ""
 echo -e "${GREEN}${BOLD}  ✔ FideliOS installation complete!${RESET}"
 echo ""
-echo -e "  ${DIM}Run ${RESET}${BOLD}fidelios --help${RESET}${DIM} to get started.${RESET}"
+if $PATH_UPDATED; then
+  warn "PATH updated — reload your shell to use fidelios:"
+  echo ""
+  echo -e "     ${BOLD}source ~/.zprofile${RESET}   ${DIM}# or open a new terminal window${RESET}"
+  echo ""
+  echo -e "  Then run:"
+  echo -e "     ${BOLD}fidelios onboard${RESET}"
+else
+  echo -e "  ${DIM}Run ${RESET}${BOLD}fidelios --help${RESET}${DIM} to get started.${RESET}"
+fi
 echo ""
