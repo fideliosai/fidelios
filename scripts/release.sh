@@ -46,6 +46,8 @@ restore_publish_artifacts() {
   for pkg_dir in server packages/adapters/claude-local packages/adapters/codex-local; do
     rm -rf "$REPO_ROOT/$pkg_dir/skills"
   done
+
+  rm -rf "$REPO_ROOT/server/packages"
 }
 
 cleanup_release_state() {
@@ -187,7 +189,11 @@ for pkg_dir in server packages/adapters/claude-local packages/adapters/codex-loc
   rm -rf "$REPO_ROOT/$pkg_dir/skills"
   cp -r "$REPO_ROOT/skills" "$REPO_ROOT/$pkg_dir/skills"
 done
-release_info "  ✓ Workspace build complete"
+# Bundle plugin examples into server package so they are available in npm tarball
+rm -rf "$REPO_ROOT/server/packages/plugins/examples"
+mkdir -p "$REPO_ROOT/server/packages/plugins"
+cp -r "$REPO_ROOT/packages/plugins/examples" "$REPO_ROOT/server/packages/plugins/examples"
+release_info "  ✓ Workspace build complete (including bundled plugin examples)"
 
 release_info ""
 release_info "==> Step 3/7: Rewriting workspace versions..."

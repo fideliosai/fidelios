@@ -417,6 +417,15 @@ export function maybeRepairLegacyWorktreeConfigAndEnvFiles(): {
     }
   }
 
+  // Guard: never write worktree env vars into the default instance .env file.
+  // If the env path resolves to the default instance directory, skip env repair
+  // entirely — a poisoned .env here would cause every subsequent non-worktree
+  // launch to re-enter worktree mode, creating a self-reinforcing loop.
+  const defaultInstanceEnvDir = path.resolve(os.homedir(), ".fidelios", "instances", "default");
+  if (isPathInside(context.envPath, defaultInstanceEnvDir)) {
+    return { repairedConfig, repairedEnv: false };
+  }
+
   const existingEnvEntries = readEnvEntries(context.envPath);
   const desiredEnvEntries: Record<string, string> = {
     ...existingEnvEntries,

@@ -306,3 +306,23 @@ ls -la ~/.fidelios/instances/default/data/backups/
 **Key URLs:**
 - `http://localhost:3100` — FideliOS UI
 - `http://localhost:3100/api/health` — Health check endpoint
+
+---
+
+## 8. Agent Safety Rules
+
+These rules MUST be followed by all AI agents working on FideliOS:
+
+### Never do:
+- **Never publish npm releases** without explicit board/user approval
+- **Never write `FIDELIOS_IN_WORKTREE=true`** to `~/.fidelios/instances/default/.env` — this poisons all subsequent launches and forces worktree mode
+- **Never modify** `~/.fidelios/instances/default/config.json` to point database/storage/logs paths to `/var/folders/` or any temporary directory
+- **Never run `fidelios run`** from the repository directory (`~/fidelios/`) — this triggers dev mode instead of production
+- **Never run `scripts/release.sh`** without explicit human approval
+- **Never delete** database backups, `.env` files, or `config.json` without creating a backup first
+
+### Always do:
+- **Always create feature branches** (`feature/IRO-XXX`) — never commit to `main`
+- **Always backup** before destructive operations on `~/.fidelios/`
+- **Always verify** that production server runs on port 3100 after any config change
+- **Always check** that `~/.fidelios/instances/default/.env` contains only `FIDELIOS_AGENT_JWT_SECRET` — no worktree variables
