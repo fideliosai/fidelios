@@ -158,13 +158,13 @@ Agents use feature branches per root issue:
 
 ```bash
 # Create branch for a new feature
-git checkout -b feature/IRO-XXX
+git checkout -b feature/{ISSUE-ID}
 
 # Work on it, commit...
 git add . && git commit -m "feat: ..."
 
 # Push branch
-git push origin feature/IRO-XXX
+git push origin feature/{ISSUE-ID}
 
 # Create PR
 gh pr create --base main --title "Feature: ..."
@@ -183,9 +183,9 @@ gh pr create --base main
 # Option 2: Local merge
 git checkout main
 git pull origin main
-git merge feature/IRO-XXX
+git merge feature/{ISSUE-ID}
 git push origin main
-git branch -d feature/IRO-XXX
+git branch -d feature/{ISSUE-ID}
 ```
 
 ---
@@ -322,7 +322,7 @@ These rules MUST be followed by all AI agents working on FideliOS:
 - **Never delete** database backups, `.env` files, or `config.json` without creating a backup first
 
 ### Always do:
-- **Always create feature branches** (`feature/IRO-XXX`) — never commit to `main`
+- **Always create feature branches** (`feature/{ISSUE-ID}`) — never commit to `main`
 - **Always backup** before destructive operations on `~/.fidelios/`
 - **Always verify** that production server runs on port 3100 after any config change
 - **Always check** that `~/.fidelios/instances/default/.env` contains only `FIDELIOS_AGENT_JWT_SECRET` — no worktree variables

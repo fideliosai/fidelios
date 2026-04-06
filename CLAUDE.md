@@ -7,7 +7,7 @@
 - **NEVER** run `fidelios run` from the repo directory (`~/fidelios/`) — this triggers dev mode. Production must launch from `~` or via launchd.
 - **NEVER** modify `~/.fidelios/instances/default/config.json` to point paths into `/var/folders/` or any temporary directory.
 - **NEVER** delete database backups or `.env` files without creating a backup first.
-- **ALWAYS** work on feature branches (`feature/IRO-XXX`), never commit to `main`.
+- **ALWAYS** work on feature branches (`feature/{ISSUE-ID}`), never commit to `main`.
 
 ## Architecture Quick Reference
 

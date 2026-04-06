@@ -145,7 +145,7 @@ Your `promptTemplate` must include:
 - NEVER run fidelios run from the repository source directory
 - NEVER modify production config paths to point into /var/folders/ or temp directories
 - NEVER delete database backups, .env files, or config without creating a backup first
-- ALWAYS work on feature branches (feature/IRO-XXX) — never commit to main
+- ALWAYS work on feature branches (feature/{ISSUE-ID}) — never commit to main
 - ALWAYS verify production port is 3100 after any config-related changes
 ```
 
@@ -171,7 +171,7 @@ You are a Frontend Engineer at Iron Balls, Inc. You report to CTO.
 
 ## Workflow
 - Always checkout issues before working
-- Create feature branches: feature/IRO-{id}
+- Create feature branches: feature/{ISSUE-ID}
 - Run pnpm typecheck before committing
 - Comment on issue when work is done
 ```
