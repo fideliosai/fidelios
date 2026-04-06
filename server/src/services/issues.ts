@@ -1062,6 +1062,37 @@ export function issueService(db: Db) {
           await syncIssueLabels(updated.id, existing.companyId, nextLabelIds, tx);
         }
         const [enriched] = await withIssueLabels(tx, [updated]);
+
+        // Auto-close parent: when a child issue transitions to done/cancelled,
+        // check if ALL sibling children are now done/cancelled. If so, auto-close
+        // the parent issue to prevent governance gaps where parent stays in_progress
+        // after all children complete.
+        if (
+          (issueData.status === "done" || issueData.status === "cancelled") &&
+          existing.parentId
+        ) {
+          const siblings = await tx
+            .select({ status: issues.status })
+            .from(issues)
+            .where(eq(issues.parentId, existing.parentId));
+          const allTerminal = siblings.length > 0 && siblings.every(
+            (s) => s.status === "done" || s.status === "cancelled",
+          );
+          if (allTerminal) {
+            const parent = await tx
+              .select({ id: issues.id, status: issues.status })
+              .from(issues)
+              .where(eq(issues.id, existing.parentId))
+              .then((rows) => rows[0] ?? null);
+            if (parent && parent.status !== "done" && parent.status !== "cancelled") {
+              await tx
+                .update(issues)
+                .set({ status: "done", completedAt: new Date(), updatedAt: new Date() })
+                .where(eq(issues.id, parent.id));
+            }
+          }
+        }
+
         return enriched;
       });
     },
