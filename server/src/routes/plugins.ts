@@ -91,7 +91,7 @@ interface AvailablePluginExample {
   displayName: string;
   description: string;
   localPath: string;
-  tag: "example";
+  tag: "example" | "official";
 }
 
 /** Response body for GET /api/plugins/:pluginId/health */
@@ -112,7 +112,14 @@ const UUID_REGEX =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const REPO_ROOT = path.resolve(__dirname, "../../..");
+// When compiled to dist/, we are 2 levels from the package root (dist/routes → dist → package root).
+// When running from TypeScript source (src/), we are 3 levels from the monorepo root
+// (src/routes → src → server → monorepo root).
+// In both cases the resolved REPO_ROOT is the directory that contains packages/plugins/examples/.
+const _isCompiled = path.basename(path.dirname(__dirname)) === "dist";
+const REPO_ROOT = _isCompiled
+  ? path.resolve(__dirname, "../..")
+  : path.resolve(__dirname, "../../..");
 
 const BUNDLED_PLUGIN_EXAMPLES: AvailablePluginExample[] = [
   {
@@ -138,6 +145,14 @@ const BUNDLED_PLUGIN_EXAMPLES: AvailablePluginExample[] = [
     description: "Reference plugin that demonstrates the current FideliOS plugin API surface, bridge flows, UI extension surfaces, jobs, webhooks, tools, streams, and trusted local workspace/process demos.",
     localPath: "packages/plugins/examples/plugin-kitchen-sink-example",
     tag: "example",
+  },
+  {
+    packageName: "@fideliosai/plugin-telegram-gateway",
+    pluginKey: "fidelios.telegram-gateway",
+    displayName: "Telegram Gateway",
+    description: "Routes agent heartbeats, task assignments, approvals, and errors to a Telegram supergroup. Reply from Telegram to post comments back to FideliOS.",
+    localPath: "packages/plugins/examples/telegram-gateway",
+    tag: "official",
   },
 ];
 

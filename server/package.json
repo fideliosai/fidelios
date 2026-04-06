@@ -29,7 +29,8 @@
   "files": [
     "dist",
     "ui-dist",
-    "skills"
+    "skills",
+    "packages/plugins/examples"
   ],
   "scripts": {
     "dev": "tsx src/index.ts",
