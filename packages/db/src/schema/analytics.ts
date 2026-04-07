@@ -51,6 +51,7 @@ export const analyticsMarkets = pgTable(
     closedAt: timestamp("closed_at", { withTimezone: true }),
     createdAt: timestamp("created_at", { withTimezone: true }),
     volumeTotal: numeric("volume_total"),
+    clobTokenId: text("clob_token_id"),
     embedding: vector("embedding", { dimensions: 768 }),
   },
   (table) => ({

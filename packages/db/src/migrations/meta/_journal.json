@@ -330,6 +330,13 @@
       "when": 1775779200000,
       "tag": "0049_analytics_pgvector",
       "breakpoints": true
+    },
+    {
+      "idx": 47,
+      "version": "7",
+      "when": 1775596129047,
+      "tag": "0050_analytics_add_clob_token_id",
+      "breakpoints": true
     }
   ]
 }

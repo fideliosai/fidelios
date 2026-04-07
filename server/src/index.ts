@@ -29,6 +29,7 @@ import { loadConfig } from "./config.js";
 import { logger } from "./middleware/logger.js";
 import { setupLiveEventsWebSocketServer } from "./realtime/live-events-ws.js";
 import { heartbeatService, reconcilePersistedRuntimeServicesOnStartup, routineService } from "./services/index.js";
+import { registerAnalyticsIngestJobs } from "./services/analytics-ingest/index.js";
 import { runningProcesses } from "./adapters/index.js";
 import { createStorageServiceFromConfig } from "./storage/index.js";
 import { printStartupBanner } from "./startup-banner.js";
@@ -620,7 +621,10 @@ export async function startServer(): Promise<StartedServer> {
         });
     }, config.heartbeatSchedulerIntervalMs);
   }
-  
+
+  // Analytics ingestion jobs (Polymarket sync, price history, embeddings)
+  const analyticsIngest = registerAnalyticsIngestJobs(db as any);
+
   if (config.databaseBackupEnabled) {
     const backupIntervalMs = config.databaseBackupIntervalMinutes * 60 * 1000;
     let backupInFlight = false;
@@ -765,6 +769,7 @@ export async function startServer(): Promise<StartedServer> {
   {
     const shutdown = async (signal: "SIGINT" | "SIGTERM") => {
       updateChecker.stop();
+      analyticsIngest.stop();
       // Kill all running agent child processes before exiting
       if (runningProcesses.size > 0) {
         logger.info({ signal, count: runningProcesses.size }, "Sending SIGTERM to running agent processes");
