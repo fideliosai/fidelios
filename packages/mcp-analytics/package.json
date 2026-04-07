@@ -1,0 +1,48 @@
+{
+  "name": "@fideliosai/mcp-analytics",
+  "version": "0.0.0-dev",
+  "license": "MIT",
+  "homepage": "https://github.com/fideliosai/fidelios",
+  "bugs": {
+    "url": "https://github.com/fideliosai/fidelios/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fideliosai/fidelios",
+    "directory": "packages/mcp-analytics"
+  },
+  "type": "module",
+  "bin": {
+    "mcp-analytics": "./dist/index.js"
+  },
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "publishConfig": {
+    "access": "public",
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.js"
+      }
+    },
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.1",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.7.3"
+  }
+}
