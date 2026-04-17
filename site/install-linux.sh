@@ -8,9 +8,12 @@ set -eo pipefail
 
 # ── Arg parsing ──────────────────────────────────────────────────────────────
 YES=false
+SERVICE_CHOICE=""   # "" = ask; "yes" = install service; "no" = skip
 for arg in "$@"; do
   case "$arg" in
     --yes|-y) YES=true ;;
+    --service) SERVICE_CHOICE=yes ;;
+    --no-service) SERVICE_CHOICE=no ;;
   esac
 done
 
@@ -225,6 +228,51 @@ else
   fidelios onboard --yes || warn "fidelios onboard --yes exited non-zero — re-run manually in an interactive shell."
 fi
 
+# ── Step 5: Background service (optional) ────────────────────────────────────
+header "🔁 Run FideliOS in the background?"
+echo ""
+echo -e "  ${DIM}Install as a systemd user unit so it:${RESET}"
+echo -e "     • ${DIM}starts on login${RESET}"
+echo -e "     • ${DIM}keeps running after you close the terminal${RESET}"
+echo -e "     • ${DIM}auto-restarts on crash${RESET}"
+echo ""
+
+INSTALL_SERVICE=false
+if [[ "$SERVICE_CHOICE" == "yes" ]]; then
+  INSTALL_SERVICE=true
+elif [[ "$SERVICE_CHOICE" == "no" ]]; then
+  INSTALL_SERVICE=false
+elif $YES; then
+  INSTALL_SERVICE=true
+  info "--yes implies --service"
+elif $INTERACTIVE; then
+  if ask "Install FideliOS as a background service?"; then
+    INSTALL_SERVICE=true
+  fi
+else
+  INSTALL_SERVICE=false
+fi
+
+if $INSTALL_SERVICE; then
+  info "Installing background service…"
+  if fidelios service install; then
+    success "Service installed — FideliOS will auto-start on login."
+    # Headless servers: enable linger so the service runs before any SSH login.
+    if command -v loginctl >/dev/null 2>&1; then
+      if ! loginctl show-user "$USER" 2>/dev/null | grep -q 'Linger=yes'; then
+        info "To keep the service running before you SSH in, run:"
+        echo -e "     ${BOLD}sudo loginctl enable-linger \$USER${RESET}"
+      fi
+    fi
+  else
+    warn "Service install failed. Retry later: fidelios service install"
+  fi
+else
+  echo -e "  ${DIM}Skipped. FideliOS stops when you close the terminal.${RESET}"
+  echo -e "  ${DIM}To enable later, see${RESET} ${BOLD}https://docs.fidelios.nl/start/keep-running${RESET}"
+  echo -e "     ${BOLD}fidelios service install${RESET}   ${DIM}# systemd user unit${RESET}"
+fi
+
 # ── Done ─────────────────────────────────────────────────────────────────────
 echo ""
 echo -e "${GREEN}${BOLD}  ✔ FideliOS installation complete!${RESET}"
@@ -240,7 +288,4 @@ else
   echo -e "  Start FideliOS with: ${BOLD}fidelios run${RESET}"
   echo -e "  Then open:           ${BOLD}http://127.0.0.1:3100${RESET}"
 fi
-echo ""
-echo -e "  To keep it running after you close the terminal:"
-echo -e "     ${BOLD}fidelios service install${RESET}   ${DIM}# systemd user unit${RESET}"
 echo ""

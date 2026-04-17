@@ -8,9 +8,12 @@ set -eo pipefail
 
 # ── Arg parsing ──────────────────────────────────────────────────────────────
 YES=false
+SERVICE_CHOICE=""   # "" = ask; "yes" = install service; "no" = skip service
 for arg in "$@"; do
   case "$arg" in
     --yes|-y) YES=true ;;
+    --service) SERVICE_CHOICE=yes ;;
+    --no-service) SERVICE_CHOICE=no ;;
   esac
 done
 
@@ -254,6 +257,49 @@ else
   info "Non-interactive mode: running 'fidelios onboard --yes' with quickstart defaults."
   echo ""
   fidelios onboard --yes || warn "fidelios onboard --yes exited non-zero — re-run manually in an interactive shell."
+fi
+
+# ── Step 6: Background service (optional) ────────────────────────────────────
+header "🔁 Run FideliOS in the background?"
+echo ""
+echo -e "  ${DIM}Install FideliOS as a launchd service so it:${RESET}"
+echo -e "     • ${DIM}starts automatically when you log in${RESET}"
+echo -e "     • ${DIM}keeps running after you close Terminal${RESET}"
+echo -e "     • ${DIM}auto-restarts if it crashes${RESET}"
+echo ""
+
+INSTALL_SERVICE=false
+if [[ "$SERVICE_CHOICE" == "yes" ]]; then
+  INSTALL_SERVICE=true
+elif [[ "$SERVICE_CHOICE" == "no" ]]; then
+  INSTALL_SERVICE=false
+elif $YES; then
+  INSTALL_SERVICE=true
+  info "--yes implies --service (install background service)"
+elif $INTERACTIVE; then
+  if ask "Install FideliOS as a background service?"; then
+    INSTALL_SERVICE=true
+  fi
+else
+  # Non-interactive pipe install, no explicit flag → skip service by default
+  # (safer: don't auto-register launchd without explicit consent in pipe mode).
+  INSTALL_SERVICE=false
+fi
+
+if $INSTALL_SERVICE; then
+  info "Installing background service…"
+  if fidelios service install; then
+    success "Service installed — FideliOS will start automatically at login."
+  else
+    warn "Service install failed. You can retry manually with: fidelios service install"
+  fi
+else
+  echo -e "  ${DIM}Skipped. FideliOS will stop when you close Terminal.${RESET}"
+  echo -e "  ${DIM}To keep it running, see:${RESET} ${BOLD}https://docs.fidelios.nl/start/keep-running${RESET}"
+  echo -e "  ${DIM}Options include:${RESET}"
+  echo -e "     ${BOLD}fidelios service install${RESET}   ${DIM}# launchd service (recommended)${RESET}"
+  echo -e "     ${BOLD}Amphetamine${RESET}                  ${DIM}# free Mac app, prevents sleep${RESET}"
+  echo -e "     ${BOLD}caffeinate -i fidelios run${RESET}   ${DIM}# ad-hoc, keeps Mac awake${RESET}"
 fi
 
 # ── Done ──────────────────────────────────────────────────────────────────────

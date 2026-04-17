@@ -147,6 +147,44 @@ if ($INTERACTIVE) {
     Write-Host ""
 }
 
+# ── Step 4: Background running (interactive only — register a Task Scheduler task) ──
+#
+# Windows doesn't yet ship a `fidelios service install` path (coming soon).
+# In an interactive shell we offer to register a Scheduled Task that runs
+# FideliOS at every logon so it survives closing PowerShell.
+if ($INTERACTIVE) {
+    Write-Header "Run FideliOS in the background?"
+    Write-Host ""
+    Write-Host "  Register a Scheduled Task so FideliOS:" -ForegroundColor DarkGray
+    Write-Host "     * starts every time you sign in" -ForegroundColor DarkGray
+    Write-Host "     * keeps running after you close PowerShell" -ForegroundColor DarkGray
+    Write-Host ""
+    $answer = Read-Host "  Register Scheduled Task now? [y/N]"
+    if ($answer -match '^(y|Y|yes|YES)$') {
+        $fideliosPath = (Get-Command fidelios -ErrorAction SilentlyContinue).Source
+        if (-not $fideliosPath) {
+            Write-Err "Could not locate fidelios on PATH. Skipping."
+        } else {
+            # fidelios.cmd wraps fidelios.js on Windows — invoke directly
+            try {
+                $action    = New-ScheduledTaskAction -Execute $fideliosPath -Argument "run"
+                $trigger   = New-ScheduledTaskTrigger -AtLogOn -User "$env:USERNAME"
+                $settings  = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -ExecutionTimeLimit ([TimeSpan]::Zero)
+                $principal = New-ScheduledTaskPrincipal -UserId "$env:USERNAME" -LogonType Interactive -RunLevel Limited
+                Register-ScheduledTask -TaskName "FideliOS" -Action $action -Trigger $trigger -Settings $settings -Principal $principal -Force | Out-Null
+                Write-Success "Scheduled Task 'FideliOS' registered — will start on your next login."
+                Write-Host "  Manage via: Task Scheduler (taskschd.msc) -> Task Scheduler Library -> FideliOS" -ForegroundColor DarkGray
+            } catch {
+                Write-Err "Could not register Scheduled Task: $_"
+                Write-Host "  Manual setup instructions: https://docs.fidelios.nl/start/keep-running" -ForegroundColor DarkGray
+            }
+        }
+    } else {
+        Write-Host "  Skipped. FideliOS will stop when you close PowerShell." -ForegroundColor DarkGray
+        Write-Host "  To enable later, see: https://docs.fidelios.nl/start/keep-running" -ForegroundColor DarkGray
+    }
+}
+
 # ── Done ──────────────────────────────────────────────────────────────────────
 Write-Host ""
 Write-Host "  OK FideliOS installation complete!" -ForegroundColor Green
@@ -156,6 +194,5 @@ Write-Host "fidelios run" -ForegroundColor White
 Write-Host "  Then open:            " -NoNewline -ForegroundColor DarkGray
 Write-Host "http://127.0.0.1:3100" -ForegroundColor White
 Write-Host ""
-Write-Host "  To run in the background at login, use Task Scheduler or nssm." -ForegroundColor DarkGray
-Write-Host "  Native 'fidelios service install' on Windows is coming soon." -ForegroundColor DarkGray
+Write-Host "  To keep it running after closing PowerShell: https://docs.fidelios.nl/start/keep-running" -ForegroundColor DarkGray
 Write-Host ""
