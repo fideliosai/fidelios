@@ -112,9 +112,14 @@ else
   fi
   info "Installing Homebrew…"
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  # Add brew to PATH for Apple Silicon
+  # Add brew to PATH in the current session — Apple Silicon installs to
+  # /opt/homebrew, Intel installs to /usr/local. Brew's own installer writes
+  # shellenv into ~/.zprofile but only for NEW sessions, so we need to
+  # source it manually here.
   if [[ -f /opt/homebrew/bin/brew ]]; then
     eval "$(/opt/homebrew/bin/brew shellenv)"
+  elif [[ -f /usr/local/bin/brew ]]; then
+    eval "$(/usr/local/bin/brew shellenv)"
   fi
   success "Homebrew installed"
 fi
