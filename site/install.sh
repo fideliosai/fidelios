@@ -259,13 +259,18 @@ else
   fidelios onboard --yes || warn "fidelios onboard --yes exited non-zero — re-run manually in an interactive shell."
 fi
 
-# ── Step 6: Background service (optional) ────────────────────────────────────
-header "🔁 Run FideliOS in the background?"
+# ── Step 6: Keep running in the background? ──────────────────────────────────
+header "🔁 Should FideliOS keep running on its own?"
 echo ""
-echo -e "  ${DIM}Install FideliOS as a launchd service so it:${RESET}"
-echo -e "     • ${DIM}starts automatically when you log in${RESET}"
-echo -e "     • ${DIM}keeps running after you close Terminal${RESET}"
-echo -e "     • ${DIM}auto-restarts if it crashes${RESET}"
+echo -e "  ${DIM}Without this, FideliOS stops the moment you:${RESET}"
+echo -e "     • ${DIM}close this Terminal window${RESET}"
+echo -e "     • ${DIM}restart or shut down your Mac${RESET}"
+echo -e "     • ${DIM}close your laptop lid / let your Mac sleep${RESET}"
+echo ""
+echo -e "  ${DIM}If we set it up, your AI agents keep working 24/7 in the${RESET}"
+echo -e "  ${DIM}background. You don't have to open Terminal again.${RESET}"
+echo ""
+echo -e "  ${DIM}(You can change this later — see the link at the end.)${RESET}"
 echo ""
 
 INSTALL_SERVICE=false
@@ -275,31 +280,32 @@ elif [[ "$SERVICE_CHOICE" == "no" ]]; then
   INSTALL_SERVICE=false
 elif $YES; then
   INSTALL_SERVICE=true
-  info "--yes implies --service (install background service)"
+  info "--yes → setting up auto-start"
 elif $INTERACTIVE; then
-  if ask "Install FideliOS as a background service?"; then
+  if ask "Keep FideliOS running automatically, even after you close Terminal or restart?"; then
     INSTALL_SERVICE=true
   fi
 else
-  # Non-interactive pipe install, no explicit flag → skip service by default
-  # (safer: don't auto-register launchd without explicit consent in pipe mode).
+  # Non-interactive pipe install, no explicit flag → skip by default so we
+  # don't auto-register launchd without clear consent.
   INSTALL_SERVICE=false
 fi
 
 if $INSTALL_SERVICE; then
-  info "Installing background service…"
+  info "Setting up auto-start…"
   if fidelios service install; then
-    success "Service installed — FideliOS will start automatically at login."
+    success "Done — FideliOS will start on its own when you turn your Mac on."
+    echo -e "  ${DIM}No need to keep Terminal open anymore.${RESET}"
   else
-    warn "Service install failed. You can retry manually with: fidelios service install"
+    warn "Auto-start setup failed. You can retry later with: fidelios service install"
   fi
 else
-  echo -e "  ${DIM}Skipped. FideliOS will stop when you close Terminal.${RESET}"
-  echo -e "  ${DIM}To keep it running, see:${RESET} ${BOLD}https://docs.fidelios.nl/start/keep-running${RESET}"
-  echo -e "  ${DIM}Options include:${RESET}"
-  echo -e "     ${BOLD}fidelios service install${RESET}   ${DIM}# launchd service (recommended)${RESET}"
-  echo -e "     ${BOLD}Amphetamine${RESET}                  ${DIM}# free Mac app, prevents sleep${RESET}"
-  echo -e "     ${BOLD}caffeinate -i fidelios run${RESET}   ${DIM}# ad-hoc, keeps Mac awake${RESET}"
+  echo -e "  ${YELLOW}${BOLD}  ⚠${RESET} Skipped — FideliOS will stop when you close this Terminal."
+  echo -e "  ${DIM}Every time you want to use it, you'll need to open Terminal and type:${RESET}"
+  echo -e "     ${BOLD}fidelios run${RESET}"
+  echo ""
+  echo -e "  ${DIM}To make it run automatically later (recommended), open this page:${RESET}"
+  echo -e "     ${BOLD}https://docs.fidelios.nl/start/keep-running${RESET}"
 fi
 
 # ── Done ──────────────────────────────────────────────────────────────────────

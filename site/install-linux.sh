@@ -228,13 +228,18 @@ else
   fidelios onboard --yes || warn "fidelios onboard --yes exited non-zero — re-run manually in an interactive shell."
 fi
 
-# ── Step 5: Background service (optional) ────────────────────────────────────
-header "🔁 Run FideliOS in the background?"
+# ── Step 5: Keep running in the background? ──────────────────────────────────
+header "🔁 Should FideliOS keep running on its own?"
 echo ""
-echo -e "  ${DIM}Install as a systemd user unit so it:${RESET}"
-echo -e "     • ${DIM}starts on login${RESET}"
-echo -e "     • ${DIM}keeps running after you close the terminal${RESET}"
-echo -e "     • ${DIM}auto-restarts on crash${RESET}"
+echo -e "  ${DIM}Without this, FideliOS stops the moment you:${RESET}"
+echo -e "     • ${DIM}close this terminal window${RESET}"
+echo -e "     • ${DIM}reboot the machine${RESET}"
+echo -e "     • ${DIM}log out / close your SSH session${RESET}"
+echo ""
+echo -e "  ${DIM}If we set it up, your AI agents keep working 24/7 in the${RESET}"
+echo -e "  ${DIM}background. You don't have to stay logged in.${RESET}"
+echo ""
+echo -e "  ${DIM}(You can change this later — see the link at the end.)${RESET}"
 echo ""
 
 INSTALL_SERVICE=false
@@ -244,9 +249,9 @@ elif [[ "$SERVICE_CHOICE" == "no" ]]; then
   INSTALL_SERVICE=false
 elif $YES; then
   INSTALL_SERVICE=true
-  info "--yes implies --service"
+  info "--yes → setting up auto-start"
 elif $INTERACTIVE; then
-  if ask "Install FideliOS as a background service?"; then
+  if ask "Keep FideliOS running automatically, even after you close this terminal?"; then
     INSTALL_SERVICE=true
   fi
 else
@@ -254,23 +259,26 @@ else
 fi
 
 if $INSTALL_SERVICE; then
-  info "Installing background service…"
+  info "Setting up auto-start…"
   if fidelios service install; then
-    success "Service installed — FideliOS will auto-start on login."
-    # Headless servers: enable linger so the service runs before any SSH login.
+    success "Done — FideliOS will start on its own when you log in."
+    # Headless servers: enable linger so the service runs even when no-one is SSH'd in.
     if command -v loginctl >/dev/null 2>&1; then
       if ! loginctl show-user "$USER" 2>/dev/null | grep -q 'Linger=yes'; then
-        info "To keep the service running before you SSH in, run:"
+        echo -e "  ${DIM}On a headless server? Run this ONCE to keep FideliOS running even${RESET}"
+        echo -e "  ${DIM}when nobody is SSH'd in:${RESET}"
         echo -e "     ${BOLD}sudo loginctl enable-linger \$USER${RESET}"
       fi
     fi
   else
-    warn "Service install failed. Retry later: fidelios service install"
+    warn "Auto-start setup failed. Retry later: fidelios service install"
   fi
 else
-  echo -e "  ${DIM}Skipped. FideliOS stops when you close the terminal.${RESET}"
-  echo -e "  ${DIM}To enable later, see${RESET} ${BOLD}https://docs.fidelios.nl/start/keep-running${RESET}"
-  echo -e "     ${BOLD}fidelios service install${RESET}   ${DIM}# systemd user unit${RESET}"
+  echo -e "  ${YELLOW}${BOLD}  ⚠${RESET} Skipped — FideliOS stops when you close this terminal."
+  echo -e "  ${DIM}To start it again, run:${RESET} ${BOLD}fidelios run${RESET}"
+  echo ""
+  echo -e "  ${DIM}To make it run automatically later (recommended), see:${RESET}"
+  echo -e "     ${BOLD}https://docs.fidelios.nl/start/keep-running${RESET}"
 fi
 
 # ── Done ─────────────────────────────────────────────────────────────────────

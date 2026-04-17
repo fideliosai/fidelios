@@ -1,16 +1,17 @@
 ---
 title: Keep FideliOS running
-summary: Options for running FideliOS in the background after you close Terminal or restart your Mac/PC
+summary: Make sure FideliOS stays on even after you close Terminal or restart your computer
 ---
 
-By default, `fidelios run` ties the server to your terminal window. Close the window or reboot your machine and FideliOS stops. This page shows you how to keep it running 24/7.
+## The short version
 
-There are two categories of solutions:
+By default, FideliOS runs only while the Terminal / PowerShell window is open. Close it, restart your computer, or let your laptop sleep — FideliOS stops.
 
-1. **Background service** — FideliOS runs headless as soon as you log in, no terminal required. This is the recommended setup.
-2. **Stay-awake helpers** — lighter-weight apps that just prevent your machine from sleeping so your existing Terminal window keeps going.
+If you want your AI agents to keep working **24/7 on their own**, follow one of the steps below for your operating system. It's a single command per OS and takes less than a minute.
 
-If you picked "yes" when the installer asked, the service is already set up. If you said "no" or want to change later, follow the steps below.
+If the installer asked "Should FideliOS keep running on its own?" and you picked **Yes** — you're already done, no action needed here.
+
+If you picked **No** (or missed the question), pick one of the options below whenever you're ready.
 
 ---
 

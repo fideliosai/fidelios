@@ -147,19 +147,25 @@ if ($INTERACTIVE) {
     Write-Host ""
 }
 
-# ── Step 4: Background running (interactive only — register a Task Scheduler task) ──
+# ── Step 4: Keep running after you close PowerShell? ────────────────────────
 #
-# Windows doesn't yet ship a `fidelios service install` path (coming soon).
-# In an interactive shell we offer to register a Scheduled Task that runs
-# FideliOS at every logon so it survives closing PowerShell.
+# In interactive mode we offer to make FideliOS start on every sign-in so it
+# survives closing PowerShell / shutting down the PC. Non-interactive pipe
+# installs skip this step (no consent available).
 if ($INTERACTIVE) {
-    Write-Header "Run FideliOS in the background?"
+    Write-Header "Should FideliOS keep running on its own?"
     Write-Host ""
-    Write-Host "  Register a Scheduled Task so FideliOS:" -ForegroundColor DarkGray
-    Write-Host "     * starts every time you sign in" -ForegroundColor DarkGray
-    Write-Host "     * keeps running after you close PowerShell" -ForegroundColor DarkGray
+    Write-Host "  Without this, FideliOS stops the moment you:" -ForegroundColor DarkGray
+    Write-Host "     * close this PowerShell window" -ForegroundColor DarkGray
+    Write-Host "     * restart or shut down your PC" -ForegroundColor DarkGray
+    Write-Host "     * sign out of Windows" -ForegroundColor DarkGray
     Write-Host ""
-    $answer = Read-Host "  Register Scheduled Task now? [y/N]"
+    Write-Host "  If we set it up, your AI agents keep working 24/7 in the" -ForegroundColor DarkGray
+    Write-Host "  background. You don't have to open PowerShell again." -ForegroundColor DarkGray
+    Write-Host ""
+    Write-Host "  (You can change this later — see the link at the end.)" -ForegroundColor DarkGray
+    Write-Host ""
+    $answer = Read-Host "  Keep FideliOS running automatically? [y/N]"
     if ($answer -match '^(y|Y|yes|YES)$') {
         $fideliosPath = (Get-Command fidelios -ErrorAction SilentlyContinue).Source
         if (-not $fideliosPath) {
@@ -172,16 +178,21 @@ if ($INTERACTIVE) {
                 $settings  = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -ExecutionTimeLimit ([TimeSpan]::Zero)
                 $principal = New-ScheduledTaskPrincipal -UserId "$env:USERNAME" -LogonType Interactive -RunLevel Limited
                 Register-ScheduledTask -TaskName "FideliOS" -Action $action -Trigger $trigger -Settings $settings -Principal $principal -Force | Out-Null
-                Write-Success "Scheduled Task 'FideliOS' registered — will start on your next login."
-                Write-Host "  Manage via: Task Scheduler (taskschd.msc) -> Task Scheduler Library -> FideliOS" -ForegroundColor DarkGray
+                Write-Success "Done — FideliOS will start on its own when you sign in."
+                Write-Host "  No need to keep PowerShell open anymore." -ForegroundColor DarkGray
+                Write-Host "  Manage later: Task Scheduler (taskschd.msc) -> FideliOS" -ForegroundColor DarkGray
             } catch {
-                Write-Err "Could not register Scheduled Task: $_"
-                Write-Host "  Manual setup instructions: https://docs.fidelios.nl/start/keep-running" -ForegroundColor DarkGray
+                Write-Err "Could not set up auto-start: $_"
+                Write-Host "  See: https://docs.fidelios.nl/start/keep-running" -ForegroundColor DarkGray
             }
         }
     } else {
-        Write-Host "  Skipped. FideliOS will stop when you close PowerShell." -ForegroundColor DarkGray
-        Write-Host "  To enable later, see: https://docs.fidelios.nl/start/keep-running" -ForegroundColor DarkGray
+        Write-Warn "Skipped - FideliOS will stop when you close this PowerShell."
+        Write-Host "  To start it again, open PowerShell and type: " -NoNewline -ForegroundColor DarkGray
+        Write-Host "fidelios run" -ForegroundColor White
+        Write-Host ""
+        Write-Host "  To make it run automatically later (recommended), see:" -ForegroundColor DarkGray
+        Write-Host "     https://docs.fidelios.nl/start/keep-running" -ForegroundColor White
     }
 }
 
