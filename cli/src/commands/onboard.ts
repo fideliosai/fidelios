@@ -495,7 +495,11 @@ export async function onboard(opts: OnboardOptions): Promise<void> {
     await bootstrapCeoInvite({ config: configPath });
   }
 
-  let shouldRunNow = opts.run === true || opts.yes === true;
+  // Only auto-start when the user explicitly asked (`--run`) OR the user
+  // answered yes interactively. `--yes` alone used to imply --run, but in
+  // non-TTY pipe installs (curl | bash) that left an orphaned server bound to
+  // 3100 which blocked the user's first manual `fidelios run`.
+  let shouldRunNow = opts.run === true || (opts.yes === true && process.stdin.isTTY && process.stdout.isTTY);
   if (!shouldRunNow && !opts.invokedByRun && process.stdin.isTTY && process.stdout.isTTY) {
     const answer = await p.confirm({
       message: "Start FideliOS now?",
