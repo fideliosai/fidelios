@@ -6,7 +6,7 @@ import { buildPlist, buildServicePath, buildSystemdUnit, resolveDevRepoDir } fro
 const REPO_ROOT = path.resolve(__dirname, "../../..");
 
 describe("service: buildServicePath", () => {
-  it("includes node dir, common adapter locations, and system dirs", () => {
+  it("Apple Silicon: includes node dir, common adapter locations, and system dirs", () => {
     const pathStr = buildServicePath("/opt/homebrew/bin/node");
     const parts = pathStr.split(":");
     const homeDir = os.homedir();
@@ -23,6 +23,28 @@ describe("service: buildServicePath", () => {
     expect(parts).toContain("/usr/local/bin");
     expect(parts).toContain("/usr/bin");
     expect(parts).toContain("/bin");
+  });
+
+  it("Intel Mac: node at /usr/local/bin still lands at position 0, both brew prefixes covered", () => {
+    const pathStr = buildServicePath("/usr/local/bin/node");
+    const parts = pathStr.split(":");
+    // Node dir first — Intel brew puts node at /usr/local/bin
+    expect(parts[0]).toBe("/usr/local/bin");
+    // Intel brew prefix still in PATH
+    expect(parts).toContain("/usr/local/bin");
+    expect(parts).toContain("/usr/local/sbin");
+    // Apple Silicon brew prefix also in PATH (harmless on Intel; covers dual-arch machines / Rosetta)
+    expect(parts).toContain("/opt/homebrew/bin");
+  });
+
+  it("nvm Node (any arch): node at ~/.nvm/.../bin is still first and brew paths follow", () => {
+    const homeDir = os.homedir();
+    const nvmNode = path.join(homeDir, ".nvm", "versions", "node", "v22.11.0", "bin", "node");
+    const pathStr = buildServicePath(nvmNode);
+    const parts = pathStr.split(":");
+    expect(parts[0]).toBe(path.dirname(nvmNode));
+    expect(parts).toContain("/opt/homebrew/bin");
+    expect(parts).toContain("/usr/local/bin");
   });
 
   it("deduplicates entries (e.g. when nodeBin is already in /opt/homebrew/bin)", () => {

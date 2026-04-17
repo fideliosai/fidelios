@@ -7,8 +7,15 @@ Get FideliOS running on macOS with a single command.
 
 ## Prerequisites
 
-- macOS 12 (Monterey) or later
+- **macOS 12 (Monterey) or later** on either:
+  - **Apple Silicon** (M1 / M2 / M3 / M4, including Pro / Max / Ultra) — brew lives at `/opt/homebrew/`
+  - **Intel** (2020 and earlier Macs, x86_64) — brew lives at `/usr/local/`
 - Terminal (built-in — search Spotlight for "Terminal")
+
+Both architectures are first-class. The installer auto-detects your
+CPU, installs Homebrew at the right prefix, and the `fidelios service
+install` launchd PATH covers both `/opt/homebrew/bin` and
+`/usr/local/bin` so adapter CLIs resolve regardless of arch.
 
 No other software required. The installer handles everything.
 
