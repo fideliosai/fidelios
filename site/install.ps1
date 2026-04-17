@@ -74,22 +74,29 @@ if ($nodeCmd) {
 
         # Installer sets NVM_HOME + NVM_SYMLINK as machine env vars and
         # prepends both to PATH. They won't be visible in the current session
-        # until we reload from the registry.
+        # until we reload from the registry — and even then `Get-Command nvm`
+        # sometimes fails because the new PATH entries aren't indexed yet.
+        # Invoke nvm via its full path to sidestep both issues.
         Start-Sleep -Seconds 2
         Refresh-Path
         $env:NVM_HOME    = [System.Environment]::GetEnvironmentVariable("NVM_HOME","Machine")
         $env:NVM_SYMLINK = [System.Environment]::GetEnvironmentVariable("NVM_SYMLINK","Machine")
 
-        if (-not (Get-Command nvm -ErrorAction SilentlyContinue)) {
-            Write-Err "nvm installed but not on PATH. NVM_HOME=$env:NVM_HOME NVM_SYMLINK=$env:NVM_SYMLINK"
-            Write-Err "Open a NEW PowerShell window and re-run the installer."
+        $nvmExe = Join-Path $env:NVM_HOME "nvm.exe"
+        if (-not (Test-Path $nvmExe)) {
+            Write-Err "nvm.exe not found at $nvmExe after installer. NVM_HOME=$env:NVM_HOME"
             exit 1
         }
 
+        # Also force NVM_HOME + NVM_SYMLINK into the current session PATH so
+        # the subsequent `node` / `npm` calls resolve.
+        $env:Path = "$env:NVM_HOME;$env:NVM_SYMLINK;$env:Path"
+
         Write-Info "Installing Node.js LTS via nvm..."
-        & nvm install lts 2>&1 | ForEach-Object { Write-Host "    $_" }
-        & nvm use lts 2>&1 | ForEach-Object { Write-Host "    $_" }
+        & $nvmExe install lts 2>&1 | ForEach-Object { Write-Host "    $_" }
+        & $nvmExe use lts    2>&1 | ForEach-Object { Write-Host "    $_" }
         Refresh-Path
+        $env:Path = "$env:NVM_HOME;$env:NVM_SYMLINK;$env:Path"
     }
 
     if (-not (Get-Command node -ErrorAction SilentlyContinue)) {
