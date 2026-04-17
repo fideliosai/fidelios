@@ -1,76 +1,104 @@
 ---
 title: Quickstart
-summary: Get FideliOS running in minutes
+summary: Get FideliOS running in under 5 minutes
 ---
 
-Get FideliOS running locally in under 5 minutes.
+You don't need to know anything about development. FideliOS installs with one copy-paste. The hardest part is finding the app where you paste it in (called **Terminal** on Mac, **PowerShell** on Windows) — skip to [First time on a Mac?](/start/first-time-mac) if you've never opened it before.
 
 ## Install
 
 <Tabs>
   <Tab title="macOS">
-    Open **Terminal** and paste:
-    ```sh
-    curl -fsSL https://fidelios.nl/install.sh | bash
-    ```
-    Installs everything automatically.
+    1. Press `⌘ + Space`, type **Terminal**, press `Enter`.
+    2. Paste this and press `Enter`:
+
+       ```sh
+       curl -fsSL https://fidelios.nl/install.sh | bash
+       ```
+    3. Watch the installer. It will install everything it needs (Homebrew, Node.js, FideliOS itself) and at the end ask you a few setup questions — answer them or press `Enter` to accept the defaults.
+
+    When it's done, keep the Terminal window open and continue to [Open FideliOS](#open-fidelios) below.
   </Tab>
   <Tab title="Linux">
-    Open **Terminal** and paste:
+    Open a terminal and run **one** of these:
+
+    **Docker (recommended)** — no Node.js needed:
     ```sh
     curl -fsSL https://fidelios.nl/install-linux.sh | bash
     ```
-    Sets up Docker and runs FideliOS.
+
+    **Node.js CLI** — gives you the `fidelios` command:
+    ```sh
+    curl -fsSL https://fidelios.nl/install.sh | bash
+    ```
   </Tab>
   <Tab title="Windows">
-    Open **PowerShell** and paste:
-    ```powershell
-    iwr -useb https://fidelios.nl/install.ps1 | iex
-    ```
-    Sets up Docker and runs FideliOS.
+    1. Press the Windows key, type **PowerShell**, press `Enter`.
+    2. Paste this and press `Enter`:
+
+       ```powershell
+       iwr -useb https://fidelios.nl/install.ps1 | iex
+       ```
+
+    If Windows blocks the script, open PowerShell as Administrator and run
+    `Set-ExecutionPolicy RemoteSigned -Scope CurrentUser`, then retry.
   </Tab>
 </Tabs>
 
-> **Already have Node.js?** Run `npm install -g fidelios && fidelios run`
+## Start FideliOS
 
-Open **http://127.0.0.1:3100** — the wizard walks you through creating your first company and hiring your first agent.
+On **macOS** and **Windows** the installer asks whether to start FideliOS right away — say yes.
 
-To start FideliOS again later:
+If you closed the installer or want to start it manually later:
 
-```sh
-fidelios run
-```
+<Tabs>
+  <Tab title="macOS / Windows / Linux (CLI)">
+    ```sh
+    fidelios run
+    ```
+  </Tab>
+  <Tab title="Linux (Docker)">
+    ```sh
+    docker start fidelios
+    ```
+  </Tab>
+</Tabs>
 
-## Local Development
+## Open FideliOS
 
-For contributors working on FideliOS itself. Prerequisites: Node.js 20+ and pnpm 9+.
+Open your browser and go to [http://127.0.0.1:3100](http://127.0.0.1:3100).
 
-Clone the repository, then:
+The first time you open it, a setup wizard walks you through creating your first company and hiring your first agent. No further commands needed.
 
-```sh
-pnpm install
-pnpm dev:watch
-```
+## Keep it running after you close the terminal
 
-This starts the API server and UI at [http://localhost:3100](http://localhost:3100).
+By default FideliOS runs in the foreground of the terminal. To make it start automatically at login and survive closing your terminal window:
 
-No external database required — FideliOS uses an embedded PostgreSQL instance by default.
+<Tabs>
+  <Tab title="macOS / Linux (CLI)">
+    ```sh
+    fidelios service install
+    fidelios service status
+    ```
+    See [Service Commands](/cli/service-commands) for dev/release mode options and the background-service details.
+  </Tab>
+  <Tab title="Linux (Docker)">
+    The Docker container already restarts automatically (`--restart unless-stopped`). No extra step needed.
+  </Tab>
+  <Tab title="Windows">
+    Native background service on Windows is planned. For now keep PowerShell open, or wrap the CLI with [nssm](https://nssm.cc/) / Task Scheduler.
+  </Tab>
+</Tabs>
 
-When working from the cloned repo, you can also use:
+## Something didn't work?
 
-```sh
-pnpm fidelios run
-```
-
-This auto-onboards if config is missing, runs health checks with auto-repair, and starts the server.
+See the [Troubleshooting guide](/start/troubleshooting) — it covers the most common install errors and what to do about them.
 
 ## What's Next
 
-Once FideliOS is running:
-
 1. Create your first company in the web UI
 2. Define a company goal
-3. Create a CEO agent and configure its adapter
+3. Create a CEO agent and configure its adapter (Claude, Codex, Gemini, etc.)
 4. Build out the org chart with more agents
 5. Set budgets and assign initial tasks
 6. Hit go — agents start their heartbeats and the company runs
@@ -78,4 +106,3 @@ Once FideliOS is running:
 <Card title="Core Concepts" href="/start/core-concepts">
   Learn the key concepts behind FideliOS
 </Card>
-

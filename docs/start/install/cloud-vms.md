@@ -5,122 +5,143 @@ summary: Run FideliOS on AWS, Azure, or any cloud VM
 
 FideliOS runs on any Linux VM. This guide covers the extra steps needed to make it accessible from outside the server.
 
-## Supported Providers
+## Supported providers
 
-Any provider that offers a Linux VM will work. The instructions below use Ubuntu 22.04 as the example OS.
+Any provider with a Linux VM works. Examples below use Ubuntu 24.04 LTS.
 
 | Provider | Recommended VM size |
 |----------|---------------------|
-| AWS EC2 | t3.small or larger |
-| Azure | Standard_B2s or larger |
+| AWS EC2 | t3.small (2 vCPU, 2 GB RAM) |
+| Azure | Standard_B2s |
 | DigitalOcean | Basic 2 GB Droplet |
-| Hetzner | CX22 or larger |
-| Google Cloud | e2-small or larger |
+| Hetzner | CX22 |
+| Google Cloud | e2-small |
 
 ## Step 1 — Provision a VM
 
-Create a new VM running Ubuntu 22.04 LTS. Note your VM's public IP address — you'll need it in a moment.
+Create a new VM running Ubuntu 22.04+ LTS. Note your VM's public IP address — you'll need it in a moment.
 
-Make sure you can SSH into it:
+SSH into it:
 
 ```sh
 ssh ubuntu@<your-vm-ip>
 ```
 
-## Step 2 — Install FideliOS
+## Step 2 — Pick an install path
 
-Once connected via SSH, run:
+Two paths work on cloud VMs. Pick one.
+
+### Path A — Docker (simplest)
 
 ```sh
 curl -fsSL https://fidelios.nl/install-linux.sh | bash
 ```
 
-This installs Docker and the `fidelios` CLI.
+This installs Docker Engine, pulls `ghcr.io/fideliosai/fidelios:latest`, and runs FideliOS as a container named `fidelios` listening on port 3100. The container uses `--restart unless-stopped` so it survives reboots.
 
-## Step 3 — Open Port 3100
+You do **not** get a `fidelios` CLI on this path — all control happens through `docker ...` commands or the web UI.
 
-FideliOS listens on port `3100`. Open that port in your provider's firewall so you can reach it from a browser.
+### Path B — Node.js CLI (more control)
 
-**AWS** — Edit the inbound rules on your EC2 security group:
-- Type: Custom TCP
-- Port: 3100
-- Source: your IP address (or `0.0.0.0/0` for public access)
+```sh
+curl -fsSL https://fidelios.nl/install.sh | bash
+```
 
-**Azure** — Add an inbound security rule on your network security group:
-- Port: 3100
-- Source: your IP (or Any)
+This installs Node.js LTS via nvm and `npm install -g fidelios`. You get the full CLI: `fidelios run`, `fidelios service install`, `fidelios doctor`, etc.
 
-**DigitalOcean / Hetzner** — Add a firewall rule that allows TCP inbound on port 3100.
+For cloud deployments the CLI path is usually better because systemd gives you finer control than Docker's restart policy.
 
-## Step 4 — Bind FideliOS to All Interfaces
+## Step 3 — Open port 3100
 
-By default FideliOS only listens on `127.0.0.1`. To accept external connections, set the `HOST` variable:
+FideliOS listens on port 3100. Open that port in your provider's firewall so you can reach it from a browser.
+
+| Provider | Where |
+|----------|-------|
+| AWS EC2 | Security Group → inbound rules → Custom TCP port 3100 from your IP |
+| Azure | Network security group → inbound rule port 3100 |
+| DigitalOcean | Networking → Firewalls → TCP inbound 3100 |
+| Hetzner | Firewall → add rule TCP 3100 |
+
+## Step 4 — Bind FideliOS to all interfaces
+
+By default FideliOS only accepts connections from `127.0.0.1`. To expose it beyond the VM:
+
+### If you installed via Docker (Path A)
+
+Already done — the container maps `0.0.0.0:3100` on the host.
+
+### If you installed via CLI (Path B)
 
 ```sh
 HOST=0.0.0.0 fidelios run
 ```
 
-Then open FideliOS in your browser:
-
-```
-http://<your-vm-ip>:3100
-```
-
-## Step 5 — Run as a System Service
-
-To keep FideliOS running after you close the SSH session and restart on reboot:
+Or for the background service, regenerate the plist/systemd unit with `HOST`:
 
 ```sh
-sudo tee /etc/systemd/system/fidelios.service > /dev/null <<EOF
-[Unit]
-Description=FideliOS
-After=network.target
-
-[Service]
-ExecStart=/usr/local/bin/fidelios run
-Restart=on-failure
-User=$USER
-Environment=HOME=$HOME
-Environment=HOST=0.0.0.0
-
-[Install]
-WantedBy=multi-user.target
-EOF
-
-sudo systemctl daemon-reload
-sudo systemctl enable --now fidelios
+HOST=0.0.0.0 fidelios service install
 ```
+
+## Step 5 — Run as a background service
+
+### Docker path
+
+Already handled by `--restart unless-stopped`. Confirm:
+
+```sh
+docker inspect fidelios --format '{{.HostConfig.RestartPolicy.Name}}'
+# -> unless-stopped
+```
+
+### CLI path
+
+```sh
+fidelios service install
+fidelios service status
+```
+
+The CLI sets up a systemd user unit (`~/.config/systemd/user/fidelios.service`) with `Restart=always` and a `PATH` that includes `~/.claude/local/bin`, `~/.cargo/bin`, and common adapter locations.
 
 Check it is running:
 
 ```sh
 curl http://localhost:3100/api/health
-# -> {"status":"ok"}
+# -> {"status":"ok","version":"0.0.31",...}
 ```
 
-## Private Access with Tailscale (Recommended)
+## Step 6 — Private access with Tailscale (recommended)
 
-Exposing port 3100 to the internet works but is not ideal. A better option is to use Tailscale so that only devices on your private network can reach FideliOS.
+Exposing port 3100 to the internet works but is not ideal. A better option is to use Tailscale so only devices on your private network can reach FideliOS.
 
-1. Install Tailscale on the VM: follow the [Tailscale Linux install docs](https://tailscale.com/kb/1031/install-linux)
-2. Join your Tailnet: `sudo tailscale up`
+1. Install Tailscale on the VM — follow the [Tailscale Linux install docs](https://tailscale.com/kb/1031/install-linux)
+2. Join your tailnet: `sudo tailscale up`
 3. Find your Tailscale IP: `tailscale ip -4`
 4. Close port 3100 in your cloud firewall (only allow Tailscale traffic)
 5. Access FideliOS via the Tailscale IP: `http://<tailscale-ip>:3100`
 
-See [Tailscale Private Access](/deploy/tailscale-private-access) for details on allowed hostnames and MagicDNS.
+See [Tailscale Private Access](/deploy/tailscale-private-access) for allowed hostnames and MagicDNS setup.
 
-## Where Your Data Lives
+## Where your data lives
 
-All data is stored under `~/.fidelios/` on the VM:
+### Docker path
+
+| Data | Location |
+|------|----------|
+| All runtime state | Docker named volume `fidelios` |
+
+Inspect the host path: `docker volume inspect fidelios`.
+
+### CLI path
 
 | Data | Location |
 |------|----------|
 | Config | `~/.fidelios/instances/default/config.json` |
 | Database | `~/.fidelios/instances/default/db` |
 | Secrets key | `~/.fidelios/instances/default/secrets/master.key` |
+| Logs | `~/.fidelios/instances/default/logs` |
+| Service log | `~/.fidelios/instances/default/fidelios.log` |
 
-Back up this directory if you want to preserve your data before resizing or destroying the VM.
+Back up the appropriate dir before resizing or destroying the VM.
 
 ## What's Next
 

@@ -17,6 +17,31 @@ import {
 } from "../config/home.js";
 import { checkForUpdateSilently } from "./update.js";
 
+function resolveCliVersion(): string {
+  // When running the published CLI, package.json lives two dirs up from
+  // cli/src/commands/run.ts (bundled dist/index.js → package.json sibling).
+  // Walk up looking for a package.json that declares `"name": "fidelios"`.
+  let current = path.dirname(fileURLToPath(import.meta.url));
+  const root = path.parse(current).root;
+  while (current !== root) {
+    const candidate = path.join(current, "package.json");
+    if (fs.existsSync(candidate)) {
+      try {
+        const pkg = JSON.parse(fs.readFileSync(candidate, "utf8")) as { name?: string; version?: string };
+        if (pkg.name === "fidelios" && typeof pkg.version === "string") {
+          return pkg.version;
+        }
+      } catch {
+        // try parent dir
+      }
+    }
+    const parent = path.dirname(current);
+    if (parent === current) break;
+    current = parent;
+  }
+  return process.env.npm_package_version ?? "0.0.0";
+}
+
 interface RunOptions {
   config?: string;
   instance?: string;
@@ -47,8 +72,10 @@ export async function runCommand(opts: RunOptions): Promise<void> {
 
   p.intro(pc.bgCyan(pc.black(" fidelios run ")));
 
-  // Silent update check (non-blocking, 5s timeout)
-  const currentVersion = process.env.npm_package_version ?? "0.0.0";
+  // Silent update check (non-blocking, 5s timeout).
+  // Prefer the version from the CLI's own package.json — `npm_package_version`
+  // is only set when invoked via `npm run`, not on a direct `fidelios run`.
+  const currentVersion = resolveCliVersion();
   const updateMsg = checkForUpdateSilently(currentVersion);
   if (updateMsg) {
     p.log.message(pc.yellow(`⬆ ${updateMsg}`));

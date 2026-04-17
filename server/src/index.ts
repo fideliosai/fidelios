@@ -61,6 +61,7 @@ type EmbeddedPostgresCtor = new (opts: {
   port: number;
   persistent: boolean;
   initdbFlags?: string[];
+  createPostgresUser?: boolean;
   onLog?: (message: unknown) => void;
   onError?: (message: unknown) => void;
 }) => EmbeddedPostgresInstance;
@@ -362,6 +363,24 @@ export async function startServer(): Promise<StartedServer> {
         }
         port = detectedPort;
         logger.info(`Using embedded PostgreSQL because no DATABASE_URL set (dataDir=${dataDir}, port=${port})`);
+        // Embedded PostgreSQL refuses to run under UID 0. In root environments
+        // (Docker containers, cloud VM root-ssh, some CI) we let the library
+        // create an unprivileged `postgres` system user so start still works.
+        // Users who don't want their host modified can explicitly opt out via
+        // FIDELIOS_EMBEDDED_POSTGRES_CREATE_USER=false.
+        const runningAsRoot = typeof process.getuid === "function" && process.getuid() === 0;
+        const createUserEnv = process.env.FIDELIOS_EMBEDDED_POSTGRES_CREATE_USER?.toLowerCase().trim();
+        const createPostgresUser =
+          createUserEnv === "true" || createUserEnv === "1" || createUserEnv === "yes"
+            ? true
+            : createUserEnv === "false" || createUserEnv === "0" || createUserEnv === "no"
+              ? false
+              : runningAsRoot;
+        if (runningAsRoot && createPostgresUser) {
+          logger.info(
+            "Running as root — enabling embedded-postgres createPostgresUser=true so initdb/postgres run under an unprivileged account.",
+          );
+        }
         embeddedPostgres = new EmbeddedPostgres({
           databaseDir: dataDir,
           user: "fidelios",
@@ -369,6 +388,7 @@ export async function startServer(): Promise<StartedServer> {
           port,
           persistent: true,
           initdbFlags: ["--encoding=UTF8", "--locale=C", "--lc-messages=C"],
+          createPostgresUser,
           onLog: appendEmbeddedPostgresLog,
           onError: appendEmbeddedPostgresLog,
         });
