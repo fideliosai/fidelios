@@ -14,10 +14,18 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="FideliOS">
+  <link rel="canonical" href="https://fidelios.nl/">
   <meta property="og:title" content="FideliOS — Run a company without hiring one">
   <meta property="og:description" content="Your always-on AI team. Plans, writes, ships, and reports — while you sleep. Manage everything from Telegram.">
   <meta property="og:type" content="website">
-  <meta property="og:image" content="/web-app-manifest-512x512.png">
+  <meta property="og:url" content="https://fidelios.nl/">
+  <meta property="og:image" content="https://fidelios.nl/web-app-manifest-512x512.png">
+  <meta property="og:image:width" content="512">
+  <meta property="og:image:height" content="512">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="FideliOS — Run a company without hiring one">
+  <meta name="twitter:description" content="Your always-on AI team. Plans, writes, ships, and reports — while you sleep. Manage everything from Telegram.">
+  <meta name="twitter:image" content="https://fidelios.nl/web-app-manifest-512x512.png">
   <script>
     // Theme boot — before Tailwind to avoid FOUC. Defaults to light.
     (function() {
@@ -118,6 +126,22 @@
       border-color: rgba(129,140,248,0.35);
     }
   </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "FideliOS",
+    "url": "https://fidelios.nl/",
+    "description": "FideliOS is your always-on AI team. It plans, writes, ships, and reports — while you sleep. You manage everything from Telegram, no Terminal needed after setup.",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "macOS, Linux, Windows",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
 </head>
 <body class="font-sans text-slate-700 dark:text-slate-200 antialiased overflow-x-hidden">
 
@@ -577,16 +601,6 @@
             </summary>
             <div class="px-5 pb-5 pt-1 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
               Three layers of guardrails: (1) <strong>approval gates</strong> — hiring new agents, publishing content, or spending over a threshold always ping you for a 👍 first; (2) <strong>budget caps</strong> — every agent has a hard spending limit per day/month; (3) <strong>full audit log</strong> — every action is recorded, so you can see exactly what happened and undo it.
-            </div>
-          </details>
-
-          <details class="group bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-xl shadow-sm overflow-hidden">
-            <summary class="flex items-center gap-3 px-5 py-4 cursor-pointer select-none hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
-              <svg class="chevron w-4 h-4 text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-              <span class="font-medium text-slate-800 dark:text-slate-200">How much does it cost?</span>
-            </summary>
-            <div class="px-5 pb-5 pt-1 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-              FideliOS itself is free and open source — no subscription, no "pro tier". You pay the AI provider you choose (Anthropic, OpenAI, Google) for their API usage. Typical side-project: <strong>$5–20 per month</strong>. A one-person content operation runs around $30–60/month. Set a cap so it never surprises you.
             </div>
           </details>
 
