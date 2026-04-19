@@ -65,17 +65,12 @@
     }
   </script>
   <style>
-    :root {
-      --bg-from: #f8fafc;
-      --bg-mid: #ffffff;
-    }
-    html.dark {
-      --bg-from: #0b0f1a;
-      --bg-mid: #0f1524;
-    }
     body {
-      background: linear-gradient(180deg, var(--bg-from) 0%, var(--bg-mid) 40%, var(--bg-from) 100%);
+      background: radial-gradient(125% 125% at 50% 10%, #ffffff 40%, #ede9fe 100%);
       min-height: 100vh;
+    }
+    html.dark body {
+      background: radial-gradient(125% 125% at 50% 10%, #0b0f1a 40%, rgba(124, 58, 237, 0.18) 100%);
     }
     .card-hover { transition: box-shadow 0.25s ease, transform 0.25s ease; }
     .card-hover:hover {
@@ -276,7 +271,7 @@
     </section>
 
     <!-- ─── PROBLEM STRIP ────────────────────────────────────────────────── -->
-    <section class="px-5 sm:px-8 py-14 border-t border-slate-200/70 dark:border-slate-800/70">
+    <section class="px-5 sm:px-8 py-14">
       <div class="max-w-4xl mx-auto">
         <h2 class="text-center text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white mb-10">
           You have more ideas than hours.
@@ -302,7 +297,7 @@
     </section>
 
     <!-- ─── HOW IT WORKS ─────────────────────────────────────────────────── -->
-    <section class="px-5 sm:px-8 py-16 border-t border-slate-200/70 dark:border-slate-800/70">
+    <section class="px-5 sm:px-8 py-16">
       <div class="max-w-4xl mx-auto">
         <h2 class="text-center text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white mb-3">
           Three steps. That's all.
@@ -331,7 +326,7 @@
     </section>
 
     <!-- ─── AUDIENCE CARDS ───────────────────────────────────────────────── -->
-    <section class="px-5 sm:px-8 py-16 border-t border-slate-200/70 dark:border-slate-800/70">
+    <section class="px-5 sm:px-8 py-16">
       <div class="max-w-5xl mx-auto">
         <h2 class="text-center text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white mb-3">
           What will you automate?
@@ -397,7 +392,7 @@
     </section>
 
     <!-- ─── WHY FIDELIOS — 3 verified differentiators ─────────────────────── -->
-    <section class="px-5 sm:px-8 py-16 border-t border-slate-200/70 dark:border-slate-800/70">
+    <section class="px-5 sm:px-8 py-16">
       <div class="max-w-5xl mx-auto">
         <h2 class="text-center text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white mb-3">
           What's different here.
@@ -426,7 +421,7 @@
     </section>
 
     <!-- ─── INSTALL ──────────────────────────────────────────────────────── -->
-    <section id="install" class="px-5 sm:px-8 py-16 border-t border-slate-200/70 dark:border-slate-800/70">
+    <section id="install" class="px-5 sm:px-8 py-16">
       <div class="max-w-4xl mx-auto">
         <div class="bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-violet-500/10 rounded-2xl p-6 sm:p-10 shadow-sm dark:shadow-[0_0_60px_rgba(124,58,237,0.06)]">
         <div class="mb-2 text-center">
@@ -596,7 +591,7 @@
     </section>
 
     <!-- ─── FAQ ──────────────────────────────────────────────────────────── -->
-    <section class="px-5 sm:px-8 py-16 border-t border-slate-200/70 dark:border-slate-800/70">
+    <section class="px-5 sm:px-8 py-16">
       <div class="max-w-3xl mx-auto">
         <h2 class="text-center text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white mb-10">
           Frequently asked questions
@@ -720,7 +715,7 @@
     </section>
 
     <!-- ─── FINAL CTA ────────────────────────────────────────────────────── -->
-    <section class="px-5 sm:px-8 py-20 border-t border-slate-200/70 dark:border-slate-800/70">
+    <section class="px-5 sm:px-8 py-20">
       <div class="max-w-2xl mx-auto text-center">
         <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white mb-4">
           Your first AI employee is two minutes away.
