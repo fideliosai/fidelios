@@ -125,6 +125,33 @@
       background: linear-gradient(135deg, rgba(99,102,241,0.15), rgba(79,70,229,0.08));
       border-color: rgba(129,140,248,0.35);
     }
+    /* Dark-mode FAQ accordion */
+    html.dark .faq-item {
+      background: transparent;
+      border-color: rgba(30,41,59,0.7);
+    }
+    html.dark .faq-item[open] {
+      background: #131c2e;
+      border-left: 3px solid #7c3aed;
+      border-radius: 0 0.75rem 0.75rem 0;
+      border-top-color: rgba(30,41,59,0.5);
+      border-right-color: rgba(30,41,59,0.5);
+      border-bottom-color: rgba(30,41,59,0.5);
+    }
+    html.dark .faq-item summary:hover {
+      background: rgba(13,21,37,0.5);
+    }
+    html.dark .faq-item[open] > summary {
+      border-bottom: 1px solid rgba(30,41,59,0.4);
+    }
+    html.dark .faq-item strong,
+    html.dark .faq-item b {
+      color: #f1f5f9;
+    }
+    html.dark .faq-item .faq-body {
+      padding-top: 14px;
+      padding-bottom: 22px;
+    }
   </style>
   <script type="application/ld+json">
   {
@@ -572,86 +599,86 @@
     <section class="px-5 sm:px-8 py-16 border-t border-slate-200/70 dark:border-slate-800/70">
       <div class="max-w-3xl mx-auto">
         <h2 class="text-center text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white mb-10">
-          Common questions
+          Frequently asked questions
         </h2>
         <div class="space-y-3">
 
-          <details class="group bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-xl shadow-sm overflow-hidden">
+          <details class="faq-item group bg-white dark:bg-transparent border border-slate-200 dark:border-slate-800/70 rounded-xl">
             <summary class="flex items-center gap-3 px-5 py-4 cursor-pointer select-none hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
               <svg class="chevron w-4 h-4 text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
               <span class="font-medium text-slate-800 dark:text-slate-200">Do I need coding skills?</span>
             </summary>
-            <div class="px-5 pb-5 pt-1 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+            <div class="faq-body px-5 pb-6 pt-3 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
               No. If you can open Terminal (Cmd+Space, type "Terminal") and paste one line, you can install FideliOS. From then on everything happens in a web dashboard or Telegram. <a href="https://docs.fidelios.nl/start/first-time-mac" class="text-brand-600 dark:text-brand-400 hover:underline">First time on a Mac? →</a>
             </div>
           </details>
 
-          <details class="group bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-xl shadow-sm overflow-hidden">
+          <details class="faq-item group bg-white dark:bg-transparent border border-slate-200 dark:border-slate-800/70 rounded-xl">
             <summary class="flex items-center gap-3 px-5 py-4 cursor-pointer select-none hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
               <svg class="chevron w-4 h-4 text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
               <span class="font-medium text-slate-800 dark:text-slate-200">How much does it cost?</span>
             </summary>
-            <div class="px-5 pb-5 pt-1 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+            <div class="faq-body px-5 pb-6 pt-3 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
               FideliOS itself is free and open source — no subscription, no "pro tier". You pay the AI provider you choose (Anthropic, OpenAI, Google) for their API usage. Typical side-project: <strong>$5–20 per month</strong>. A one-person content operation runs around $30–60/month. Set a cap so it never surprises you.
             </div>
           </details>
 
-          <details class="group bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-xl shadow-sm overflow-hidden">
+          <details class="faq-item group bg-white dark:bg-transparent border border-slate-200 dark:border-slate-800/70 rounded-xl">
             <summary class="flex items-center gap-3 px-5 py-4 cursor-pointer select-none hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
               <svg class="chevron w-4 h-4 text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
               <span class="font-medium text-slate-800 dark:text-slate-200">Will my data be safe?</span>
             </summary>
-            <div class="px-5 pb-5 pt-1 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+            <div class="faq-body px-5 pb-6 pt-3 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
               Yes. FideliOS runs entirely on your own computer (or your own cloud VM if you prefer). There's no FideliOS cloud, no data upload, no telemetry. Your agents talk to Claude / OpenAI / etc. directly via your keys — we never see the content. <a href="https://docs.fidelios.nl/deploy/secrets" class="text-brand-600 dark:text-brand-400 hover:underline">Privacy details →</a>
             </div>
           </details>
 
-          <details class="group bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-xl shadow-sm overflow-hidden">
+          <details class="faq-item group bg-white dark:bg-transparent border border-slate-200 dark:border-slate-800/70 rounded-xl">
             <summary class="flex items-center gap-3 px-5 py-4 cursor-pointer select-none hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
               <svg class="chevron w-4 h-4 text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
               <span class="font-medium text-slate-800 dark:text-slate-200">What if an agent makes a bad decision?</span>
             </summary>
-            <div class="px-5 pb-5 pt-1 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-              Three layers of guardrails: (1) <strong>approval gates</strong> — hiring new agents, publishing content, or spending over a threshold always ping you for a 👍 first; (2) <strong>budget caps</strong> — every agent has a hard spending limit per day/month; (3) <strong>full audit log</strong> — every action is recorded, so you can see exactly what happened and undo it.
+            <div class="faq-body px-5 pb-6 pt-3 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+              Three layers of guardrails: (1) <strong>approval gates</strong> — hiring new agents, publishing content, or spending over a threshold always ping you for approval first; (2) <strong>budget caps</strong> — every agent has a hard spending limit per day/month; (3) <strong>full audit log</strong> — every action is recorded, so you can see exactly what happened and undo it.
             </div>
           </details>
 
-          <details class="group bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-xl shadow-sm overflow-hidden">
+          <details class="faq-item group bg-white dark:bg-transparent border border-slate-200 dark:border-slate-800/70 rounded-xl">
             <summary class="flex items-center gap-3 px-5 py-4 cursor-pointer select-none hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
               <svg class="chevron w-4 h-4 text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
               <span class="font-medium text-slate-800 dark:text-slate-200">Can I really run this from my phone?</span>
             </summary>
-            <div class="px-5 pb-5 pt-1 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+            <div class="faq-body px-5 pb-6 pt-3 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
               Yes. Two ways: (1) <strong>Telegram bot</strong> — your agents message you updates, you reply in chat to approve or adjust priorities; (2) <strong>mobile web dashboard</strong> — same UI as on your laptop, optimised for touch, works in any phone browser.
             </div>
           </details>
 
-          <details class="group bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-xl shadow-sm overflow-hidden">
+          <details class="faq-item group bg-white dark:bg-transparent border border-slate-200 dark:border-slate-800/70 rounded-xl">
             <summary class="flex items-center gap-3 px-5 py-4 cursor-pointer select-none hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
               <svg class="chevron w-4 h-4 text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
               <span class="font-medium text-slate-800 dark:text-slate-200">Can I cancel anytime?</span>
             </summary>
-            <div class="px-5 pb-5 pt-1 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+            <div class="faq-body px-5 pb-6 pt-3 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
               There's nothing to cancel — FideliOS is open source and runs on your machine. To uninstall: <code class="text-xs bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded">fidelios uninstall</code>. Your data stays in <code class="text-xs bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded">~/.fidelios/</code> until you delete that too.
             </div>
           </details>
 
-          <details class="group bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-xl shadow-sm overflow-hidden">
+          <details class="faq-item group bg-white dark:bg-transparent border border-slate-200 dark:border-slate-800/70 rounded-xl">
             <summary class="flex items-center gap-3 px-5 py-4 cursor-pointer select-none hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
               <svg class="chevron w-4 h-4 text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
               <span class="font-medium text-slate-800 dark:text-slate-200">What happens when I close Terminal?</span>
             </summary>
-            <div class="px-5 pb-5 pt-1 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+            <div class="faq-body px-5 pb-6 pt-3 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
               The installer asks: <em>"Keep FideliOS running automatically, even after you close Terminal or restart?"</em> Pick <strong>Yes</strong> — it sets up a background service so your AI team keeps working 24/7. If you said No, you can change your mind later: <a href="https://docs.fidelios.nl/start/keep-running" class="text-brand-600 dark:text-brand-400 hover:underline">Keep FideliOS running →</a>
             </div>
           </details>
 
-          <details class="group bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-xl shadow-sm overflow-hidden">
+          <details class="faq-item group bg-white dark:bg-transparent border border-slate-200 dark:border-slate-800/70 rounded-xl">
             <summary class="flex items-center gap-3 px-5 py-4 cursor-pointer select-none hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
               <svg class="chevron w-4 h-4 text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
               <span class="font-medium text-slate-800 dark:text-slate-200">Why not just use Anthropic's Claude Managed Agents?</span>
             </summary>
-            <div class="px-5 pb-5 pt-1 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+            <div class="faq-body px-5 pb-6 pt-3 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
               Anthropic's new <a href="https://claude.com/blog/claude-managed-agents" class="text-brand-600 dark:text-brand-400 hover:underline">Managed Agents</a> run single agents on Anthropic's infrastructure — you pay $0.08/session-hour on top of token costs, and your prompts + tool results go through their sandbox. Great for a solo developer building one agent at a time.
               <br><br>
               FideliOS is the <strong>company-shape</strong> of the same idea: 5-50 agents in an org chart, with budgets, approval gates, Telegram remote control, peak-hour throttling — all running on <strong>your</strong> Mac / VM. Session hours are free (it's your electricity). Data never leaves your machine. Mix-and-match Claude, OpenAI, Gemini, and local models in the same company.
@@ -660,24 +687,24 @@
             </div>
           </details>
 
-          <details class="group bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-xl shadow-sm overflow-hidden">
+          <details class="faq-item group bg-white dark:bg-transparent border border-slate-200 dark:border-slate-800/70 rounded-xl">
             <summary class="flex items-center gap-3 px-5 py-4 cursor-pointer select-none hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
               <svg class="chevron w-4 h-4 text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
               <span class="font-medium text-slate-800 dark:text-slate-200">Will this work on my older Intel Mac?</span>
             </summary>
-            <div class="px-5 pb-5 pt-1 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+            <div class="faq-body px-5 pb-6 pt-3 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
               Yes. FideliOS supports both <strong>Apple Silicon</strong> (M1 / M2 / M3 / M4, any variant) and <strong>Intel</strong> (x86_64, 2020 and earlier) Macs first-class. The installer auto-detects your CPU and installs Homebrew at the right prefix (<code class="text-xs bg-slate-100 dark:bg-slate-800 px-1 rounded">/opt/homebrew</code> on Apple Silicon, <code class="text-xs bg-slate-100 dark:bg-slate-800 px-1 rounded">/usr/local</code> on Intel). The embedded PostgreSQL used by FideliOS ships native binaries for both architectures — no Rosetta required.
               <br><br>
               Minimum macOS version: 12 (Monterey). See <a href="https://docs.fidelios.nl/start/install/mac" class="text-brand-600 dark:text-brand-400 hover:underline">the Mac install guide</a> for details.
             </div>
           </details>
 
-          <details class="group bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-xl shadow-sm overflow-hidden">
+          <details class="faq-item group bg-white dark:bg-transparent border border-slate-200 dark:border-slate-800/70 rounded-xl">
             <summary class="flex items-center gap-3 px-5 py-4 cursor-pointer select-none hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
               <svg class="chevron w-4 h-4 text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
               <span class="font-medium text-slate-800 dark:text-slate-200">Can I use Opus 4.7's advisor tool / task budgets / fast mode?</span>
             </summary>
-            <div class="px-5 pb-5 pt-1 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+            <div class="faq-body px-5 pb-6 pt-3 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
               Yes. Every <a href="https://docs.fidelios.nl/adapters/claude-local" class="text-brand-600 dark:text-brand-400 hover:underline">Claude agent</a> in FideliOS exposes these Anthropic beta features as plain config fields:
               <ul class="mt-2 ml-4 list-disc space-y-1">
                 <li><strong>effort</strong>: <code class="text-xs bg-slate-100 dark:bg-slate-800 px-1 rounded">low / medium / high / max</code> — trade speed for quality per-agent</li>
