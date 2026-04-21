@@ -30,6 +30,25 @@ Write-Host "  |    FideliOS Windows Installer       |" -ForegroundColor Cyan
 Write-Host "  +-------------------------------------+" -ForegroundColor Cyan
 Write-Host ""
 
+# ── Execution policy ─────────────────────────────────────────────────────────
+# npm.ps1 (and nvm.ps1) are .ps1 files on disk — they are blocked when the
+# current-user execution policy is "Restricted" (the Windows default). The
+# script itself runs fine because it is piped into iex (never written to disk),
+# but any .ps1 wrappers that npm/nvm drop into PATH will fail without this.
+# Scope CurrentUser avoids requiring admin rights; RemoteSigned allows
+# locally-created scripts and signed scripts downloaded from the internet.
+try {
+    $currentPolicy = Get-ExecutionPolicy -Scope CurrentUser
+    if ($currentPolicy -eq "Restricted" -or $currentPolicy -eq "Undefined") {
+        Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
+        Write-Success "Execution policy set to RemoteSigned (CurrentUser)"
+    }
+} catch {
+    Write-Warn "Could not set execution policy: $_"
+    Write-Warn "If npm install fails, run this first:"
+    Write-Warn "  Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Force"
+}
+
 # ── Step 1: Check / install Node.js ───────────────────────────────────────────
 Write-Header "Checking Node.js..."
 $nodeCmd = Get-Command node -ErrorAction SilentlyContinue
