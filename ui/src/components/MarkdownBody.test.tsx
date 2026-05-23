@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
 import { buildAgentMentionHref, buildProjectMentionHref } from "@fideliosai/shared";
 import { ThemeProvider } from "../context/ThemeContext";
-import { MarkdownBody, decodeWhitespaceEntities } from "./MarkdownBody";
+import { MarkdownBody, decodeEscapedLineBreaks, decodeWhitespaceEntities } from "./MarkdownBody";
 
 describe("MarkdownBody", () => {
   it("renders markdown images without a resolver", () => {
@@ -58,6 +58,20 @@ describe("MarkdownBody", () => {
     });
   });
 
+  describe("FID-58: decodes escaped line breaks at render", () => {
+    it("renders Codex-authored literal `\\n` sequences as real markdown line breaks", () => {
+      const html = renderToStaticMarkup(
+        <ThemeProvider>
+          <MarkdownBody>{"Done\\n\\n- first\\n- second"}</MarkdownBody>
+        </ThemeProvider>,
+      );
+      expect(html).not.toContain("\\n");
+      expect(html).toContain("<p>Done</p>");
+      expect(html).toContain("<li>first</li>");
+      expect(html).toContain("<li>second</li>");
+    });
+  });
+
   it("renders agent and project mentions as chips", () => {
     const html = renderToStaticMarkup(
       <ThemeProvider>
@@ -73,6 +87,21 @@ describe("MarkdownBody", () => {
     expect(html).toContain('href="/projects/project-456"');
     expect(html).toContain('data-mention-kind="project"');
     expect(html).toContain("--fidelios-mention-project-color:#336699");
+  });
+});
+
+describe("decodeEscapedLineBreaks (FID-58)", () => {
+  it("decodes literal escaped newlines in prose", () => {
+    expect(decodeEscapedLineBreaks("a\\n\\nb")).toBe("a\n\nb");
+  });
+
+  it("preserves escaped newlines inside inline code", () => {
+    expect(decodeEscapedLineBreaks("Use `a\\nb` here\\nnext")).toBe("Use `a\\nb` here\nnext");
+  });
+
+  it("preserves escaped newlines inside fenced code blocks", () => {
+    const input = "```txt\nconst value = \"a\\nb\";\n```\\nAfter";
+    expect(decodeEscapedLineBreaks(input)).toBe("```txt\nconst value = \"a\\nb\";\n```\nAfter");
   });
 });
 

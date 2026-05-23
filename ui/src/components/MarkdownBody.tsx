@@ -58,6 +58,57 @@ export function decodeWhitespaceEntities(input: string): string {
   });
 }
 
+export function decodeEscapedLineBreaks(input: string): string {
+  if (!input.includes("\\n")) return input;
+
+  let output = "";
+  let inlineTicks = 0;
+  let fencedTicks = 0;
+  let atLineStart = true;
+
+  for (let i = 0; i < input.length; i += 1) {
+    const char = input[i]!;
+    const next = input[i + 1];
+
+    if (atLineStart && inlineTicks === 0 && char === "`") {
+      const fence = input.slice(i).match(/^`{3,}/)?.[0];
+      if (fence) {
+        fencedTicks = fencedTicks === fence.length ? 0 : fence.length;
+        output += fence;
+        i += fence.length - 1;
+        atLineStart = false;
+        continue;
+      }
+    }
+
+    if (fencedTicks === 0 && char === "`") {
+      const ticks = input.slice(i).match(/^`+/)?.[0] ?? "`";
+      if (inlineTicks === 0) inlineTicks = ticks.length;
+      else if (inlineTicks === ticks.length) inlineTicks = 0;
+      output += ticks;
+      i += ticks.length - 1;
+      atLineStart = false;
+      continue;
+    }
+
+    if (fencedTicks === 0 && inlineTicks === 0 && char === "\\" && next === "n") {
+      output += "\n";
+      i += 1;
+      atLineStart = true;
+      continue;
+    }
+
+    output += char;
+    atLineStart = char === "\n" || char === "\r";
+  }
+
+  return output;
+}
+
+function normalizeMarkdownSource(input: string): string {
+  return decodeEscapedLineBreaks(decodeWhitespaceEntities(input));
+}
+
 function extractMermaidSource(children: ReactNode): string | null {
   if (!isValidElement(children)) return null;
   const childProps = children.props as { className?: unknown; children?: ReactNode };
@@ -213,7 +264,7 @@ export function MarkdownBody({
         )}
       >
         <Markdown remarkPlugins={[remarkGfm]} components={components} urlTransform={(url) => url}>
-          {decodeWhitespaceEntities(children)}
+          {normalizeMarkdownSource(children)}
         </Markdown>
       </div>
       {fileViewerEnabled && viewingPath ? (
@@ -230,4 +281,3 @@ export function MarkdownBody({
     </>
   );
 }
-
