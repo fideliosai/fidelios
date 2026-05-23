@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { cn } from "../lib/utils";
+import { MarkdownBody } from "./MarkdownBody";
 import { MarkdownEditor, type MarkdownEditorRef, type MentionOption } from "./MarkdownEditor";
 import { useAutosaveIndicator } from "../hooks/useAutosaveIndicator";
 
@@ -104,6 +105,7 @@ export function InlineEditor({
       setDraft(value);
       if (multiline) {
         setMultilineFocused(false);
+        setEditing(false);
         if (document.activeElement instanceof HTMLElement) {
           document.activeElement.blur();
         }
@@ -138,7 +140,7 @@ export function InlineEditor({
     };
   }, [autosaveState, commit, draft, markDirty, multiline, multilineFocused, reset, runSave, value]);
 
-  if (multiline) {
+  if (multiline && editing) {
     return (
       <div
         className={cn(
@@ -157,9 +159,11 @@ export function InlineEditor({
           if (!trimmed || trimmed === value) {
             reset();
             void commit();
+            setEditing(false);
             return;
           }
           void runSave(() => commit());
+          setEditing(false);
         }}
         onKeyDown={handleKeyDown}
       >
@@ -232,6 +236,20 @@ export function InlineEditor({
   // (e.g. <p> cannot contain the <div>/<p> elements that markdown produces)
   const DisplayTag = value && multiline ? "div" : Tag;
 
+  if (value && multiline) {
+    return (
+      <div
+        className={cn(
+          "cursor-pointer rounded hover:bg-accent/50 transition-colors overflow-hidden",
+          pad,
+        )}
+        onClick={() => setEditing(true)}
+      >
+        <MarkdownBody className={className}>{value}</MarkdownBody>
+      </div>
+    );
+  }
+
   return (
     <DisplayTag
       className={cn(
@@ -246,4 +264,3 @@ export function InlineEditor({
     </DisplayTag>
   );
 }
-
