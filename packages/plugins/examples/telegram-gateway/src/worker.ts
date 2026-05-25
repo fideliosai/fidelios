@@ -13,6 +13,7 @@ interface TelegramConfig {
   defaultTopicId: number;
   topicRouting?: string;
   ceoTopicId?: number;
+  boardTelegramUserId?: string;
 }
 
 interface TopicRouting {
@@ -184,6 +185,46 @@ async function lookupMessage(
 }
 
 // ---------------------------------------------------------------------------
+// FID-62: Board user — ping the human on action-required events
+// ---------------------------------------------------------------------------
+
+const BOARD_USER_STATE_KEY = "tg-board-user";
+
+interface BoardUserInfo {
+  id: string;
+  username?: string;
+  firstName?: string;
+}
+
+/**
+ * Produce an HTML inline mention that pings a specific Telegram user by numeric
+ * ID. Telegram delivers a notification for inline mentions even when the user
+ * has muted the chat/topic (as long as they are a chat member), which is the
+ * whole point — surfacing decisions the Board would otherwise miss in the feed.
+ *
+ * Using the numeric ID (rather than @username) works for users without a public
+ * username and is stable across username changes. Returns "" when no valid
+ * numeric ID is configured, so callers can safely prepend the result.
+ */
+export function boardMention(boardTelegramUserId: string | undefined): string {
+  if (!boardTelegramUserId) return "";
+  const id = boardTelegramUserId.trim();
+  if (!/^\d{1,20}$/.test(id)) return "";
+  return `<a href="tg://user?id=${id}">📍 Board</a> `;
+}
+
+async function saveDetectedBoardUser(
+  ctx: PluginContext,
+  companyId: string,
+  info: BoardUserInfo,
+): Promise<void> {
+  await ctx.state.set(
+    { scopeKind: "company", scopeId: companyId, stateKey: BOARD_USER_STATE_KEY },
+    info,
+  );
+}
+
+// ---------------------------------------------------------------------------
 // CEO topic helpers
 // ---------------------------------------------------------------------------
 
@@ -235,7 +276,9 @@ function escapeHtml(s: string): string {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
-function formatEvent(event: PluginEvent): { text: string; topicKey: string } | null {
+// `mention: true` marks an event that needs a human decision — the event
+// handler prepends a Board @-mention (FID-62) so it pings even in a muted topic.
+function formatEvent(event: PluginEvent): { text: string; topicKey: string; mention?: boolean } | null {
   const p = event.payload as Record<string, unknown>;
 
   switch (event.eventType) {
@@ -252,9 +295,11 @@ function formatEvent(event: PluginEvent): { text: string; topicKey: string } | n
     }
     case "issue.updated": {
       const title = escapeHtml(String(p.title ?? "Task"));
-      const status = p.status ? ` → <b>${escapeHtml(String(p.status))}</b>` : "";
+      const rawStatus = p.status ? String(p.status) : "";
+      const status = rawStatus ? ` → <b>${escapeHtml(rawStatus)}</b>` : "";
       const assignee = p.assigneeAgentName ? ` (${escapeHtml(String(p.assigneeAgentName))})` : "";
-      return { text: `📋 <b>${title}</b>${status}${assignee}`, topicKey: "tasks" };
+      // in_review is the Board's review queue — ping the human so it isn't lost.
+      return { text: `📋 <b>${title}</b>${status}${assignee}`, topicKey: "tasks", mention: rawStatus === "in_review" };
     }
     case "issue.created": {
       const title = escapeHtml(String(p.title ?? "Task"));
@@ -263,7 +308,7 @@ function formatEvent(event: PluginEvent): { text: string; topicKey: string } | n
     case "approval.created": {
       const subject = escapeHtml(String(p.subject ?? "Approval requested"));
       const by = p.requestedByAgentName ? ` by ${escapeHtml(String(p.requestedByAgentName))}` : "";
-      return { text: `🔔 Approval requested${by}: <b>${subject}</b>`, topicKey: "approvals" };
+      return { text: `🔔 Approval requested${by}: <b>${subject}</b>`, topicKey: "approvals", mention: true };
     }
     case "approval.decided": {
       const subject = escapeHtml(String(p.subject ?? "Approval"));
@@ -304,6 +349,9 @@ const plugin = definePlugin({
       const companyId = typeof params.companyId === "string" ? params.companyId : "";
       const cfg = (await ctx.config.get()) as unknown as TelegramConfig | null;
       const savedTopics = companyId ? await getSavedTopics(ctx, companyId) : null;
+      const detectedBoardUser = companyId
+        ? ((await ctx.state.get({ scopeKind: "company", scopeId: companyId, stateKey: BOARD_USER_STATE_KEY })) as BoardUserInfo | null)
+        : null;
       // Never leak the bot token to the UI — return a boolean flag instead so
       // the settings page can still decide whether the plugin is configured.
       return {
@@ -313,9 +361,11 @@ const plugin = definePlugin({
               chatId: cfg.chatId,
               defaultTopicId: cfg.defaultTopicId,
               topicRouting: cfg.topicRouting,
+              boardTelegramUserId: cfg.boardTelegramUserId,
             }
           : {},
         topics: savedTopics,
+        detectedBoardUser,
       };
     });
 
@@ -449,7 +499,8 @@ const plugin = definePlugin({
         if (!formatted) return;
         const savedTopics = await getSavedTopics(ctx, event.companyId);
         const topicId = resolveTopicId(routing, event.companyId, formatted.topicKey, cfg.defaultTopicId, savedTopics);
-        const sent = await sendMessage(ctx, cfg, formatted.text, topicId);
+        const prefix = formatted.mention ? boardMention(cfg.boardTelegramUserId) : "";
+        const sent = await sendMessage(ctx, cfg, `${prefix}${formatted.text}`, topicId);
         if (sent?.message_id && event.entityId && event.entityType) {
           await saveMessageMapping(ctx, sent.message_id, event.entityType, event.entityId, event.companyId);
         }
@@ -517,6 +568,17 @@ const plugin = definePlugin({
       const senderName = from
         ? String(from.first_name ?? from.username ?? "Board")
         : "Board";
+
+      // FID-62: capture the sender's Telegram user ID so the settings page can
+      // offer it as a one-click value for the "Board Telegram User ID" config —
+      // no third-party ID-lookup bot required.
+      if (from && typeof from.id === "number" && companyId) {
+        await saveDetectedBoardUser(ctx, companyId, {
+          id: String(from.id),
+          username: typeof from.username === "string" ? from.username : undefined,
+          firstName: typeof from.first_name === "string" ? from.first_name : undefined,
+        });
+      }
 
       const ceoAgent = await findCeoAgent(ctx, companyId);
       if (!ceoAgent) {

@@ -1,7 +1,7 @@
 import type { FideliOSPluginManifestV1 } from "@fideliosai/plugin-sdk";
 
 const PLUGIN_ID = "fidelios.telegram-gateway";
-const PLUGIN_VERSION = "0.2.0";
+const PLUGIN_VERSION = "0.3.0";
 
 const manifest: FideliOSPluginManifestV1 = {
   id: PLUGIN_ID,
@@ -64,6 +64,11 @@ const manifest: FideliOSPluginManifestV1 = {
         title: "Topic Routing (JSON)",
         description: "Optional JSON mapping agent roles and event types to topic thread IDs. See docs for format.",
         default: "{}",
+      },
+      boardTelegramUserId: {
+        type: "string",
+        title: "Board Telegram User ID",
+        description: "Optional. Numeric Telegram user ID of the human who should be @-mentioned (pinged) when agents need a decision — approvals and tasks moved to review. Message @userinfobot to get your ID, or just write in the Board-CEO topic and copy the auto-detected ID from this page.",
       },
     },
   },

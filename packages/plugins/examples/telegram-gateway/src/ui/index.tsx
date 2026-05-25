@@ -111,11 +111,19 @@ interface TelegramConfig {
   chatId?: string;
   defaultTopicId?: number;
   topicRouting?: string;
+  boardTelegramUserId?: string;
+}
+
+interface BoardUserInfo {
+  id: string;
+  username?: string;
+  firstName?: string;
 }
 
 interface StatusData {
   config: TelegramConfig;
   topics: Record<string, number> | null;
+  detectedBoardUser?: BoardUserInfo | null;
 }
 
 interface CreateTopicsResult {
@@ -225,6 +233,11 @@ export function TelegramGatewaySettingsPage({ context: _context }: PluginSetting
   const topics = data?.topics ?? null;
   const hasConfig = Boolean(config?.hasBotToken && config?.chatId);
 
+  const boardUserId = config?.boardTelegramUserId?.trim() || null;
+  const detected = data?.detectedBoardUser ?? null;
+  // Offer the auto-detected ID only when it differs from what's already saved.
+  const detectedSuggestion = detected && detected.id !== boardUserId ? detected : null;
+
   return (
     <div style={containerStyle}>
       {/* Connection */}
@@ -263,6 +276,44 @@ export function TelegramGatewaySettingsPage({ context: _context }: PluginSetting
             </div>
           </div>
         )}
+      </div>
+
+      {/* Board Notifications (FID-62) */}
+      <div style={cardStyle}>
+        <div style={headingStyle}>Board Notifications</div>
+        <p style={mutedStyle}>
+          When set, the human Board user is @-mentioned (pinged) on events that need a
+          decision — approvals, and tasks moved to <code>in_review</code>. The ping arrives
+          even if the topic is muted. Set the numeric ID in the <b>Board Telegram User ID</b> field
+          above, then Save.
+        </p>
+        <div style={{ display: "grid", gap: "8px" }}>
+          <div>
+            <div style={labelStyle}>Board Telegram User ID</div>
+            {boardUserId ? (
+              <span style={badge("#22c55e")}>{boardUserId}</span>
+            ) : (
+              <span style={badge("#f97316")}>Not set — pings disabled</span>
+            )}
+          </div>
+          {detectedSuggestion && (
+            <div style={{ fontSize: "12px", lineHeight: 1.5 }}>
+              <span style={{ opacity: 0.6 }}>Auto-detected from the Board-CEO topic: </span>
+              <span style={valueStyle}>{detectedSuggestion.id}</span>
+              {detectedSuggestion.username ? ` (@${detectedSuggestion.username})` : ""}
+              {detectedSuggestion.firstName ? ` — ${detectedSuggestion.firstName}` : ""}
+              <div style={{ opacity: 0.6, marginTop: "4px" }}>
+                Copy this into the <b>Board Telegram User ID</b> field above and Save to enable pings.
+              </div>
+            </div>
+          )}
+          {!detected && (
+            <div style={{ fontSize: "12px", opacity: 0.6, lineHeight: 1.5 }}>
+              Don't know your ID? Message <code>@userinfobot</code> on Telegram, or just write any
+              message in the Board-CEO topic — it will appear here automatically.
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Forum Topics */}

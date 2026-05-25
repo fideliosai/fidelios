@@ -1,6 +1,6 @@
 {
   "name": "@fideliosai/plugin-telegram-gateway",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "FideliOS plugin that routes agent events to a Telegram supergroup and routes bot replies back as issue comments",
   "type": "module",
   "private": true,
