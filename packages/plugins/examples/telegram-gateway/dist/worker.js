@@ -5,6 +5,7 @@ const PLUGIN_ID = "fidelios.telegram-gateway";
 // ---------------------------------------------------------------------------
 let currentContext = null;
 let currentConfig = null;
+let currentCompanyId = null;
 // ---------------------------------------------------------------------------
 // Telegram API helpers
 // ---------------------------------------------------------------------------
@@ -45,19 +46,24 @@ const TOPIC_DEFINITIONS = [
     { key: "approvals", name: "Approvals" },
     { key: "hiring", name: "Hiring" },
     { key: "system", name: "System" },
+    { key: "ceo", name: "Board-CEO" },
 ];
 async function getSavedTopics(ctx, companyId) {
     const raw = await ctx.state.get({ scopeKind: "company", scopeId: companyId, stateKey: TOPICS_STATE_KEY });
     return raw;
 }
-function resolveTopicId(routing, companyId, key, defaultTopicId, savedTopics) {
-    // State-stored topics (created via UI) take precedence over config JSON routing
+// Exported so unit tests can verify routing without spinning up a worker
+// (see ./__tests__/routing.test.ts). Ordering contract:
+//   1. UI-created topics (saved in plugin state) win for the given key
+//   2. Config JSON `topicRouting[companyId][key]` is the fallback
+//   3. `defaultTopicId` is the final fallback
+export function resolveTopicId(routing, companyId, key, defaultTopicId, savedTopics) {
     if (savedTopics && key in savedTopics) {
         return savedTopics[key];
     }
     return routing[companyId]?.[key] ?? defaultTopicId;
 }
-function parseTopicRouting(raw) {
+export function parseTopicRouting(raw) {
     if (!raw)
         return {};
     try {
@@ -66,6 +72,26 @@ function parseTopicRouting(raw) {
     catch {
         return {};
     }
+}
+// ---------------------------------------------------------------------------
+// FID-43: HTML numeric character reference normalization
+//
+// Some Telegram clients (notably iOS) emit trailing whitespace as numeric
+// HTML entities (e.g. `&#x20;`, `&#xA0;`). When markdown is re-pasted, the
+// `&` may be backslash-escaped to `\&#x20;`. Both forms survive react-markdown
+// rendering and surface as literal text in the FideliOS UI.
+//
+// We decode the whitespace numeric references (and consume an optional
+// leading backslash) at ingestion time so downstream renderers see plain
+// whitespace. Scope is intentionally narrow — only whitespace entities — to
+// avoid changing semantics for comments that legitimately mention `&#xNN;`.
+// ---------------------------------------------------------------------------
+const WHITESPACE_ENTITY_RE = /\\?&#(?:x(20|09|0[Aa]|0[Dd]|[Aa]0)|(32|9|10|13|160));/g;
+export function decodeWhitespaceEntities(input) {
+    return input.replace(WHITESPACE_ENTITY_RE, (_match, hex, dec) => {
+        const code = hex !== undefined ? parseInt(hex, 16) : parseInt(dec ?? "0", 10);
+        return Number.isFinite(code) && code > 0 ? String.fromCharCode(code) : "";
+    });
 }
 // ---------------------------------------------------------------------------
 // State helpers — map Telegram message IDs back to FideliOS entities
@@ -96,11 +122,74 @@ async function lookupMessage(ctx, telegramMessageId) {
     return map?.[String(telegramMessageId)] ?? null;
 }
 // ---------------------------------------------------------------------------
+// FID-62: Board user — ping the human on action-required events
+// ---------------------------------------------------------------------------
+const BOARD_USER_STATE_KEY = "tg-board-user";
+/**
+ * Produce an HTML inline mention that pings a specific Telegram user by numeric
+ * ID. Telegram delivers a notification for inline mentions even when the user
+ * has muted the chat/topic (as long as they are a chat member), which is the
+ * whole point — surfacing decisions the Board would otherwise miss in the feed.
+ *
+ * Using the numeric ID (rather than @username) works for users without a public
+ * username and is stable across username changes. Returns "" when no valid
+ * numeric ID is configured, so callers can safely prepend the result.
+ */
+export function boardMention(boardTelegramUserId) {
+    if (!boardTelegramUserId)
+        return "";
+    const id = boardTelegramUserId.trim();
+    if (!/^\d{1,20}$/.test(id))
+        return "";
+    return `<a href="tg://user?id=${id}">📍 Board</a> `;
+}
+async function saveDetectedBoardUser(ctx, companyId, info) {
+    await ctx.state.set({ scopeKind: "company", scopeId: companyId, stateKey: BOARD_USER_STATE_KEY }, info);
+}
+// ---------------------------------------------------------------------------
+// CEO topic helpers
+// ---------------------------------------------------------------------------
+/**
+ * Returns true when an incoming Telegram message belongs to the configured
+ * Board-CEO topic. A topic message always carries `message_thread_id`; the
+ * general chat (no topic) has it absent or equal to 1.
+ */
+export function isCeoTopicMessage(messageThreadId, ceoTopicId) {
+    if (!ceoTopicId || !messageThreadId)
+        return false;
+    return messageThreadId === ceoTopicId;
+}
+/**
+ * Extract displayable text from a Telegram message object.
+ * Prefers `text` (plain messages), falls back to `caption` (media messages).
+ */
+export function extractMessageText(message) {
+    const text = message.text;
+    if (typeof text === "string" && text.trim())
+        return text.trim();
+    const caption = message.caption;
+    if (typeof caption === "string" && caption.trim())
+        return caption.trim();
+    return undefined;
+}
+/** Find the first agent with role "ceo" in the given company. */
+async function findCeoAgent(ctx, companyId) {
+    try {
+        const agents = await ctx.agents.list({ companyId, limit: 50 });
+        return agents.find((a) => a.role === "ceo") ?? null;
+    }
+    catch {
+        return null;
+    }
+}
+// ---------------------------------------------------------------------------
 // Event formatting
 // ---------------------------------------------------------------------------
 function escapeHtml(s) {
     return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
+// `mention: true` marks an event that needs a human decision — the event
+// handler prepends a Board @-mention (FID-62) so it pings even in a muted topic.
 function formatEvent(event) {
     const p = event.payload;
     switch (event.eventType) {
@@ -117,9 +206,11 @@ function formatEvent(event) {
         }
         case "issue.updated": {
             const title = escapeHtml(String(p.title ?? "Task"));
-            const status = p.status ? ` → <b>${escapeHtml(String(p.status))}</b>` : "";
+            const rawStatus = p.status ? String(p.status) : "";
+            const status = rawStatus ? ` → <b>${escapeHtml(rawStatus)}</b>` : "";
             const assignee = p.assigneeAgentName ? ` (${escapeHtml(String(p.assigneeAgentName))})` : "";
-            return { text: `📋 <b>${title}</b>${status}${assignee}`, topicKey: "tasks" };
+            // in_review is the Board's review queue — ping the human so it isn't lost.
+            return { text: `📋 <b>${title}</b>${status}${assignee}`, topicKey: "tasks", mention: rawStatus === "in_review" };
         }
         case "issue.created": {
             const title = escapeHtml(String(p.title ?? "Task"));
@@ -128,7 +219,7 @@ function formatEvent(event) {
         case "approval.created": {
             const subject = escapeHtml(String(p.subject ?? "Approval requested"));
             const by = p.requestedByAgentName ? ` by ${escapeHtml(String(p.requestedByAgentName))}` : "";
-            return { text: `🔔 Approval requested${by}: <b>${subject}</b>`, topicKey: "approvals" };
+            return { text: `🔔 Approval requested${by}: <b>${subject}</b>`, topicKey: "approvals", mention: true };
         }
         case "approval.decided": {
             const subject = escapeHtml(String(p.subject ?? "Approval"));
@@ -152,14 +243,38 @@ const plugin = definePlugin({
     async setup(ctx) {
         currentContext = ctx;
         ctx.logger.info(`${PLUGIN_ID} setup`);
+        // Resolve and cache the company this plugin instance serves. A plugin is
+        // installed per company, so list() returns exactly one entry.
+        try {
+            const companies = await ctx.companies.list({ limit: 1 });
+            if (companies[0])
+                currentCompanyId = companies[0].id;
+        }
+        catch {
+            ctx.logger.warn(`${PLUGIN_ID}: could not resolve companyId during setup`);
+        }
         // ---- Data handlers (UI) — registered unconditionally ----
         ctx.data.register("plugin-status", async (params) => {
             const companyId = typeof params.companyId === "string" ? params.companyId : "";
             const cfg = (await ctx.config.get());
             const savedTopics = companyId ? await getSavedTopics(ctx, companyId) : null;
+            const detectedBoardUser = companyId
+                ? (await ctx.state.get({ scopeKind: "company", scopeId: companyId, stateKey: BOARD_USER_STATE_KEY }))
+                : null;
+            // Never leak the bot token to the UI — return a boolean flag instead so
+            // the settings page can still decide whether the plugin is configured.
             return {
-                config: cfg ? { chatId: cfg.chatId, defaultTopicId: cfg.defaultTopicId, topicRouting: cfg.topicRouting } : {},
+                config: cfg
+                    ? {
+                        hasBotToken: Boolean(cfg.botToken),
+                        chatId: cfg.chatId,
+                        defaultTopicId: cfg.defaultTopicId,
+                        topicRouting: cfg.topicRouting,
+                        boardTelegramUserId: cfg.boardTelegramUserId,
+                    }
+                    : {},
                 topics: savedTopics,
+                detectedBoardUser,
             };
         });
         // ---- Action handlers (UI) ----
@@ -274,7 +389,8 @@ const plugin = definePlugin({
                     return;
                 const savedTopics = await getSavedTopics(ctx, event.companyId);
                 const topicId = resolveTopicId(routing, event.companyId, formatted.topicKey, cfg.defaultTopicId, savedTopics);
-                const sent = await sendMessage(ctx, cfg, formatted.text, topicId);
+                const prefix = formatted.mention ? boardMention(cfg.boardTelegramUserId) : "";
+                const sent = await sendMessage(ctx, cfg, `${prefix}${formatted.text}`, topicId);
                 if (sent?.message_id && event.entityId && event.entityType) {
                     await saveMessageMapping(ctx, sent.message_id, event.entityType, event.entityId, event.companyId);
                 }
@@ -322,10 +438,103 @@ const plugin = definePlugin({
         const message = update.message;
         if (!message)
             return;
-        const text = message.text;
+        const messageThreadId = message.message_thread_id;
+        // -----------------------------------------------------------------------
+        // CEO topic: new messages (not necessarily replies) create tasks assigned
+        // to the CEO agent and immediately invoke a CEO heartbeat.
+        // The "Board-CEO" topic thread ID is read from plugin state (set when the
+        // "Create Topics" action is run) — no manual config required.
+        // Handles both text/caption messages and voice messages (with optional
+        // transcribeAudio + placeholder fallback).
+        // -----------------------------------------------------------------------
+        const companyId = currentCompanyId ?? "";
+        const savedTopics = companyId ? await getSavedTopics(ctx, companyId) : null;
+        const ceoTopicId = savedTopics?.ceo ?? config.ceoTopicId;
+        if (isCeoTopicMessage(messageThreadId, ceoTopicId)) {
+            const body = extractMessageText(message);
+            const voiceObj = message.voice;
+            if (!body && !voiceObj)
+                return; // nothing actionable (e.g. sticker without caption)
+            const from = message.from;
+            const senderName = from
+                ? String(from.first_name ?? from.username ?? "Board")
+                : "Board";
+            // FID-62: capture the sender's Telegram user ID so the settings page can
+            // offer it as a one-click value for the "Board Telegram User ID" config —
+            // no third-party ID-lookup bot required.
+            if (from && typeof from.id === "number" && companyId) {
+                await saveDetectedBoardUser(ctx, companyId, {
+                    id: String(from.id),
+                    username: typeof from.username === "string" ? from.username : undefined,
+                    firstName: typeof from.first_name === "string" ? from.first_name : undefined,
+                });
+            }
+            const ceoAgent = await findCeoAgent(ctx, companyId);
+            if (!ceoAgent) {
+                ctx.logger.warn(`${PLUGIN_ID}: CEO topic message received but no CEO agent found`);
+                return;
+            }
+            let title;
+            let description;
+            if (body) {
+                // Text or captioned media message
+                title = body.length > 120 ? `${body.slice(0, 117)}…` : body;
+                description = `_Sent by ${senderName} via Telegram (Board-CEO topic)._\n\n${body}`;
+            }
+            else {
+                // Voice message — try Telegram transcribeAudio, fall back to placeholder
+                const duration = typeof voiceObj.duration === "number" ? voiceObj.duration : 0;
+                const msgId = message.message_id;
+                let transcription;
+                if (msgId) {
+                    try {
+                        const tr = await telegramRequest(ctx, config.botToken, "transcribeAudio", {
+                            chat_id: config.chatId,
+                            message_id: msgId,
+                        });
+                        if (tr.ok && tr.result?.text?.trim()) {
+                            transcription = tr.result.text.trim();
+                        }
+                    }
+                    catch {
+                        // transcribeAudio unavailable — use placeholder
+                    }
+                }
+                if (transcription) {
+                    title = transcription.length > 120 ? `${transcription.slice(0, 117)}…` : transcription;
+                    description = `_Voice note from ${senderName} via Telegram (Board-CEO topic)._\n\n${transcription}`;
+                }
+                else {
+                    const label = duration ? `${duration}s voice note` : "voice note";
+                    title = `[${label} from ${senderName}]`;
+                    description = `_Voice message from ${senderName} via Telegram (Board-CEO topic). Duration: ${duration}s._\n\nAsk ${senderName} to resend as text if transcription is unavailable.`;
+                }
+            }
+            try {
+                const issue = await ctx.issues.create({
+                    companyId,
+                    title,
+                    description,
+                    assigneeAgentId: ceoAgent.id,
+                });
+                ctx.logger.info(`${PLUGIN_ID}: created CEO task ${issue.id} from Board-CEO topic message`);
+                await ctx.agents.invoke(ceoAgent.id, companyId, {
+                    prompt: `New task from Board via Telegram: ${title}`,
+                    reason: "board-ceo-topic-message",
+                });
+                ctx.logger.info(`${PLUGIN_ID}: invoked CEO agent for task ${issue.id}`);
+            }
+            catch (err) {
+                ctx.logger.error(`${PLUGIN_ID}: failed to create CEO task or invoke CEO`, { err });
+            }
+            return;
+        }
+        // -----------------------------------------------------------------------
+        // Regular flow: reply to a known bot message → post as issue comment
+        // -----------------------------------------------------------------------
+        const text = extractMessageText(message);
         if (!text)
             return;
-        // Only handle replies to our bot messages
         const replyTo = message.reply_to_message;
         if (!replyTo)
             return;
@@ -339,7 +548,11 @@ const plugin = definePlugin({
         // Post the reply back to FideliOS as a comment on the issue
         const from = message.from;
         const senderName = from ? String(from.first_name ?? from.username ?? "Telegram user") : "Telegram user";
-        const commentBody = `**${senderName} via Telegram:** ${text}`;
+        // FID-43: normalize whitespace HTML entities (e.g. `&#x20;`, `\&#x20;`) that
+        // some Telegram clients emit for trailing whitespace, to prevent literal
+        // entity text from leaking into rendered comments.
+        const normalizedText = decodeWhitespaceEntities(text);
+        const commentBody = `**${senderName} via Telegram:** ${normalizedText}`;
         try {
             await ctx.issues.createComment(entry.entityId, commentBody, entry.companyId);
             ctx.logger.info(`${PLUGIN_ID}: posted Telegram reply as comment on issue ${entry.entityId}`);
@@ -351,6 +564,7 @@ const plugin = definePlugin({
     async onShutdown() {
         currentContext = null;
         currentConfig = null;
+        currentCompanyId = null;
     },
 });
 export default plugin;

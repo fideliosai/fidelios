@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { parseTopicRouting, resolveTopicId, isCeoTopicMessage, extractMessageText } from "../worker.js";
+import { parseTopicRouting, resolveTopicId, isCeoTopicMessage, extractMessageText, boardMention } from "../worker.js";
 
 // FID-1: Automated test to verify Telegram plugin routes to correct topic/group
 // for every (companyId, key) combination across the three-source precedence
@@ -110,6 +110,36 @@ describe("extractMessageText", () => {
     expect(extractMessageText({})).toBeUndefined();
     expect(extractMessageText({ text: "  " })).toBeUndefined();
     expect(extractMessageText({ voice: {} })).toBeUndefined();
+  });
+});
+
+// FID-62: Board @-mention — ping the human on action-required events
+describe("boardMention", () => {
+  it("returns an empty string when no ID is configured", () => {
+    expect(boardMention(undefined)).toBe("");
+    expect(boardMention("")).toBe("");
+    expect(boardMention("   ")).toBe("");
+  });
+
+  it("builds a tg://user inline mention for a valid numeric ID", () => {
+    expect(boardMention("123456789")).toBe('<a href="tg://user?id=123456789">📍 Board</a> ');
+  });
+
+  it("trims surrounding whitespace before building the mention", () => {
+    expect(boardMention("  42 ")).toBe('<a href="tg://user?id=42">📍 Board</a> ');
+  });
+
+  it("rejects non-numeric / unsafe values to avoid HTML injection", () => {
+    expect(boardMention("@maxz")).toBe("");
+    expect(boardMention("123abc")).toBe("");
+    expect(boardMention('1"><script>')).toBe("");
+    expect(boardMention("-100123")).toBe("");
+  });
+
+  it("ends with a trailing space so it can be safely prepended to message text", () => {
+    const prefix = boardMention("777");
+    expect(prefix.endsWith("</a> ")).toBe(true);
+    expect(`${prefix}🔔 Approval requested`).toBe('<a href="tg://user?id=777">📍 Board</a> 🔔 Approval requested');
   });
 });
 

@@ -1,5 +1,5 @@
 const PLUGIN_ID = "fidelios.telegram-gateway";
-const PLUGIN_VERSION = "0.1.0";
+const PLUGIN_VERSION = "0.2.0";
 const manifest = {
     id: PLUGIN_ID,
     apiVersion: 1,
@@ -11,8 +11,10 @@ const manifest = {
     capabilities: [
         "companies.read",
         "issues.read",
+        "issues.create",
         "issue.comments.create",
         "agents.read",
+        "agents.invoke",
         "events.subscribe",
         "webhooks.receive",
         "http.outbound",
@@ -59,6 +61,11 @@ const manifest = {
                 title: "Topic Routing (JSON)",
                 description: "Optional JSON mapping agent roles and event types to topic thread IDs. See docs for format.",
                 default: "{}",
+            },
+            boardTelegramUserId: {
+                type: "string",
+                title: "Board Telegram User ID",
+                description: "Optional. Numeric Telegram user ID of the human who should be @-mentioned (pinged) when agents need a decision — approvals and tasks moved to review. Message @userinfobot to get your ID, or just write in the Board-CEO topic and copy the auto-detected ID from this page.",
             },
         },
     },
