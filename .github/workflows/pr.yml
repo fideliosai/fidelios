@@ -157,9 +157,9 @@ jobs:
       - name: Install Playwright browsers
         if: steps.playwright-cache.outputs.cache-hit != 'true'
         run: |
-          for attempt in 1 2 3; do
-            echo "::group::Playwright browser download (attempt $attempt/3)"
-            if timeout 600 npx playwright install chromium; then
+          for attempt in 1 2; do
+            echo "::group::Playwright browser download (attempt $attempt/2)"
+            if timeout 900 npx playwright install chromium; then
               echo "::endgroup::"
               exit 0
             fi
@@ -167,7 +167,7 @@ jobs:
             echo "Playwright download attempt $attempt failed or timed out; retrying in 15s..."
             sleep 15
           done
-          echo "Playwright browser download failed after 3 attempts"
+          echo "Playwright browser download failed after 2 attempts"
           exit 1
 
       - name: Install Playwright system dependencies
