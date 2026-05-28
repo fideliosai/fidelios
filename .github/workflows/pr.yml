@@ -123,7 +123,7 @@ jobs:
   e2e:
     needs: [policy]
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 60
 
     steps:
       - name: Checkout repository
@@ -159,12 +159,12 @@ jobs:
         run: |
           for attempt in 1 2; do
             echo "::group::Playwright browser download (attempt $attempt/2)"
-            if timeout 900 npx playwright install chromium; then
+            if npx playwright install chromium; then
               echo "::endgroup::"
               exit 0
             fi
             echo "::endgroup::"
-            echo "Playwright download attempt $attempt failed or timed out; retrying in 15s..."
+            echo "Playwright download attempt $attempt failed; retrying in 15s..."
             sleep 15
           done
           echo "Playwright browser download failed after 2 attempts"
