@@ -333,6 +333,31 @@ export function normalizeAgentMentionToken(raw: string): string {
 const REGEX_META_RE = /[-/\\^$*+?.()|[\]{}]/g;
 const MARKDOWN_AGENT_LINK_RE = /\[[^\]]*]\(agent:\/\/[^)\s]+\)/gi;
 
+/**
+ * Keyset "comments after a cursor" condition.
+ *
+ * The anchor timestamp is read back via a non-correlated subquery on the
+ * anchor id rather than binding a JS `Date` into the raw `sql` template — the
+ * postgres driver cannot bind a bare `Date` in an untyped parameter slot
+ * (`Buffer.byteLength` throws `Received an instance of Date`, surfacing as a
+ * 500), and a subquery also keeps full microsecond precision so the cursor
+ * stays exclusive of the anchor row itself.
+ */
+function commentCursorCondition(anchorId: string, order: "asc" | "desc") {
+  const anchorCreatedAt = sql`(
+    SELECT ${issueComments.createdAt} FROM ${issueComments} WHERE ${issueComments.id} = ${anchorId}
+  )`;
+  return order === "asc"
+    ? sql<boolean>`(
+        ${issueComments.createdAt} > ${anchorCreatedAt}
+        OR (${issueComments.createdAt} = ${anchorCreatedAt} AND ${issueComments.id} > ${anchorId})
+      )`
+    : sql<boolean>`(
+        ${issueComments.createdAt} < ${anchorCreatedAt}
+        OR (${issueComments.createdAt} = ${anchorCreatedAt} AND ${issueComments.id} < ${anchorId})
+      )`;
+}
+
 /** Build a regex that matches `@<name>` as a standalone mention (case-insensitive). */
 function buildAgentNameMentionRegex(name: string, flags = "i"): RegExp {
   const escaped = name.replace(REGEX_META_RE, "\\$&");
@@ -1568,26 +1593,13 @@ export function issueService(db: Db) {
       const conditions = [eq(issueComments.issueId, issueId)];
       if (afterCommentId) {
         const anchor = await db
-          .select({
-            id: issueComments.id,
-            createdAt: issueComments.createdAt,
-          })
+          .select({ id: issueComments.id })
           .from(issueComments)
           .where(and(eq(issueComments.issueId, issueId), eq(issueComments.id, afterCommentId)))
           .then((rows) => rows[0] ?? null);
 
         if (!anchor) return [];
-        conditions.push(
-          order === "asc"
-            ? sql<boolean>`(
-                ${issueComments.createdAt} > ${anchor.createdAt}
-                OR (${issueComments.createdAt} = ${anchor.createdAt} AND ${issueComments.id} > ${anchor.id})
-              )`
-            : sql<boolean>`(
-                ${issueComments.createdAt} < ${anchor.createdAt}
-                OR (${issueComments.createdAt} = ${anchor.createdAt} AND ${issueComments.id} < ${anchor.id})
-              )`,
-        );
+        conditions.push(commentCursorCondition(anchor.id, order));
       }
 
       const query = db
@@ -2293,7 +2305,7 @@ export function issueService(db: Db) {
         // Delta comments (after lastSeen, or last N if no cursor)
         (async () => {
           if (opts?.lastSeenCommentId) {
-            const anchor = await db.select({ id: issueComments.id, createdAt: issueComments.createdAt })
+            const anchor = await db.select({ id: issueComments.id })
               .from(issueComments)
               .where(and(eq(issueComments.issueId, issueId), eq(issueComments.id, opts.lastSeenCommentId)))
               .then((r) => r[0] ?? null);
@@ -2301,7 +2313,7 @@ export function issueService(db: Db) {
               return db.select().from(issueComments)
                 .where(and(
                   eq(issueComments.issueId, issueId),
-                  sql<boolean>`(${issueComments.createdAt} > ${anchor.createdAt} OR (${issueComments.createdAt} = ${anchor.createdAt} AND ${issueComments.id} > ${anchor.id}))`,
+                  commentCursorCondition(anchor.id, "asc"),
                 ))
                 .orderBy(asc(issueComments.createdAt), asc(issueComments.id))
                 .limit(maxComments);
