@@ -265,6 +265,41 @@ describeEmbeddedPostgres("issueFileService.readWorkspaceFile", () => {
     expect(result.content).toContain("# PR Positioning");
   });
 
+  it("resolves a bare filename from a cleaned-up worktree branch via git-show", async () => {
+    // Regression: the UI emits bare filenames (e.g. `PR_POSITIONING_MAP.md`) without a path
+    // prefix. The git-show fallback must do the same basename search that git ls-files does.
+    const projectCwd = await makeWorkspaceDir();
+    execFileSync("git", ["init", "-q"], { cwd: projectCwd });
+    execFileSync("git", ["config", "user.email", "test@test.com"], { cwd: projectCwd });
+    execFileSync("git", ["config", "user.name", "Test"], { cwd: projectCwd });
+    await fs.writeFile(path.join(projectCwd, "README.md"), "main\n", "utf8");
+    execFileSync("git", ["add", "."], { cwd: projectCwd });
+    execFileSync("git", ["commit", "-m", "initial"], { cwd: projectCwd });
+    execFileSync("git", ["checkout", "-b", "feature/tra-90"], { cwd: projectCwd });
+    await fs.mkdir(path.join(projectCwd, "docs", "marketing"), { recursive: true });
+    await fs.writeFile(
+      path.join(projectCwd, "docs", "marketing", "PR_POSITIONING_MAP.md"),
+      "# PR Positioning\n",
+      "utf8",
+    );
+    execFileSync("git", ["add", "."], { cwd: projectCwd });
+    execFileSync("git", ["commit", "-m", "add PR positioning map"], { cwd: projectCwd });
+    execFileSync("git", ["checkout", "-"], { cwd: projectCwd });
+
+    const removedWorktree = path.join(os.tmpdir(), `fidelios-gone-${randomUUID()}`);
+    const { companyId, issueId } = await seedIssue(projectCwd, {
+      executionWorktreeCwd: removedWorktree,
+      executionBranch: "feature/tra-90",
+    });
+
+    // Request just the bare filename — no path prefix
+    const result = await svc.readWorkspaceFile(companyId, issueId, "PR_POSITIONING_MAP.md");
+
+    expect(result.kind).toBe("text");
+    expect(result.path).toBe("docs/marketing/PR_POSITIONING_MAP.md");
+    expect(result.content).toContain("# PR Positioning");
+  });
+
   it("falls back to the project workspace when the worktree directory is gone", async () => {
     const projectCwd = await makeWorkspaceDir();
     execFileSync("git", ["init", "-q"], { cwd: projectCwd });

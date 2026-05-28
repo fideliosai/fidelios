@@ -117,14 +117,32 @@ async function gitRepoRoot(dir: string): Promise<string | null> {
 }
 
 /**
- * Read a file directly from a git branch/ref without needing a checked-out worktree.
- * Returns the file content as a string, or null when the ref or path doesn't exist.
+ * List all files tracked by a branch/ref (equivalent to `git ls-files` for the working tree).
+ * Returns paths relative to the repo root, or null when the ref doesn't exist.
  */
-async function gitShowFile(root: string, ref: string, normalizedPath: string): Promise<string | null> {
+async function gitListBranchFiles(root: string, ref: string): Promise<string[] | null> {
   try {
     const { stdout } = await execFileAsync(
       "git",
-      ["-C", root, "show", `${ref}:${normalizedPath}`],
+      ["-C", root, "ls-tree", "-r", "--name-only", ref],
+      { maxBuffer: 64 * 1024 * 1024 },
+    );
+    return stdout.split("\n").filter(Boolean);
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Read a file directly from a git branch/ref without needing a checked-out worktree.
+ * `resolvedPath` must be the exact repo-relative path (as returned by `gitListBranchFiles`).
+ * Returns the file content as a string, or null when the path doesn't exist on the ref.
+ */
+async function gitShowFile(root: string, ref: string, resolvedPath: string): Promise<string | null> {
+  try {
+    const { stdout } = await execFileAsync(
+      "git",
+      ["-C", root, "show", `${ref}:${resolvedPath}`],
       { maxBuffer: MAX_FILE_BYTES },
     );
     return stdout;
@@ -374,20 +392,39 @@ export function issueFileService(db: Db) {
     const found = await findFileInWorkspace(ctx.root, normalized);
     if (!found) {
       // The execution worktree may have been cleaned up after the agent finished; the branch still
-      // exists locally. Try `git show <branch>:<path>` before reporting the file as missing.
+      // exists locally. List the branch tree and apply the same basename/suffix matching that the
+      // working-tree search uses, then `git show` the resolved path.
       if (ctx.gitFallbackRef) {
-        const gitContent = await gitShowFile(ctx.root, ctx.gitFallbackRef, normalized);
-        if (gitContent !== null) {
-          const size = Buffer.byteLength(gitContent, "utf8");
-          const truncated = size > MAX_FILE_BYTES;
-          return {
-            path: normalized,
-            kind: "text",
-            content: truncated ? gitContent.slice(0, MAX_FILE_BYTES) : gitContent,
-            size,
-            truncated,
-            multipleMatches: false,
-          };
+        const branchFiles = await gitListBranchFiles(ctx.root, ctx.gitFallbackRef);
+        if (branchFiles) {
+          const matches = matchWorkspacePaths(branchFiles, normalized);
+          if (matches.length > 0) {
+            const resolvedPath = matches[0];
+            const extension = path.extname(resolvedPath).slice(1).toLowerCase();
+            if (BINARY_EXTENSIONS.has(extension)) {
+              return {
+                path: resolvedPath,
+                kind: "binary",
+                content: "",
+                size: 0,
+                truncated: false,
+                multipleMatches: matches.length > 1,
+              };
+            }
+            const gitContent = await gitShowFile(ctx.root, ctx.gitFallbackRef, resolvedPath);
+            if (gitContent !== null) {
+              const size = Buffer.byteLength(gitContent, "utf8");
+              const truncated = size > MAX_FILE_BYTES;
+              return {
+                path: resolvedPath,
+                kind: "text",
+                content: truncated ? gitContent.slice(0, MAX_FILE_BYTES) : gitContent,
+                size,
+                truncated,
+                multipleMatches: matches.length > 1,
+              };
+            }
+          }
         }
       }
       return {
