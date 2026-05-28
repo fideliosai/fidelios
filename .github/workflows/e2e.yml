@@ -29,20 +29,37 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
-      - name: Install Playwright
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-chromium-${{ runner.os }}-${{ hashFiles('**/package.json') }}
+          restore-keys: playwright-chromium-${{ runner.os }}-
+
+      - name: Install Playwright browsers
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        env:
+          # Skip chromium-headless-shell — tests use the full chromium browser; the silent
+          # headless-shell download (~167 MB) was hanging and exhausting the job timeout.
+          PLAYWRIGHT_CHROMIUM_SKIP_HEADLESS_SHELL: "1"
         run: |
-          for attempt in 1 2 3; do
-            echo "::group::Playwright browser install (attempt $attempt/3)"
-            if timeout 300 npx playwright install --with-deps chromium; then
+          for attempt in 1 2; do
+            echo "::group::Playwright browser download (attempt $attempt/2)"
+            if npx playwright install chromium; then
               echo "::endgroup::"
               exit 0
             fi
             echo "::endgroup::"
-            echo "Playwright install attempt $attempt failed or timed out; retrying in 15s..."
+            echo "Playwright download attempt $attempt failed; retrying in 15s..."
             sleep 15
           done
-          echo "Playwright install failed after 3 attempts"
+          echo "Playwright browser download failed after 2 attempts"
           exit 1
+
+      - name: Install Playwright system dependencies
+        run: npx playwright install-deps chromium
 
       - name: Run e2e tests
         run: pnpm run test:e2e
