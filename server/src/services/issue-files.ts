@@ -60,6 +60,12 @@ interface WorkspaceContext {
   /** The workspace's git ref (branch/tag); used to build host-side deep links. */
   repoRef: string | null;
   defaultRef: string | null;
+  /**
+   * When the execution worktree directory has been cleaned up, the branch still exists locally.
+   * Set to the agent's branch name so `readWorkspaceFile` can fall back to `git show <ref>:<path>`
+   * rather than reporting the file as missing.
+   */
+  gitFallbackRef?: string | null;
 }
 
 /** Strip `..`/`.`/leading-`/` segments so a path can never escape the workspace root. */
@@ -105,6 +111,23 @@ async function gitRepoRoot(dir: string): Promise<string | null> {
     const { stdout } = await execFileAsync("git", ["-C", dir, "rev-parse", "--show-toplevel"]);
     const root = stdout.trim();
     return root || null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Read a file directly from a git branch/ref without needing a checked-out worktree.
+ * Returns the file content as a string, or null when the ref or path doesn't exist.
+ */
+async function gitShowFile(root: string, ref: string, normalizedPath: string): Promise<string | null> {
+  try {
+    const { stdout } = await execFileAsync(
+      "git",
+      ["-C", root, "show", `${ref}:${normalizedPath}`],
+      { maxBuffer: MAX_FILE_BYTES },
+    );
+    return stdout;
   } catch {
     return null;
   }
@@ -216,17 +239,23 @@ async function findFileInWorkspace(
 }
 
 export function issueFileService(db: Db) {
+  interface ExecutionWorktreeInfo {
+    /** Resolved git repo root for the live worktree directory, or null when the directory is gone. */
+    root: string | null;
+    repoUrl: string | null;
+    /** The agent's branch (or base ref); retained even when the worktree directory has been removed. */
+    repoRef: string | null;
+  }
+
   /**
-   * Resolve the issue's live execution worktree root, when one exists on disk.
-   * Agents do their work in a per-issue git worktree (`executionWorkspaces.cwd`); files created
-   * there are invisible at the committed project path until merged. Reading from the worktree lets
-   * reviewers inspect uncommitted work before approving the commit/merge. Returns null when the
-   * issue has no execution workspace, or its worktree has already been cleaned up (directory gone),
-   * in which case callers fall back to the committed project workspace.
+   * Resolve the issue's execution workspace metadata. When the worktree directory is still present,
+   * `root` points to the git repo root so callers can search the live working tree. When the
+   * directory has been cleaned up (agent finished), `root` is null but `repoRef` is still returned
+   * so callers can fall back to `git show <repoRef>:<path>` against the project workspace repo.
    */
   async function resolveExecutionWorktreeRoot(
     executionWorkspaceId: string | null,
-  ): Promise<Pick<WorkspaceContext, "root" | "repoUrl" | "repoRef"> | null> {
+  ): Promise<ExecutionWorktreeInfo | null> {
     if (!executionWorkspaceId) return null;
     const workspace = await db
       .select({
@@ -238,18 +267,19 @@ export function issueFileService(db: Db) {
       .from(executionWorkspaces)
       .where(eq(executionWorkspaces.id, executionWorkspaceId))
       .then((rows) => rows[0] ?? null);
-    const cwd = workspace?.cwd?.trim() ?? "";
-    if (!workspace || !cwd) return null;
+    if (!workspace) return null;
+    const repoUrl = workspace.repoUrl ?? null;
+    const repoRef = workspace.branchName ?? workspace.baseRef ?? null;
+    const cwd = workspace.cwd?.trim() ?? "";
+    if (!cwd) return { root: null, repoUrl, repoRef };
     const resolvedCwd = path.resolve(cwd);
-    // The worktree directory is removed on merge/cleanup; absence is the signal to fall back.
     const stat = await fs.stat(resolvedCwd).catch(() => null);
-    if (!stat?.isDirectory()) return null;
+    if (!stat?.isDirectory()) {
+      // Worktree cleaned up; retain branch ref so callers can use git-show fallback.
+      return { root: null, repoUrl, repoRef };
+    }
     const root = (await gitRepoRoot(resolvedCwd)) ?? resolvedCwd;
-    return {
-      root,
-      repoUrl: workspace.repoUrl ?? null,
-      repoRef: workspace.branchName ?? workspace.baseRef ?? null,
-    };
+    return { root, repoUrl, repoRef };
   }
 
   /** Resolve the issue's on-disk workspace; throws 404 when the issue/workspace is missing. */
@@ -281,11 +311,10 @@ export function issueFileService(db: Db) {
       : null;
 
     // Prefer the live execution worktree so reviewers can read files created (but not yet
-    // committed) by the agent. Falls back to the committed project workspace when no worktree
-    // is active. The project workspace still supplies the host repo URL / default ref used to
-    // build deep links for files that are missing locally.
+    // committed) by the agent. When the worktree directory has been cleaned up the branch still
+    // exists locally; store it as `gitFallbackRef` so readWorkspaceFile can use `git show`.
     const worktree = await resolveExecutionWorktreeRoot(issue.executionWorkspaceId);
-    if (worktree) {
+    if (worktree?.root) {
       return {
         root: worktree.root,
         repoUrl: worktree.repoUrl ?? workspace?.repoUrl ?? null,
@@ -307,6 +336,8 @@ export function issueFileService(db: Db) {
       repoUrl: workspace.repoUrl ?? null,
       repoRef: workspace.repoRef ?? null,
       defaultRef: workspace.defaultRef ?? null,
+      // When the worktree dir is gone the branch is still local; try git show before giving up.
+      gitFallbackRef: worktree?.repoRef ?? null,
     };
   }
 
@@ -342,6 +373,23 @@ export function issueFileService(db: Db) {
     const normalized = normalizeRequest(requestedPath);
     const found = await findFileInWorkspace(ctx.root, normalized);
     if (!found) {
+      // The execution worktree may have been cleaned up after the agent finished; the branch still
+      // exists locally. Try `git show <branch>:<path>` before reporting the file as missing.
+      if (ctx.gitFallbackRef) {
+        const gitContent = await gitShowFile(ctx.root, ctx.gitFallbackRef, normalized);
+        if (gitContent !== null) {
+          const size = Buffer.byteLength(gitContent, "utf8");
+          const truncated = size > MAX_FILE_BYTES;
+          return {
+            path: normalized,
+            kind: "text",
+            content: truncated ? gitContent.slice(0, MAX_FILE_BYTES) : gitContent,
+            size,
+            truncated,
+            multipleMatches: false,
+          };
+        }
+      }
       return {
         path: normalized,
         kind: "missing",
