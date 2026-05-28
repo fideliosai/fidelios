@@ -4,9 +4,11 @@ import path from "node:path";
 import { promises as fs } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
+import { eq } from "drizzle-orm";
 import {
   companies,
   createDb,
+  executionWorkspaces,
   issues,
   projectWorkspaces,
   projects,
@@ -41,6 +43,7 @@ describeEmbeddedPostgres("issueFileService.readWorkspaceFile", () => {
 
   afterEach(async () => {
     await db.delete(issues);
+    await db.delete(executionWorkspaces);
     await db.delete(projectWorkspaces);
     await db.delete(projects);
     await db.delete(companies);
@@ -65,7 +68,13 @@ describeEmbeddedPostgres("issueFileService.readWorkspaceFile", () => {
    */
   async function seedIssue(
     workspaceCwd: string | null,
-    opts: { repoUrl?: string; repoRef?: string; defaultRef?: string } = {},
+    opts: {
+      repoUrl?: string;
+      repoRef?: string;
+      defaultRef?: string;
+      executionWorktreeCwd?: string;
+      executionBranch?: string;
+    } = {},
   ) {
     const companyId = randomUUID();
     const projectId = randomUUID();
@@ -108,6 +117,27 @@ describeEmbeddedPostgres("issueFileService.readWorkspaceFile", () => {
       status: "todo",
       priority: "medium",
     });
+
+    if (opts.executionWorktreeCwd !== undefined) {
+      const executionWorkspaceId = randomUUID();
+      await db.insert(executionWorkspaces).values({
+        id: executionWorkspaceId,
+        companyId,
+        projectId,
+        ...(projectWorkspaceId ? { projectWorkspaceId } : {}),
+        sourceIssueId: issueId,
+        mode: "isolated",
+        strategyType: "git_worktree",
+        name: "Issue worktree",
+        status: "active",
+        cwd: opts.executionWorktreeCwd,
+        ...(opts.executionBranch ? { branchName: opts.executionBranch } : {}),
+      });
+      await db
+        .update(issues)
+        .set({ executionWorkspaceId })
+        .where(eq(issues.id, issueId));
+    }
 
     return { companyId, issueId };
   }
@@ -170,6 +200,43 @@ describeEmbeddedPostgres("issueFileService.readWorkspaceFile", () => {
     expect(result.kind).toBe("text");
     expect(result.path).toBe("docs/deep/GIT_NOTE.md");
     expect(result.content).toBe("tracked-ish\n");
+  });
+
+  it("reads an uncommitted file from the live execution worktree", async () => {
+    // The committed project workspace is empty; the agent created the file only in its worktree.
+    const projectCwd = await makeWorkspaceDir();
+    execFileSync("git", ["init", "-q"], { cwd: projectCwd });
+    const worktreeCwd = await makeWorkspaceDir();
+    execFileSync("git", ["init", "-q"], { cwd: worktreeCwd });
+    await fs.writeFile(path.join(worktreeCwd, "DRAFT_BRIEF.md"), "# Draft brief\n", "utf8");
+
+    const { companyId, issueId } = await seedIssue(projectCwd, {
+      executionWorktreeCwd: worktreeCwd,
+      executionBranch: "feature/FID-63",
+    });
+
+    const result = await svc.readWorkspaceFile(companyId, issueId, "DRAFT_BRIEF.md");
+
+    expect(result.kind).toBe("text");
+    expect(result.path).toBe("DRAFT_BRIEF.md");
+    expect(result.content).toBe("# Draft brief\n");
+  });
+
+  it("falls back to the project workspace when the worktree directory is gone", async () => {
+    const projectCwd = await makeWorkspaceDir();
+    execFileSync("git", ["init", "-q"], { cwd: projectCwd });
+    await fs.writeFile(path.join(projectCwd, "MERGED.md"), "# Merged content\n", "utf8");
+
+    // Point the execution workspace at a directory that no longer exists (post-merge cleanup).
+    const removedWorktree = path.join(os.tmpdir(), `fidelios-gone-${randomUUID()}`);
+    const { companyId, issueId } = await seedIssue(projectCwd, {
+      executionWorktreeCwd: removedWorktree,
+    });
+
+    const result = await svc.readWorkspaceFile(companyId, issueId, "MERGED.md");
+
+    expect(result.kind).toBe("text");
+    expect(result.content).toBe("# Merged content\n");
   });
 
   it("resolves a file outside the workspace cwd but inside the same git repo", async () => {

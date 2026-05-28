@@ -4,7 +4,7 @@ import { promisify } from "node:util";
 import path from "node:path";
 import { eq } from "drizzle-orm";
 import type { Db } from "@fideliosai/db";
-import { issues, projectWorkspaces } from "@fideliosai/db";
+import { executionWorkspaces, issues, projectWorkspaces } from "@fideliosai/db";
 import { badRequest, notFound } from "../errors.js";
 
 const execFileAsync = promisify(execFile);
@@ -216,30 +216,84 @@ async function findFileInWorkspace(
 }
 
 export function issueFileService(db: Db) {
+  /**
+   * Resolve the issue's live execution worktree root, when one exists on disk.
+   * Agents do their work in a per-issue git worktree (`executionWorkspaces.cwd`); files created
+   * there are invisible at the committed project path until merged. Reading from the worktree lets
+   * reviewers inspect uncommitted work before approving the commit/merge. Returns null when the
+   * issue has no execution workspace, or its worktree has already been cleaned up (directory gone),
+   * in which case callers fall back to the committed project workspace.
+   */
+  async function resolveExecutionWorktreeRoot(
+    executionWorkspaceId: string | null,
+  ): Promise<Pick<WorkspaceContext, "root" | "repoUrl" | "repoRef"> | null> {
+    if (!executionWorkspaceId) return null;
+    const workspace = await db
+      .select({
+        cwd: executionWorkspaces.cwd,
+        repoUrl: executionWorkspaces.repoUrl,
+        branchName: executionWorkspaces.branchName,
+        baseRef: executionWorkspaces.baseRef,
+      })
+      .from(executionWorkspaces)
+      .where(eq(executionWorkspaces.id, executionWorkspaceId))
+      .then((rows) => rows[0] ?? null);
+    const cwd = workspace?.cwd?.trim() ?? "";
+    if (!workspace || !cwd) return null;
+    const resolvedCwd = path.resolve(cwd);
+    // The worktree directory is removed on merge/cleanup; absence is the signal to fall back.
+    const stat = await fs.stat(resolvedCwd).catch(() => null);
+    if (!stat?.isDirectory()) return null;
+    const root = (await gitRepoRoot(resolvedCwd)) ?? resolvedCwd;
+    return {
+      root,
+      repoUrl: workspace.repoUrl ?? null,
+      repoRef: workspace.branchName ?? workspace.baseRef ?? null,
+    };
+  }
+
   /** Resolve the issue's on-disk workspace; throws 404 when the issue/workspace is missing. */
   async function resolveWorkspaceContext(companyId: string, issueId: string): Promise<WorkspaceContext> {
     const issue = await db
-      .select({ companyId: issues.companyId, projectWorkspaceId: issues.projectWorkspaceId })
+      .select({
+        companyId: issues.companyId,
+        projectWorkspaceId: issues.projectWorkspaceId,
+        executionWorkspaceId: issues.executionWorkspaceId,
+      })
       .from(issues)
       .where(eq(issues.id, issueId))
       .then((rows) => rows[0] ?? null);
     if (!issue || issue.companyId !== companyId) {
       throw notFound("Issue not found");
     }
-    if (!issue.projectWorkspaceId) {
-      throw notFound("No workspace is configured for this issue");
+
+    const workspace = issue.projectWorkspaceId
+      ? await db
+          .select({
+            cwd: projectWorkspaces.cwd,
+            repoUrl: projectWorkspaces.repoUrl,
+            repoRef: projectWorkspaces.repoRef,
+            defaultRef: projectWorkspaces.defaultRef,
+          })
+          .from(projectWorkspaces)
+          .where(eq(projectWorkspaces.id, issue.projectWorkspaceId))
+          .then((rows) => rows[0] ?? null)
+      : null;
+
+    // Prefer the live execution worktree so reviewers can read files created (but not yet
+    // committed) by the agent. Falls back to the committed project workspace when no worktree
+    // is active. The project workspace still supplies the host repo URL / default ref used to
+    // build deep links for files that are missing locally.
+    const worktree = await resolveExecutionWorktreeRoot(issue.executionWorkspaceId);
+    if (worktree) {
+      return {
+        root: worktree.root,
+        repoUrl: worktree.repoUrl ?? workspace?.repoUrl ?? null,
+        repoRef: worktree.repoRef ?? workspace?.repoRef ?? null,
+        defaultRef: workspace?.defaultRef ?? null,
+      };
     }
 
-    const workspace = await db
-      .select({
-        cwd: projectWorkspaces.cwd,
-        repoUrl: projectWorkspaces.repoUrl,
-        repoRef: projectWorkspaces.repoRef,
-        defaultRef: projectWorkspaces.defaultRef,
-      })
-      .from(projectWorkspaces)
-      .where(eq(projectWorkspaces.id, issue.projectWorkspaceId))
-      .then((rows) => rows[0] ?? null);
     const cwd = workspace?.cwd?.trim() ?? "";
     if (!workspace || !cwd) {
       throw notFound("No workspace is configured for this issue");
