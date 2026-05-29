@@ -156,14 +156,12 @@ jobs:
 
       - name: Install Playwright browsers
         if: steps.playwright-cache.outputs.cache-hit != 'true'
-        env:
-          # Skip chromium-headless-shell — tests use the full chromium browser; the silent
-          # headless-shell download (~167 MB) was hanging and exhausting the job timeout.
-          PLAYWRIGHT_CHROMIUM_SKIP_HEADLESS_SHELL: "1"
         run: |
+          # --no-shell skips the chromium-headless-shell artifact; tests use the full chromium
+          # browser, and the silent headless-shell download (~167 MB) was hanging the job.
           for attempt in 1 2; do
             echo "::group::Playwright browser download (attempt $attempt/2)"
-            if npx playwright install chromium; then
+            if npx playwright install --no-shell chromium; then
               echo "::endgroup::"
               exit 0
             fi
