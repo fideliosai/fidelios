@@ -152,15 +152,15 @@ jobs:
         with:
           path: ~/.cache/ms-playwright
           key: playwright-chromium-${{ runner.os }}-${{ hashFiles('**/package.json') }}
-          restore-keys: playwright-chromium-${{ runner.os }}-
 
       - name: Install Playwright browsers
         if: steps.playwright-cache.outputs.cache-hit != 'true'
         timeout-minutes: 20
         run: |
-          # --with-deps installs system libs before playwright verifies the browser binary;
-          # without it the post-download verification hangs on missing shared libraries.
-          # --no-shell skips chromium-headless-shell (not used by tests).
+          # Clear any partial browser dir left by prior cancelled runs (restore-keys
+          # could restore a stale partial dir that causes extraction to hang).
+          rm -rf ~/.cache/ms-playwright
+          # --with-deps installs system libs; --no-shell skips chromium-headless-shell.
           for attempt in 1 2; do
             echo "::group::Playwright install (attempt $attempt/2)"
             if npx playwright install --with-deps --no-shell chromium; then
