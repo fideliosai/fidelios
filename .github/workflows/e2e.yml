@@ -29,37 +29,7 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
-
-      - name: Cache Playwright browsers
-        uses: actions/cache@v4
-        id: playwright-cache
-        with:
-          path: ~/.cache/ms-playwright
-          key: playwright-chromium-${{ runner.os }}-${{ hashFiles('**/package.json') }}
-
-      - name: Install Playwright browsers
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
-        timeout-minutes: 20
-        run: |
-          # Clear any partial browser dir left by prior cancelled runs (restore-keys
-          # could restore a stale partial dir that causes extraction to hang).
-          rm -rf ~/.cache/ms-playwright
-          # --with-deps installs system libs; --no-shell skips chromium-headless-shell.
-          for attempt in 1 2; do
-            echo "::group::Playwright install (attempt $attempt/2)"
-            if npx playwright install --with-deps --no-shell chromium; then
-              echo "::endgroup::"
-              exit 0
-            fi
-            echo "::endgroup::"
-            echo "Playwright install attempt $attempt failed; retrying in 15s..."
-            sleep 15
-          done
-          echo "Playwright install failed after 2 attempts"
-          exit 1
-
-      - name: Install Playwright system dependencies
-        run: npx playwright install-deps chromium
+      - run: npx playwright install --with-deps chromium
 
       - name: Run e2e tests
         run: pnpm run test:e2e
