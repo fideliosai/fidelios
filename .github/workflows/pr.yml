@@ -124,7 +124,17 @@ jobs:
     needs: [policy]
     runs-on: ubuntu-latest
     timeout-minutes: 30
-
+    # Adapters are headless packages with no UI surface; their unit tests and the
+    # verify job already cover them. Running Playwright here mostly burns CI minutes
+    # installing browsers for changes that cannot affect browser behavior. When a PR
+    # is labelled adapter-only (or the branch name ends with /adapter-<name>), skip
+    # e2e unless an explicit skip-e2e label has also been applied.
+    if: |
+      !contains(github.event.pull_request.labels.*.name, 'skip-e2e') &&
+      !(
+        contains(github.event.pull_request.labels.*.name, 'adapter-only') ||
+        endsWith(github.head_ref, '/adapter-')
+      )
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
