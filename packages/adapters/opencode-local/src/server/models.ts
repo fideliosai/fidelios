@@ -123,10 +123,13 @@ export async function discoverOpenCodeModels(input: {
   // Prevent OpenCode from writing an opencode.json into the working directory.
   const runtimeEnv = normalizeEnv(ensurePathInEnv({ ...process.env, ...env, ...(resolvedHome ? { HOME: resolvedHome } : {}), OPENCODE_DISABLE_PROJECT_CONFIG: "true" }));
 
+  // Always refresh the model cache from models.dev. OpenCode caches the model
+  // list locally, so newly-added models (e.g. ollama-cloud/kimi-k2.7-code) are
+  // hidden from FideliOS until the cache is refreshed.
   const result = await runChildProcess(
     `opencode-models-${Date.now()}-${Math.random().toString(16).slice(2)}`,
     command,
-    ["models"],
+    ["models", "--refresh"],
     {
       cwd,
       env: runtimeEnv,
@@ -184,7 +187,9 @@ export async function ensureOpenCodeModelConfiguredAndAvailable(input: {
   });
 
   if (models.length === 0) {
-    throw new Error("OpenCode returned no models. Run `opencode models` and verify provider auth.");
+    throw new Error(
+      "OpenCode returned no models. Run `opencode models --refresh` and verify provider auth.",
+    );
   }
 
   if (!models.some((entry) => entry.id === model)) {
