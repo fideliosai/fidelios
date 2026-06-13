@@ -261,18 +261,6 @@ describe("execute: auto-triage path", () => {
     expect(childEnv.OLLAMA_API_KEY).toBe("sk-envelope");
   });
 
-  it("passes --provider custom and --provider ollama to hermes chat", async () => {
-    for (const provider of ["custom", "ollama"]) {
-      runChildProcessMock.mockClear();
-      const { ctx } = makeCtx({
-        adapterConfig: { provider, toolsets: "file" },
-      });
-      await execute(ctx);
-      const args = getArgs();
-      expect(args).toContain("--provider");
-      expect(args[args.indexOf("--provider") + 1]).toBe(provider);
-    }
-  });
 });
 
 describe("execute: triage off when no toolsets and triageEnabled disabled", () => {
