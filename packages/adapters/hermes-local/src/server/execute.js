@@ -37,6 +37,16 @@ function cfgStringArray(v) {
         ? v
         : undefined;
 }
+function resolveOllamaApiKey(envConfig) {
+    let candidate = envConfig?.OLLAMA_API_KEY ?? process.env.OLLAMA_API_KEY ?? "";
+    if (candidate && typeof candidate === "object" && "value" in candidate) {
+        candidate = candidate.value;
+    }
+    if (typeof candidate !== "string") {
+        candidate = "";
+    }
+    return candidate.trim() || undefined;
+}
 // ---------------------------------------------------------------------------
 // Wake-up prompt builder
 // ---------------------------------------------------------------------------
@@ -281,10 +291,12 @@ export async function execute(ctx) {
         const triageModel = cfgString(config.triageModel) || model;
         const triageTimeoutMs = cfgNumber(config.triageTimeoutMs);
         const triageHost = cfgString(config.triageHost) || cfgString(config.ollamaHost);
+        const ollamaApiKey = resolveOllamaApiKey(config.env);
         triageMeta = await triageToolsets({
             prompt,
             model: triageModel,
             host: triageHost,
+            apiKey: ollamaApiKey,
             timeoutMs: triageTimeoutMs,
         });
         if (triageMeta.toolsets.length > 0) {
@@ -378,6 +390,10 @@ export async function execute(ctx) {
     const hasExplicitApiKey = typeof userEnv?.FIDELIOS_API_KEY === "string" && userEnv.FIDELIOS_API_KEY.trim().length > 0;
     if (userEnv && typeof userEnv === "object") {
         Object.assign(env, userEnv);
+    }
+    const ollamaApiKey = resolveOllamaApiKey(userEnv);
+    if (ollamaApiKey) {
+        env.OLLAMA_API_KEY = ollamaApiKey;
     }
     if (!hasExplicitApiKey && ctx.authToken) {
         env.FIDELIOS_API_KEY = ctx.authToken;
