@@ -216,6 +216,63 @@ describe("execute: auto-triage path", () => {
     expect(result.resultJson?.triage?.used_fallback).toBe(true);
     expect(result.resultJson?.triage?.error).toBe("triage call failed");
   });
+
+  it("forwards OLLAMA_API_KEY to triage and to the child process env", async () => {
+    delete process.env.OLLAMA_API_KEY;
+    triageToolsetsMock.mockResolvedValue({
+      toolsets: ["file"],
+      usedFallback: false,
+      durationMs: 3,
+    });
+
+    const { ctx } = makeCtx({
+      adapterConfig: {
+        env: { OLLAMA_API_KEY: "sk-test" },
+      },
+    });
+    await execute(ctx);
+
+    const triageOpts = triageToolsetsMock.mock.calls[0][0];
+    expect(triageOpts.apiKey).toBe("sk-test");
+
+    const childEnv = runChildProcessMock.mock.calls[0][3].env;
+    expect(childEnv.OLLAMA_API_KEY).toBe("sk-test");
+  });
+
+  it("unwraps FideliOS secret envelope for OLLAMA_API_KEY", async () => {
+    delete process.env.OLLAMA_API_KEY;
+    triageToolsetsMock.mockResolvedValue({
+      toolsets: ["file"],
+      usedFallback: false,
+      durationMs: 3,
+    });
+
+    const { ctx } = makeCtx({
+      adapterConfig: {
+        env: { OLLAMA_API_KEY: { type: "plain", value: "sk-envelope" } },
+      },
+    });
+    await execute(ctx);
+
+    const triageOpts = triageToolsetsMock.mock.calls[0][0];
+    expect(triageOpts.apiKey).toBe("sk-envelope");
+
+    const childEnv = runChildProcessMock.mock.calls[0][3].env;
+    expect(childEnv.OLLAMA_API_KEY).toBe("sk-envelope");
+  });
+
+  it("passes --provider custom and --provider ollama to hermes chat", async () => {
+    for (const provider of ["custom", "ollama"]) {
+      runChildProcessMock.mockClear();
+      const { ctx } = makeCtx({
+        adapterConfig: { provider, toolsets: "file" },
+      });
+      await execute(ctx);
+      const args = getArgs();
+      expect(args).toContain("--provider");
+      expect(args[args.indexOf("--provider") + 1]).toBe(provider);
+    }
+  });
 });
 
 describe("execute: triage off when no toolsets and triageEnabled disabled", () => {
