@@ -150,7 +150,7 @@ fi
 while IFS= read -r package_name; do
   [ -z "$package_name" ] && continue
   if npm_package_version_exists "$package_name" "$TARGET_VERSION"; then
-    release_fail "npm version ${package_name}@${TARGET_VERSION} already exists."
+    release_warn "npm version ${package_name}@${TARGET_VERSION} already exists; will skip publishing this package."
   fi
 done <<< "$(printf '%s\n' "${PUBLIC_PACKAGE_NAMES[@]}")"
 
@@ -233,6 +233,10 @@ else
   release_info "==> Step 5/7: Publishing packages to npm..."
   while IFS=$'\t' read -r pkg_dir pkg_name pkg_version; do
     [ -z "$pkg_dir" ] && continue
+    if npm_package_version_exists "$pkg_name" "$pkg_version"; then
+      release_info "  Skipping $pkg_name@$pkg_version (already on npm)"
+      continue
+    fi
     release_info "  Publishing $pkg_name@$pkg_version"
     cd "$REPO_ROOT/$pkg_dir"
     pnpm publish --no-git-checks --tag latest --access public
