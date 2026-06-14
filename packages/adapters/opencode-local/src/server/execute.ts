@@ -313,17 +313,29 @@ export async function execute(ctx: AdapterExecutionContext): Promise<AdapterExec
       heartbeatPromptChars: renderedPrompt.length,
     };
 
-    const buildArgs = (resumeSessionId: string | null) => {
+    function isOllamaCloudModelNotFound(
+      modelId: string | null,
+      stdout: string,
+      stderr: string,
+    ): boolean {
+      if (!modelId) return false;
+      const provider = parseModelProvider(modelId);
+      if (provider !== "ollama-cloud") return false;
+      const haystack = `${stdout}\n${stderr}`;
+      return /model\s+['"]?[^'"\n]+['"]?\s+not\s+found|ProviderModelNotFoundError/i.test(haystack);
+    }
+
+    const buildArgs = (resumeSessionId: string | null, modelOverride?: string) => {
       const args = ["run", "--format", "json"];
       if (resumeSessionId) args.push("--session", resumeSessionId);
-      if (model) args.push("--model", model);
+      if (model) args.push("--model", modelOverride ?? model);
       if (variant) args.push("--variant", variant);
       if (extraArgs.length > 0) args.push(...extraArgs);
       return args;
     };
 
-    const runAttempt = async (resumeSessionId: string | null) => {
-      const args = buildArgs(resumeSessionId);
+    const runAttempt = async (resumeSessionId: string | null, modelOverride?: string) => {
+      const args = buildArgs(resumeSessionId, modelOverride);
       if (onMeta) {
         await onMeta({
           adapterType: "opencode_local",
@@ -361,6 +373,7 @@ export async function execute(ctx: AdapterExecutionContext): Promise<AdapterExec
         parsed: ReturnType<typeof parseOpenCodeJsonl>;
       },
       clearSessionOnMissingSession = false,
+      modelOverride?: string,
     ): AdapterExecutionResult => {
       if (attempt.proc.timedOut) {
         return {
@@ -393,7 +406,7 @@ export async function execute(ctx: AdapterExecutionContext): Promise<AdapterExec
         parsedError ||
         stderrLine ||
         `OpenCode exited with code ${synthesizedExitCode ?? -1}`;
-      const modelId = model || null;
+      const modelId = modelOverride ?? model ?? null;
 
       return {
         exitCode: synthesizedExitCode,
@@ -436,6 +449,24 @@ export async function execute(ctx: AdapterExecutionContext): Promise<AdapterExec
       );
       const retry = await runAttempt(null);
       return toResult(retry, true);
+    }
+
+    // Workaround: ollama-cloud advertises bare model IDs (e.g. kimi-k2.7-code)
+    // but some models only exist with a `:cloud` tag in the registry. Retry once
+    // with `:cloud` appended when we see a model-not-found error.
+    if (
+      initialFailed &&
+      model &&
+      !model.endsWith(":cloud") &&
+      isOllamaCloudModelNotFound(model, initial.proc.stdout, initial.rawStderr)
+    ) {
+      const cloudModelId = `${model}:cloud`;
+      await onLog(
+        "stdout",
+        `[fidelios] OpenCode model "${model}" not found; retrying with "${cloudModelId}".\n`,
+      );
+      const cloudAttempt = await runAttempt(sessionId, cloudModelId);
+      return toResult(cloudAttempt, false, cloudModelId);
     }
 
     return toResult(initial);

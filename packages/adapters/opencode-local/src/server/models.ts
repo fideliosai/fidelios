@@ -61,6 +61,15 @@ function parseModelsOutput(stdout: string): AdapterModel[] {
     const model = firstToken.slice(firstToken.indexOf("/") + 1).trim();
     if (!provider || !model) continue;
     parsed.push({ id: `${provider}/${model}`, label: `${provider}/${model}` });
+    // Some ollama-cloud models are advertised without a tag but only have a
+    // `:cloud` variant in the registry (e.g. kimi-k2.7-code). Expose the tagged
+    // variant so users can select a working model ID.
+    if (provider === "ollama-cloud" && !model.includes(":")) {
+      parsed.push({
+        id: `${provider}/${model}:cloud`,
+        label: `${provider}/${model}:cloud`,
+      });
+    }
   }
   return dedupeModels(parsed);
 }
